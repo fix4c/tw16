@@ -109,7 +109,7 @@ export default function HomePage() {
           <span>最後自動更新：{formatDateTime(data.lastUpdated)}</span>
           <span className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-            自動化流水線運作中（示範資料）
+            自動化流水線運作中
           </span>
         </div>
       </section>
