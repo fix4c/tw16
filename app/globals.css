@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
-@theme inline {
-  --font-sans: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
-  --font-serif: var(--font-noto-serif), "PingFang TC", "Microsoft JhengHei", serif;
+html {
+  font-family: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei",
+    system-ui, sans-serif;
 }
 
-body {
-  font-family: var(--font-sans);
+.font-serif {
+  font-family: var(--font-noto-serif), "PingFang TC", "Microsoft JhengHei",
+    serif;
 }
