@@ -33,6 +33,7 @@ const SOURCES = [
   { name: "衛生福利部", tier: 1, url: "https://www.mohw.gov.tw/rss-16-1-1.html" },
   { name: "疾病管制署", tier: 1, url: "https://www.cdc.gov.tw/RSS/RssXml/Hh094B49-DRwe2RR4eFfrQ?type=1" },
   { name: "食品藥物管理署", tier: 1, url: "https://www.fda.gov.tw/TC/rssNews.ashx" },
+  { name: "國民健康署", tier: 1, url: "https://www.hpa.gov.tw/wf/newsapi.ashx" },
 ];
 
 async function fetchAll() {
@@ -58,7 +59,7 @@ async function fetchAll() {
 }
 
 async function main() {
-  console.log("开始抓取三个官方来源...");
+  console.log("开始抓取四个官方来源...");
   const items = await fetchAll();
   if (items.length === 0) {
     console.error("所有来源均无数据");
@@ -67,7 +68,7 @@ async function main() {
   console.log(`共 ${items.length} 条候选，交给 AI 筛选...`);
 
   const prompt = `
-你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署的最新公告 RSS 條目。
+你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署、國民健康署的最新公告 RSS 條目。
 
 請從中選出「3 則」對一般民眾最相關、且主題不重複的公告，改寫成繁體中文的結構化摘要。
 
@@ -82,7 +83,7 @@ ${JSON.stringify(items, null, 2)}
   title: 改寫成一般民眾看得懂的標題（30 字以內）
   summary: 2-3 句摘要，說明公告內容
   whyItMatters: 1-2 句「為什麼與你有關」，具體說明對生活的影響
-  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署）
+  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署 / 國民健康署）
   sourceUrl: 原始 link
   sourceTier: 1
   publishedAt: 原始發布時間或抓取時間
