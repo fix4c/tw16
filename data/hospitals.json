@@ -1,6 +1,6 @@
 {
   "lastUpdated": "2026-11-15T00:00:00+08:00",
-  "total": 37,
+  "total": 86,
   "hospitals": [
     {
       "id": "ntuh",
@@ -334,6 +334,402 @@
       "address": "金門縣金湖鎮新市里復興路2號",
       "phone": "082-332-546",
       "registrationUrl": "https://www.kmhp.mohw.gov.tw/"
+    },
+    {
+      "id": "yonghe_catholic",
+      "name": "永和耕莘醫院",
+      "level": "地區醫院",
+      "region": "新北市",
+      "address": "新北市永和區中興街80號",
+      "phone": "02-2928-6060",
+      "registrationUrl": "https://www.google.com/search?q=永和耕莘醫院+網路掛號"
+    },
+    {
+      "id": "zhongxiang",
+      "name": "中祥醫院",
+      "level": "地區醫院",
+      "region": "新北市",
+      "address": "新北市中和區中山路二段138號",
+      "phone": "02-2240-9000",
+      "registrationUrl": "https://www.google.com/search?q=中祥醫院+網路掛號"
+    },
+    {
+      "id": "fongrong",
+      "name": "豐榮醫院",
+      "level": "地區醫院",
+      "region": "新北市",
+      "address": "新北市新莊區中正路243號",
+      "phone": "02-2999-3999",
+      "registrationUrl": "https://www.google.com/search?q=豐榮醫院+網路掛號"
+    },
+    {
+      "id": "xintai",
+      "name": "新泰綜合醫院",
+      "level": "地區醫院",
+      "region": "新北市",
+      "address": "新北市新莊區新泰路157號",
+      "phone": "02-2993-1122",
+      "registrationUrl": "https://www.google.com/search?q=新泰綜合醫院+網路掛號"
+    },
+    {
+      "id": "hongqi",
+      "name": "宏其婦幼醫院",
+      "level": "地區醫院",
+      "region": "桃園市",
+      "address": "桃園市中壢區元化路二段72號",
+      "phone": "03-425-1888",
+      "registrationUrl": "https://www.google.com/search?q=宏其婦幼醫院+網路掛號"
+    },
+    {
+      "id": "deren_tao",
+      "name": "德仁醫院",
+      "level": "地區醫院",
+      "region": "桃園市",
+      "address": "桃園市桃園區中山路588號",
+      "phone": "03-332-8788",
+      "registrationUrl": "https://www.google.com/search?q=德仁醫院+桃園+網路掛號"
+    },
+    {
+      "id": "huayang",
+      "name": "華揚醫院",
+      "level": "地區醫院",
+      "region": "桃園市",
+      "address": "桃園市中壢區中北路二段68號",
+      "phone": "03-428-3636",
+      "registrationUrl": "https://www.google.com/search?q=華揚醫院+網路掛號"
+    },
+    {
+      "id": "zhudong_ntuh",
+      "name": "臺大醫院竹東分院",
+      "level": "地區醫院",
+      "region": "新竹縣",
+      "address": "新竹縣竹東鎮至善路52號",
+      "phone": "03-594-3123",
+      "registrationUrl": "https://www.google.com/search?q=臺大醫院竹東分院+網路掛號"
+    },
+    {
+      "id": "dachien",
+      "name": "大千綜合醫院",
+      "level": "地區醫院",
+      "region": "苗栗縣",
+      "address": "苗栗縣苗栗市大同路133號",
+      "phone": "037-357-125",
+      "registrationUrl": "https://www.google.com/search?q=大千綜合醫院+網路掛號"
+    },
+    {
+      "id": "taiwan_taian",
+      "name": "臺安醫院雙十分院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市北區雙十路二段30號",
+      "phone": "04-2233-4567",
+      "registrationUrl": "https://www.google.com/search?q=臺安醫院雙十分院+網路掛號"
+    },
+    {
+      "id": "taixin",
+      "name": "台新醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市東區東光路一段66號",
+      "phone": "04-2211-8899",
+      "registrationUrl": "https://www.google.com/search?q=台新醫院+台中+網路掛號"
+    },
+    {
+      "id": "linsen",
+      "name": "林森醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市西區林森路239號",
+      "phone": "04-2371-1199",
+      "registrationUrl": "https://www.google.com/search?q=林森醫院+台中+網路掛號"
+    },
+    {
+      "id": "hongen",
+      "name": "宏恩醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市南區復興路一段333號",
+      "phone": "04-2261-1122",
+      "registrationUrl": "https://www.google.com/search?q=宏恩醫院+台中+網路掛號"
+    },
+    {
+      "id": "xin_yadong",
+      "name": "新亞東婦產科醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市北區中清路一段333號",
+      "phone": "04-2202-2121",
+      "registrationUrl": "https://www.google.com/search?q=新亞東婦產科醫院+網路掛號"
+    },
+    {
+      "id": "xiang_en",
+      "name": "祥恩醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市豐原區中正路115號",
+      "phone": "04-2523-4567",
+      "registrationUrl": "https://www.google.com/search?q=祥恩醫院+台中+網路掛號"
+    },
+    {
+      "id": "xin_puti",
+      "name": "新菩提醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市大里區中興路二段655號",
+      "phone": "04-2483-1234",
+      "registrationUrl": "https://www.google.com/search?q=新菩提醫院+網路掛號"
+    },
+    {
+      "id": "wufeng_chinghai",
+      "name": "霧峰澄清醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市霧峰區中正路1122號",
+      "phone": "04-2330-1122",
+      "registrationUrl": "https://www.google.com/search?q=霧峰澄清醫院+網路掛號"
+    },
+    {
+      "id": "wuri_chinghai",
+      "name": "烏日澄清醫院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市烏日區光明路419號",
+      "phone": "04-2338-1122",
+      "registrationUrl": "https://www.google.com/search?q=烏日澄清醫院+網路掛號"
+    },
+    {
+      "id": "zhongxing_cmuh",
+      "name": "中山醫學大學附設醫院中興分院",
+      "level": "地區醫院",
+      "region": "臺中市",
+      "address": "臺中市南區復興路二段11號",
+      "phone": "04-2262-1666",
+      "registrationUrl": "https://www.google.com/search?q=中山醫學大學附設醫院中興分院+網路掛號"
+    },
+    {
+      "id": "daozhou",
+      "name": "道周醫院",
+      "level": "地區醫院",
+      "region": "彰化縣",
+      "address": "彰化縣和美鎮彰美路五段2號",
+      "phone": "04-755-2222",
+      "registrationUrl": "https://www.google.com/search?q=道周醫院+網路掛號"
+    },
+    {
+      "id": "yuanrong",
+      "name": "員榮醫院",
+      "level": "地區醫院",
+      "region": "彰化縣",
+      "address": "彰化縣員林市中正路201號",
+      "phone": "04-832-6161",
+      "registrationUrl": "https://www.google.com/search?q=員榮醫院+網路掛號"
+    },
+    {
+      "id": "guanhua",
+      "name": "冠華醫院",
+      "level": "地區醫院",
+      "region": "彰化縣",
+      "address": "彰化縣彰化市中山路二段800號",
+      "phone": "04-722-2122",
+      "registrationUrl": "https://www.google.com/search?q=冠華醫院+彰化+網路掛號"
+    },
+    {
+      "id": "haosheng",
+      "name": "皓生醫院",
+      "level": "地區醫院",
+      "region": "彰化縣",
+      "address": "彰化縣員林市莒光路456號",
+      "phone": "04-838-1122",
+      "registrationUrl": "https://www.google.com/search?q=皓生醫院+網路掛號"
+    },
+    {
+      "id": "zhushan_showchwan",
+      "name": "竹山秀傳醫院",
+      "level": "地區醫院",
+      "region": "南投縣",
+      "address": "南投縣竹山鎮集山路二段75號",
+      "phone": "049-262-3966",
+      "registrationUrl": "https://www.google.com/search?q=竹山秀傳醫院+網路掛號"
+    },
+    {
+      "id": "nanto_christian",
+      "name": "南投基督教醫院",
+      "level": "地區醫院",
+      "region": "南投縣",
+      "address": "南投縣南投市中興路870號",
+      "phone": "049-222-5595",
+      "registrationUrl": "https://www.google.com/search?q=南投基督教醫院+網路掛號"
+    },
+    {
+      "id": "puli_veterans",
+      "name": "臺中榮民總醫院埔里分院",
+      "level": "地區醫院",
+      "region": "南投縣",
+      "address": "南投縣埔里鎮榮光路1號",
+      "phone": "049-299-0830",
+      "registrationUrl": "https://www.google.com/search?q=臺中榮民總醫院埔里分院+網路掛號"
+    },
+    {
+      "id": "wanqiao_veterans",
+      "name": "臺中榮民總醫院灣橋分院",
+      "level": "地區醫院",
+      "region": "嘉義縣",
+      "address": "嘉義縣竹崎鄉灣橋村石麻園1號",
+      "phone": "05-279-1070",
+      "registrationUrl": "https://www.google.com/search?q=臺中榮民總醫院灣橋分院+網路掛號"
+    },
+    {
+      "id": "chiayi_hospital",
+      "name": "衛生福利部嘉義醫院",
+      "level": "地區醫院",
+      "region": "嘉義市",
+      "address": "嘉義市西區北港路312號",
+      "phone": "05-231-9090",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部嘉義醫院+網路掛號"
+    },
+    {
+      "id": "st_martin",
+      "name": "天主教聖馬爾定醫院",
+      "level": "地區醫院",
+      "region": "嘉義市",
+      "address": "嘉義市東區大雅路二段565號",
+      "phone": "05-275-6000",
+      "registrationUrl": "https://www.google.com/search?q=天主教聖馬爾定醫院+網路掛號"
+    },
+    {
+      "id": "tmannh",
+      "name": "臺南市立醫院",
+      "level": "地區醫院",
+      "region": "臺南市",
+      "address": "臺南市東區崇德路670號",
+      "phone": "06-260-9926",
+      "registrationUrl": "https://www.google.com/search?q=臺南市立醫院+網路掛號"
+    },
+    {
+      "id": "tainan_hospital",
+      "name": "衛生福利部臺南醫院",
+      "level": "地區醫院",
+      "region": "臺南市",
+      "address": "臺南市中西區中山路125號",
+      "phone": "06-220-0050",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部臺南醫院+網路掛號"
+    },
+    {
+      "id": "vghks_tainan",
+      "name": "高雄榮民總醫院臺南分院",
+      "level": "地區醫院",
+      "region": "臺南市",
+      "address": "臺南市永康區復興路427號",
+      "phone": "06-312-5101",
+      "registrationUrl": "https://www.google.com/search?q=高雄榮民總醫院臺南分院+網路掛號"
+    },
+    {
+      "id": "jianyou",
+      "name": "建佑醫院",
+      "level": "地區醫院",
+      "region": "高雄市",
+      "address": "高雄市苓雅區建國一路188號",
+      "phone": "07-751-1122",
+      "registrationUrl": "https://www.google.com/search?q=建佑醫院+高雄+網路掛號"
+    },
+    {
+      "id": "linyuan",
+      "name": "霖園醫院",
+      "level": "地區醫院",
+      "region": "高雄市",
+      "address": "高雄市林園區林園北路188號",
+      "phone": "07-641-1122",
+      "registrationUrl": "https://www.google.com/search?q=霖園醫院+高雄+網路掛號"
+    },
+    {
+      "id": "pingtung_hospital",
+      "name": "衛生福利部屏東醫院",
+      "level": "地區醫院",
+      "region": "屏東縣",
+      "address": "屏東縣屏東市自由路270號",
+      "phone": "08-736-3011",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部屏東醫院+網路掛號"
+    },
+    {
+      "id": "hengchun_travel",
+      "name": "衛生福利部恆春旅遊醫院",
+      "level": "地區醫院",
+      "region": "屏東縣",
+      "address": "屏東縣恆春鎮恆南路188號",
+      "phone": "08-889-2266",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部恆春旅遊醫院+網路掛號"
+    },
+    {
+      "id": "pingtung_veterans",
+      "name": "高雄榮民總醫院屏東分院",
+      "level": "地區醫院",
+      "region": "屏東縣",
+      "address": "屏東縣內埔鄉龍潭村昭勝路1號",
+      "phone": "08-770-4112",
+      "registrationUrl": "https://www.google.com/search?q=高雄榮民總醫院屏東分院+網路掛號"
+    },
+    {
+      "id": "hualien_hospital",
+      "name": "衛生福利部花蓮醫院",
+      "level": "地區醫院",
+      "region": "花蓮縣",
+      "address": "花蓮縣花蓮市中正路600號",
+      "phone": "03-835-8141",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部花蓮醫院+網路掛號"
+    },
+    {
+      "id": "yuli_tzuchi",
+      "name": "玉里慈濟醫院",
+      "level": "地區醫院",
+      "region": "花蓮縣",
+      "address": "花蓮縣玉里鎮民權街1號",
+      "phone": "03-888-8888",
+      "registrationUrl": "https://www.google.com/search?q=玉里慈濟醫院+網路掛號"
+    },
+    {
+      "id": "taitung_christian",
+      "name": "台東基督教醫院",
+      "level": "地區醫院",
+      "region": "臺東縣",
+      "address": "臺東縣臺東市開封街350號",
+      "phone": "089-960-888",
+      "registrationUrl": "https://www.google.com/search?q=台東基督教醫院+網路掛號"
+    },
+    {
+      "id": "taitung_hospital",
+      "name": "衛生福利部臺東醫院",
+      "level": "地區醫院",
+      "region": "臺東縣",
+      "address": "臺東縣臺東市五權街1號",
+      "phone": "089-324-112",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部臺東醫院+網路掛號"
+    },
+    {
+      "id": "taitung_veterans",
+      "name": "臺北榮民總醫院臺東分院",
+      "level": "地區醫院",
+      "region": "臺東縣",
+      "address": "臺東縣臺東市更生路1000號",
+      "phone": "089-222-995",
+      "registrationUrl": "https://www.google.com/search?q=臺北榮民總醫院臺東分院+網路掛號"
+    },
+    {
+      "id": "penghu_hospital",
+      "name": "衛生福利部澎湖醫院",
+      "level": "地區醫院",
+      "region": "澎湖縣",
+      "address": "澎湖縣馬公市中正路10號",
+      "phone": "06-926-1151",
+      "registrationUrl": "https://www.google.com/search?q=衛生福利部澎湖醫院+網路掛號"
+    },
+    {
+      "id": "lienchiang_hospital",
+      "name": "連江縣立醫院",
+      "level": "地區醫院",
+      "region": "連江縣",
+      "address": "連江縣南竿鄉復興村217號",
+      "phone": "0836-23995",
+      "registrationUrl": "https://www.google.com/search?q=連江縣立醫院+網路掛號"
     }
   ]
 }

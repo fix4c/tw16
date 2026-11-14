@@ -59,7 +59,7 @@ export default function HospitalsPage() {
           找到醫院，直達官方掛號
         </h1>
         <p className="text-neutral-600 leading-relaxed max-w-2xl">
-          全台 {hospitals.length} 家主要醫學中心與區域醫院。本站不代掛號，僅提供官方掛號入口。
+          全台 {hospitals.length} 家主要醫院（包含醫學中心、區域醫院與地區醫院）。本站不代掛號，僅提供官方掛號入口；部分醫院點擊後會以 Google 搜尋該院官方掛號頁。
         </p>
       </section>
 
@@ -125,7 +125,7 @@ export default function HospitalsPage() {
                 rel="noopener noreferrer"
                 className="mt-auto inline-flex items-center justify-center px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition-colors"
               >
-                前往官方掛號 →
+                前往掛號入口 →
               </a>
             </article>
           ))}
