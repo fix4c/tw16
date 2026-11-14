@@ -1,38 +1,38 @@
 {
-  "lastUpdated": "2026-11-14T11:26:35.558Z",
+  "lastUpdated": "2026-11-14T11:28:43.404Z",
   "headlines": [
     {
       "id": "57M9H7NQtbjNyO5ygCgNiA",
-      "title": "公費流感與新冠疫苗第二階段開打！開放50歲以上民眾接種",
-      "summary": "115年度公費流感及新冠疫苗第二階段已正式開打，接種對象擴大至50至64歲無高風險慢性病之成人。疾管署提醒，隨著氣溫下降、呼吸道病毒活躍，符合資格的民眾應儘速前往合約院所接種，以降低感染後重症與死亡風險。",
-      "whyItMatters": "年滿50歲即可免費接種最新病毒株的流感及新冠疫苗，不僅能建立個人防護力，完成接種還可獲得健康幣獎勵。",
+      "title": "公費流感與新冠疫苗第二階段開打 開放50歲以上接種",
+      "summary": "衛生福利部疾病管制署宣布，公費流感及新冠疫苗第二階段正式開放50歲以上成人接種。因應秋冬氣溫下降與呼吸道病毒活躍，符合資格民眾應儘速施打，以獲得最新保護力。",
+      "whyItMatters": "接種疫苗能大幅降低感染後併發重症與死亡的風險，符合條件的民眾可及早至院所接種保障健康。",
       "sourceName": "疾病管制署",
       "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/57M9H7NQtbjNyO5ygCgNiA?typeId=9",
       "sourceTier": 1,
-      "publishedAt": "2026-11-03",
-      "fetchedAt": "2026-11-14T11:26:14.103Z"
-    },
-    {
-      "id": "t634723",
-      "title": "注意誇大廣告！「活化勝」宣稱逆轉腎病遭重罰 切勿延誤就醫",
-      "summary": "食藥署監測發現「活化勝」產品及其代言人持續於媒體發布違規廣告，誇大宣稱具有「逆轉腎病」等醫療效能，涉嫌嚴重違反食品安全衛生管理法。地方衛生局已多次裁罰累計數百萬元，食藥署強調食品非藥品，無法治療疾病。",
-      "whyItMatters": "若誤信食品廣告的神奇療效而擅自停藥或延誤正規醫療處置，可能導致腎功能惡化，民眾購買保健食品前應提高警覺。",
-      "sourceName": "食品藥物管理署",
-      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
-      "sourceTier": 1,
-      "publishedAt": "2026-11-10",
-      "fetchedAt": "2026-11-14T11:26:14.103Z"
+      "publishedAt": "2026-11-03T00:00:00Z",
+      "fetchedAt": "2026-11-14T11:28:13.512Z"
     },
     {
       "id": "t634764",
-      "title": "別等骨折才發現！正確認識 DXA 與足跟超音波骨密度檢查",
-      "summary": "評估骨質疏鬆主要以雙能量X光吸光式測定儀（DXA）為標準診斷依據，測量腰椎與髖部。雖然足跟超音波（QUS）便利且無輻射，但僅能作為初步篩檢，數值無法直接取代 DXA。若篩檢異常，仍需進一步由醫師進行 DXA 評估。",
-      "whyItMatters": "瞭解不同骨密度檢測儀器的用途與限制，有助於在篩檢出現異常時及時尋求專業診斷，早期預防骨質疏鬆與併發骨折。",
+      "title": "正確認識骨密度檢查 DXA與超音波差異大解析",
+      "summary": "食品藥物管理署提醒，雙能量X光吸光式測定儀（DXA）為臨床診斷骨質疏鬆的主要工具，而足跟超音波（QUS）僅具無輻射之篩檢便利性。若超音波篩檢異常，仍應經醫師評估並進行DXA檢查以確定診斷。",
+      "whyItMatters": "了解不同檢測工具的用途，能幫助高風險族群獲得精準診斷，提早預防骨質疏鬆引起的骨折與失能。",
       "sourceName": "食品藥物管理署",
       "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
       "sourceTier": 1,
-      "publishedAt": "2026-11-10",
-      "fetchedAt": "2026-11-14T11:26:14.103Z"
+      "publishedAt": "2026-11-10T00:00:00Z",
+      "fetchedAt": "2026-11-14T11:28:13.512Z"
+    },
+    {
+      "id": "t634723",
+      "title": "食藥署開罰違規保健食品廣告 提醒民眾食品無治療功效",
+      "summary": "食品藥物管理署查獲違規廣告產品「活化勝」誇大宣稱「逆轉腎病」等醫療效能，嚴重違反食品安全衛生管理法並依法重罰。食藥署強調食品不具備藥品療效，切勿輕信廣告宣導。",
+      "whyItMatters": "誤信食品療效可能導致延誤病情與加重健康風險，有身體不適應尋求專業醫療協助。",
+      "sourceName": "食品藥物管理署",
+      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-08T00:00:00Z",
+      "fetchedAt": "2026-11-14T11:28:13.512Z"
     }
   ]
 }
