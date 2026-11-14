@@ -133,7 +133,12 @@ ${JSON.stringify(items, null, 2)}
     headlines: cleanedHeadlines,
   };
 
-  fs.writeFileSync("data/headlines.json", JSON.stringify(output, null, 2), "utf8");
+  // 終極清理：對整個 JSON 字串移除所有 Unicode 替換字符與私有區字符
+  let jsonStr = JSON.stringify(output, null, 2);
+  jsonStr = jsonStr.replace(/[\uFFFC-\uFFFF]/g, "");
+  jsonStr = jsonStr.replace(/[\uE000-\uF8FF]/g, "");
+
+  fs.writeFileSync("data/headlines.json", jsonStr, "utf8");
   console.log(`已更新 data/headlines.json，共 ${output.headlines.length} 则`);
 }
 
