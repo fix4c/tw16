@@ -1,16 +1,38 @@
 {
-  "lastUpdated": "2026-11-14T04:22:41.835Z",
+  "lastUpdated": "2026-11-14T05:34:23.462Z",
   "headlines": [
     {
-      "id": "cp-16-88481-1",
-      "title": "衛福部選出金卓越社區！銀髮照顧據點與兒童課照亮點社區一次看",
-      "summary": "衛生福利部舉辦「115年度全國社區發展金卓越社區表揚典禮」，表揚48個優異社區發展協會。得獎社區如臺北市明興社區與南投縣延正社區，積極推動長者關懷據點、多元送餐、延緩失能課程及兒童課後陪伴。這些社區活化閒置空間並串聯跨世代資源，打造高齡友善且宜居的共好環境。",
-      "whyItMatters": "民眾可多利用在地社區照顧關懷據點的長者課程、送餐與兒童課照資源，提升生活照顧品質並促進家庭世代共好。",
-      "sourceName": "衛生福利部",
-      "sourceUrl": "https://www.mohw.gov.tw/cp-16-88481-1.html",
+      "id": "HHbAdjZ5sQg8nHVyP5QXSQ",
+      "title": "流感重症偏高 疾管署籲高風險族群儘速接種疫苗",
+      "summary": "疾管署表示近期國內類流感門急診就診人次雖略有下降，但重症及死亡病例仍偏高，且超過9成重症患者未接種本季疫苗。目前社區流行病毒以H1N1為主，呼籲65歲以上長者及慢性病患者等高風險族群儘速接種公費流感與新冠疫苗。",
+      "whyItMatters": "入冬後氣溫變化大且呼吸道病毒活躍，符合資格者及早接種疫苗能有效防範重症與死亡風險，保護個人與家人健康。",
+      "sourceName": "疾病管制署",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/HHbAdjZ5sQg8nHVyP5QXSQ?typeId=9",
       "sourceTier": 1,
-      "publishedAt": "2026-11-13T00:00:00.000Z",
-      "fetchedAt": "2026-11-14T04:22:32.258Z"
+      "publishedAt": "2026-11-10T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T05:33:20.434Z"
+    },
+    {
+      "id": "t634764",
+      "title": "正確看懂骨密度檢查 醫用DXA與超音波差異解析",
+      "summary": "食藥署提醒民眾，臨床常利用雙能量X光吸光式測定儀（DXA）測量腰椎及髖部骨密度，為診斷骨質疏鬆的主要依據。足跟超音波（QUS）無輻射僅作為初步篩檢，其數據無法直接替代DXA，若超音波檢測異常仍須由醫師評估安排進一步檢查。",
+      "whyItMatters": "釐清不同骨密度檢測工具的特性與用途，有助於民眾正確認識檢查結果，及早預防骨質疏鬆及骨折風險。",
+      "sourceName": "食品藥物管理署",
+      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-10T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T05:33:20.434Z"
+    },
+    {
+      "id": "t634723",
+      "title": "切勿聽信誇大廣告！食藥署警告「活化勝」無治病療效",
+      "summary": "食藥署查獲「活化勝」產品及其代言人高頻率刊播違規廣告，誇大宣稱能「逆轉腎病」，已違反食安法並遭多次加重裁罰。食藥署強調食品絕非藥品，不具備任何療效，請民眾切勿輕信。",
+      "whyItMatters": "誤信誇大食品廣告並代替正規醫療，可能導致重大疾病延誤就醫，損害身體健康。",
+      "sourceName": "食品藥物管理署",
+      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-10T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T05:33:20.434Z"
     }
   ]
 }
