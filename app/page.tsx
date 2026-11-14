@@ -83,6 +83,7 @@ export default function HomePage() {
           <nav className="flex items-center gap-5">
             <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
             <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
+            <Link href="/guides" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">就醫指南</Link>
             <Link href="/about" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">關於本站</Link>
           </nav>
         </div>

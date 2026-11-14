@@ -12,10 +12,18 @@ export default function AboutPage() {
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-neutral-200 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
-<Link href="/" className="flex items-center gap-2">
-  <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
-</Link>
-          <span className="text-xs text-neutral-500">關於本站</span>
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
+          </Link>
+          
+          {/* 👇 這裡補上了導航菜單 */}
+          <nav className="flex items-center gap-4 md:gap-5">
+            <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
+            <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
+            <Link href="/guides" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">就醫指南</Link>
+            <Link href="/about" className="text-sm font-medium text-teal-700 transition-colors">關於本站</Link>
+          </nav>
+          
         </div>
       </header>
 
@@ -64,7 +72,7 @@ export default function AboutPage() {
             <ol className="space-y-3 text-neutral-700 leading-relaxed list-decimal pl-5">
               <li>
                 <span className="font-medium">抓取</span>
-                ：從三個官方 RSS 源取得最新公告
+                ：從四個官方與權威 RSS 源取得最新公告
               </li>
               <li>
                 <span className="font-medium">篩選</span>
@@ -104,6 +112,12 @@ export default function AboutPage() {
                 </span>
                 食品藥物管理署 RSS
               </li>
+              <li>
+                <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full border bg-blue-100 text-blue-800 border-blue-200 mr-2">
+                  一級
+                </span>
+                新華網健康頻道（經簡轉繁與在地化處理）
+              </li>
             </ul>
             <p className="text-neutral-700 leading-relaxed mt-3 text-sm">
               所有內容皆附原始出處連結，可點擊卡片底部的「查看原始出處」直達官方頁面核對。
@@ -132,15 +146,15 @@ export default function AboutPage() {
             <h2 className="font-serif text-xl font-semibold text-neutral-900 mb-3">
               聯絡
             </h2>
-<p className="text-neutral-700 leading-relaxed">
-  發現內容錯誤、來源失效、或任何建議，歡迎來信：
-  <a
-    href="mailto:tw16.net@gmail.com"
-    className="text-blue-700 hover:underline ml-1"
-  >
-    tw16.net@gmail.com
-  </a>
-</p>
+            <p className="text-neutral-700 leading-relaxed">
+              發現內容錯誤、來源失效、或任何建議，歡迎來信：
+              <a
+                href="mailto:tw16.net@gmail.com"
+                className="text-blue-700 hover:underline ml-1"
+              >
+                tw16.net@gmail.com
+              </a>
+            </p>
           </div>
         </section>
 
