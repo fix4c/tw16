@@ -1,38 +1,38 @@
 {
-  "lastUpdated": "2026-11-14T19:13:29.223Z",
+  "lastUpdated": "2026-11-14T19:25:22.699Z",
   "headlines": [
     {
-      "id": "57M9H7NQtbjNyO5ygCgNiA",
-      "title": "公費流感與新冠疫苗第二階段開打 50歲以上成人可接種",
-      "summary": "疾病管制署表示公費流感及新冠疫苗第二階段已正式開打，接種對象擴大至50歲至64歲無高風險慢性病之成人。隨著氣溫下降，呼吸道病毒活動增加，政府呼籲符合資格者儘速前往合約院所接種，獲取保護力。",
-      "whyItMatters": "年滿50歲的民眾即日起可前往施打公費疫苗，能有效降低冬季流感與新冠感染後併發重症及死亡的風險。",
+      "id": "WbcJELHHghLEXDcmoH9ixQ",
+      "title": "65歲以上長者及高風險群 應儘速接種公費肺炎鏈球菌疫苗",
+      "summary": "疾病管制署表示，每年11月12日為世界肺炎日，肺炎為國人第三大死因。目前政府提供65歲以上長者、55至64歲原住民及19至64歲高風險對象公費接種結合型肺炎鏈球菌疫苗，今年個案數與死亡數已降至近年新低。",
+      "whyItMatters": "若您或家中長輩符合公費資格，及早接種疫苗可有效降低感染後併發重症與死亡的風險，保障呼吸道健康。",
       "sourceName": "疾病管制署",
-      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/57M9H7NQtbjNyO5ygCgNiA?typeId=9",
-      "sourceTier": 1,
-      "publishedAt": "2026-11-03T00:00:00Z",
-      "fetchedAt": "2026-11-14T19:13:10.229Z"
-    },
-    {
-      "id": "t634723",
-      "title": "警惕誇大食品廣告 食藥署強調食品無療效切勿延誤就醫",
-      "summary": "食藥署持續監控違規食品廣告，查獲有保健產品及其代言人在媒體宣稱具逆轉腎病等醫療效能，涉嫌嚴重違反食品安全衛生管理法並已面臨多次裁罰。食藥署強調食品絕非藥品，切勿相信無根據的宣傳。",
-      "whyItMatters": "若家中長輩或慢性病患者誤信誇大食品廣告而停藥或延誤就醫，可能導致病情惡化，購買保健食品前應仔細評估並尋求醫師意見。",
-      "sourceName": "食品藥物管理署",
-      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/WbcJELHHghLEXDcmoH9ixQ?typeId=9",
       "sourceTier": 1,
       "publishedAt": "2026-11-10T00:00:00Z",
-      "fetchedAt": "2026-11-14T19:13:10.229Z"
+      "fetchedAt": "2026-11-14T19:25:03.250Z"
+    },
+    {
+      "id": "2mi2li9PETT6m3FtutKJxA",
+      "title": "國內新增登革熱本土病例 民眾應加強清除戶內外積水容器",
+      "summary": "疾病管制署公布國內新增1例登革熱本土病例及境外移入群聚案件。雖然秋季降溫，但近期降雨後白天氣溫仍適合病媒蚊孳生，提醒民眾持續落實巡倒清刷及個人防蚊措施。",
+      "whyItMatters": "登革熱流行風險仍高，若居家周邊積水未清易導致病媒蚊孳生；民眾如出現發燒、頭痛、肌肉關節痛等症狀，應儘速就醫採檢。",
+      "sourceName": "疾病管制署",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/2mi2li9PETT6m3FtutKJxA?typeId=9",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-09T00:00:00Z",
+      "fetchedAt": "2026-11-14T19:25:03.250Z"
     },
     {
       "id": "t634764",
-      "title": "認識骨密度測量儀 正確檢測防範骨質疏鬆與骨折",
-      "summary": "食藥署說明臨床常以雙能量X光吸光式測定儀（DXA）測量腰椎與髖部骨密度，作為骨質疏鬆診斷標準。足跟定量超音波儀（QUS）無輻射且便利，但僅適用於初步篩檢，若數值異常仍須透過DXA進行精確評估。",
-      "whyItMatters": "骨質疏鬆早期無明顯症狀，了解正確的檢測方式有助於中高齡族群與高風險民眾及早發現骨質流失問題，降低日後骨折風險。",
+      "title": "正確認識骨密度測量儀 DXA與超音波檢查差異大公開",
+      "summary": "食品藥物管理署說明，臨床常以雙能量X光吸光式測定儀（DXA）檢測腰椎與髖部骨密度，作為骨質疏鬆診斷依據。足跟超音波儀（QUS）雖具無輻射與便利特性，但結果僅能作為初篩，異常者仍應透過DXA作進一步評估。",
+      "whyItMatters": "瞭解不同骨密度檢測工具的限制與用途，有助於評估自身骨質健康狀況，避免因誤解檢測數據而延誤治療。",
       "sourceName": "食品藥物管理署",
       "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
       "sourceTier": 1,
       "publishedAt": "2026-11-10T00:00:00Z",
-      "fetchedAt": "2026-11-14T19:13:10.229Z"
+      "fetchedAt": "2026-11-14T19:25:03.250Z"
     }
   ]
 }
