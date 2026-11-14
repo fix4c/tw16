@@ -76,10 +76,9 @@ export default function HomePage() {
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-neutral-200 bg-white">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link href="/" className="block">
-            <h1 className="font-serif text-2xl font-bold text-neutral-900">台灣醫療入口</h1>
-            <p className="text-xs text-neutral-500 mt-1">由 AI 自動策展的權威醫療資訊導航</p>
-          </Link>
+<Link href="/" className="flex items-center gap-2">
+  <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
+</Link>
           <nav className="flex items-center gap-5">
             <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
             <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
@@ -87,6 +86,9 @@ export default function HomePage() {
           </nav>
         </div>
       </header>
+
+      {/* 頂部橫幅廣告 */}
+      <AdPlaceholder type="banner" />
 
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-12 pb-8 w-full">
@@ -153,6 +155,11 @@ export default function HomePage() {
             <HeadlineCard key={h.id} headline={h} />
           ))}
         </div>
+      </section>
+
+      {/* 內容底部矩形廣告 */}
+      <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
+        <AdPlaceholder type="box" />
       </section>
 
       <footer className="border-t border-neutral-200 bg-neutral-100 mt-auto">

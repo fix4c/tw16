@@ -46,12 +46,14 @@ export default function HospitalsPage() {
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-neutral-200 bg-white">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link href="/" className="font-serif text-xl font-bold text-neutral-900 hover:text-teal-700 transition-colors">
-            ← 台灣醫療入口
-          </Link>
+<Link href="/" className="flex items-center gap-2">
+  <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
+</Link>
           <span className="text-xs text-neutral-500">醫院掛號導航</span>
         </div>
       </header>
+
+      <AdPlaceholder type="banner" />
 
       <section className="max-w-5xl mx-auto px-6 pt-10 pb-6 w-full">
         <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">醫院掛號導航</p>
@@ -130,6 +132,11 @@ export default function HospitalsPage() {
             </article>
           ))}
         </div>
+      </section>
+
+      {/* 內容底部矩形廣告 */}
+      <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
+        <AdPlaceholder type="box" />
       </section>
 
       <footer className="border-t border-neutral-200 bg-neutral-100 mt-auto">
