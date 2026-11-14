@@ -1,38 +1,38 @@
 {
-  "lastUpdated": "2026-11-14T11:28:43.404Z",
+  "lastUpdated": "2026-11-14T11:32:32.179Z",
   "headlines": [
     {
-      "id": "57M9H7NQtbjNyO5ygCgNiA",
-      "title": "公費流感與新冠疫苗第二階段開打 開放50歲以上接種",
-      "summary": "衛生福利部疾病管制署宣布，公費流感及新冠疫苗第二階段正式開放50歲以上成人接種。因應秋冬氣溫下降與呼吸道病毒活躍，符合資格民眾應儘速施打，以獲得最新保護力。",
-      "whyItMatters": "接種疫苗能大幅降低感染後併發重症與死亡的風險，符合條件的民眾可及早至院所接種保障健康。",
+      "id": "WbcJELHHghLEXDcmoH9ixQ",
+      "title": "65歲以上及高風險族群 請儘速接種公費肺炎鏈球菌疫苗",
+      "summary": "疾管署表示肺炎為國人第三大死因，目前公費提供65歲以上長者、55至64歲原住民及高風險族群接種結合型肺炎鏈球菌疫苗。今年公費政策推動下，侵襲性病例數與死亡數均創新低，但仍有約六成長者尚未接種。官方呼籲符合資格者儘快前往醫療院所施打，以獲得完整保護力。",
+      "whyItMatters": "感染肺炎鏈球菌易引發嚴重併發症，符合公費資格者儘早接種可顯著降低重症與死亡風險。",
       "sourceName": "疾病管制署",
-      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/57M9H7NQtbjNyO5ygCgNiA?typeId=9",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/WbcJELHHghLEXDcmoH9ixQ?typeId=9",
       "sourceTier": 1,
-      "publishedAt": "2026-11-03T00:00:00Z",
-      "fetchedAt": "2026-11-14T11:28:13.512Z"
+      "publishedAt": "2026-11-10T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T11:32:10.041Z"
     },
     {
-      "id": "t634764",
-      "title": "正確認識骨密度檢查 DXA與超音波差異大解析",
-      "summary": "食品藥物管理署提醒，雙能量X光吸光式測定儀（DXA）為臨床診斷骨質疏鬆的主要工具，而足跟超音波（QUS）僅具無輻射之篩檢便利性。若超音波篩檢異常，仍應經醫師評估並進行DXA檢查以確定診斷。",
-      "whyItMatters": "了解不同檢測工具的用途，能幫助高風險族群獲得精準診斷，提早預防骨質疏鬆引起的骨折與失能。",
-      "sourceName": "食品藥物管理署",
-      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "id": "2mi2li9PETT6m3FtutKJxA",
+      "title": "國內新增登革熱本土病例 提醒落實積水容器清除與防蚊",
+      "summary": "國內新增一例北部本土登革熱個案及越南境外移入群聚事件。近期受東北季風影響各地持續降雨，白天氣溫仍適合病媒蚊孳生與活動，登革熱流行風險依然偏高。地方衛生單位已啟動社區孳生源清除與相關防治工作。",
+      "whyItMatters": "雨後積水易助長病媒蚊孳生，落實巡倒清刷並做好防蚊措施能有效避免感染登革熱。",
+      "sourceName": "疾病管制署",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/2mi2li9PETT6m3FtutKJxA?typeId=9",
       "sourceTier": 1,
-      "publishedAt": "2026-11-10T00:00:00Z",
-      "fetchedAt": "2026-11-14T11:28:13.512Z"
+      "publishedAt": "2026-11-09T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T11:32:10.041Z"
     },
     {
       "id": "t634723",
-      "title": "食藥署開罰違規保健食品廣告 提醒民眾食品無治療功效",
-      "summary": "食品藥物管理署查獲違規廣告產品「活化勝」誇大宣稱「逆轉腎病」等醫療效能，嚴重違反食品安全衛生管理法並依法重罰。食藥署強調食品不具備藥品療效，切勿輕信廣告宣導。",
-      "whyItMatters": "誤信食品療效可能導致延誤病情與加重健康風險，有身體不適應尋求專業醫療協助。",
+      "title": "食藥署開罰違規廣告 提醒保健食品無醫療效能切勿誤信",
+      "summary": "食藥署監控發現食品「活化勝」及其代言醫師於媒體誇大宣稱能「逆轉腎病」，已嚴重違反食品安全衛生管理法並遭連續裁罰。食藥署強調食品絕非藥物，並不具備治療或逆轉疾病的功能。官方呼籲媒體善盡審查責任，民眾亦切勿輕信廣告誇大療效。",
+      "whyItMatters": "誤信不實廣告宣稱的神奇效果可能導致延誤就醫，若有腎臟疾病或身體不適應尋求專業醫師診治。",
       "sourceName": "食品藥物管理署",
       "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
       "sourceTier": 1,
-      "publishedAt": "2026-11-08T00:00:00Z",
-      "fetchedAt": "2026-11-14T11:28:13.512Z"
+      "publishedAt": "2026-11-01T00:00:00.000Z",
+      "fetchedAt": "2026-11-14T11:32:10.041Z"
     }
   ]
 }

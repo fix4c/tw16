@@ -57,6 +57,12 @@ async function fetchAll() {
   return results;
 }
 
+// 清理 AI 偶發生成的 UTF-8 替換字符（�）與多餘空白
+function cleanText(s) {
+  if (typeof s !== "string") return s;
+  return s.replace(/\uFFFD+/g, "").replace(/\s+/g, " ").trim();
+}
+
 async function main() {
   console.log("开始抓取三个官方来源...");
   const items = await fetchAll();
@@ -67,7 +73,7 @@ async function main() {
   console.log(`共 ${items.length} 条候选，交给 AI 筛选...`);
 
   const prompt = `
-你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署、國民健康署的最新公告 RSS 條目。
+你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署的最新公告 RSS 條目。
 
 請從中選出「3 則」對一般民眾最相關、且主題不重複的公告，改寫成繁體中文的結構化摘要。
 
@@ -84,7 +90,7 @@ ${JSON.stringify(items, null, 2)}
   title: 改寫成一般民眾看得懂的標題（30 字以內）
   summary: 2-3 句摘要，說明公告內容
   whyItMatters: 1-2 句「為什麼與你有關」，具體說明對生活的影響
-  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署 / 國民健康署）
+  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署）
   sourceUrl: 原始 link
   sourceTier: 1
   publishedAt: 原始發布時間或抓取時間
@@ -114,9 +120,17 @@ ${JSON.stringify(items, null, 2)}
     return true;
   });
 
+  // 對最終輸出做清理
+  const cleanedHeadlines = unique.slice(0, 3).map((h) => ({
+    ...h,
+    title: cleanText(h.title),
+    summary: cleanText(h.summary),
+    whyItMatters: cleanText(h.whyItMatters),
+  }));
+
   const output = {
     lastUpdated: new Date().toISOString(),
-    headlines: unique.slice(0, 3),
+    headlines: cleanedHeadlines,
   };
 
   fs.writeFileSync("data/headlines.json", JSON.stringify(output, null, 2), "utf8");
