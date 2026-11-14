@@ -1,3 +1,4 @@
+import Link from "next/link";
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";
 
@@ -74,12 +75,12 @@ export default function HomePage() {
               由 AI 自動策展的權威醫療資訊導航
             </p>
           </div>
-          <a
-            href="#"
+          <Link
+            href="/about"
             className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
           >
             關於本站
-          </a>
+          </Link>
         </div>
       </header>
 
