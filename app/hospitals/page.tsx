@@ -12,7 +12,6 @@ type Hospital = {
   address: string;
   phone: string;
   registrationUrl: string;
-  hasDirectLink: boolean;
 };
 
 const hospitals = (rawData as { hospitals: Hospital[] }).hospitals;
@@ -60,7 +59,7 @@ export default function HospitalsPage() {
           找到醫院，直達官方掛號
         </h1>
         <p className="text-neutral-600 leading-relaxed max-w-2xl">
-          全台 {hospitals.length} 家醫學中心與區域醫院。本站不代掛號，僅提供官方掛號入口；未收錄精確連結的醫院，點擊後會以 Google 搜尋該院官方掛號頁。
+          全台 {hospitals.length} 家主要醫學中心與區域醫院。本站不代掛號，僅提供官方掛號入口。
         </p>
       </section>
 
@@ -116,11 +115,6 @@ export default function HospitalsPage() {
                   {h.level}
                 </span>
                 <span className="text-xs text-neutral-500">{h.region}</span>
-                {h.hasDirectLink && (
-                  <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200">
-                    直達
-                  </span>
-                )}
               </div>
               <h3 className="font-serif text-lg font-semibold text-neutral-900 mb-1">{h.name}</h3>
               <p className="text-sm text-neutral-600 mb-1">{h.address}</p>
@@ -129,13 +123,9 @@ export default function HospitalsPage() {
                 href={h.registrationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`mt-auto inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                  h.hasDirectLink
-                    ? "bg-teal-600 text-white hover:bg-teal-700"
-                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200"
-                }`}
+                className="mt-auto inline-flex items-center justify-center px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition-colors"
               >
-                {h.hasDirectLink ? "前往官方掛號 →" : "搜尋掛號入口 →"}
+                前往官方掛號 →
               </a>
             </article>
           ))}

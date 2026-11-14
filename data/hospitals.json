@@ -1,7 +1,339 @@
 {
-  "lastUpdated": "2026-11-14T15:48:45.780Z",
-  "total": 0,
-  "directCount": 0,
-  "searchCount": 0,
-  "hospitals": []
+  "lastUpdated": "2026-11-15T00:00:00+08:00",
+  "total": 37,
+  "hospitals": [
+    {
+      "id": "ntuh",
+      "name": "臺大醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市中正區中山南路7號",
+      "phone": "02-2312-3456",
+      "registrationUrl": "https://reg.ntuh.gov.tw"
+    },
+    {
+      "id": "vghtpe",
+      "name": "臺北榮民總醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市北投區石牌路二段201號",
+      "phone": "02-2871-2121",
+      "registrationUrl": "https://www6.vghtpe.gov.tw/reg/home.do"
+    },
+    {
+      "id": "tsgh",
+      "name": "三軍總醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市內湖區成功路二段325號",
+      "phone": "02-8792-3311",
+      "registrationUrl": "https://www1.ndmctsgh.edu.tw/opd/"
+    },
+    {
+      "id": "mmh",
+      "name": "馬偕紀念醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市中山區中山北路二段92號",
+      "phone": "02-2543-3535",
+      "registrationUrl": "https://www.mmh.org.tw/reg/"
+    },
+    {
+      "id": "shinkong",
+      "name": "新光吳火獅紀念醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市士林區文昌路95號",
+      "phone": "02-2833-2211",
+      "registrationUrl": "https://reg.skh.org.tw/"
+    },
+    {
+      "id": "cathay",
+      "name": "國泰綜合醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市大安區仁愛路四段280號",
+      "phone": "02-2708-2121",
+      "registrationUrl": "https://reg.cgh.org.tw/"
+    },
+    {
+      "id": "wanfang",
+      "name": "萬芳醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市文山區興隆路三段111號",
+      "phone": "02-2930-7930",
+      "registrationUrl": "https://www.wanfang.gov.tw/opd/"
+    },
+    {
+      "id": "tpe_tzuchi",
+      "name": "台北慈濟醫院",
+      "level": "醫學中心",
+      "region": "新北市",
+      "address": "新北市新店區建國路289號",
+      "phone": "02-6628-9779",
+      "registrationUrl": "https://reg.tzuchi.com.tw/"
+    },
+    {
+      "id": "shuangho",
+      "name": "雙和醫院",
+      "level": "醫學中心",
+      "region": "新北市",
+      "address": "新北市中和區中正路291號",
+      "phone": "02-2249-0088",
+      "registrationUrl": "https://www.shh.org.tw/opd/"
+    },
+    {
+      "id": "fejen",
+      "name": "亞東紀念醫院",
+      "level": "醫學中心",
+      "region": "新北市",
+      "address": "新北市板橋區南雅南路二段21號",
+      "phone": "02-8966-7000",
+      "registrationUrl": "https://www.femh.org.tw/reg/"
+    },
+    {
+      "id": "cgmh_linkou",
+      "name": "林口長庚紀念醫院",
+      "level": "醫學中心",
+      "region": "桃園市",
+      "address": "桃園市龜山區復興街5號",
+      "phone": "03-328-1200",
+      "registrationUrl": "https://register.cgmh.org.tw/"
+    },
+    {
+      "id": "cmuh",
+      "name": "中國醫藥大學附設醫院",
+      "level": "醫學中心",
+      "region": "臺中市",
+      "address": "臺中市北區育德路2號",
+      "phone": "04-2205-2121",
+      "registrationUrl": "https://www.cmuh.cmu.edu.tw/OnlineAppointment/RegBooking"
+    },
+    {
+      "id": "vghtc",
+      "name": "臺中榮民總醫院",
+      "level": "醫學中心",
+      "region": "臺中市",
+      "address": "臺中市西屯區臺灣大道四段1650號",
+      "phone": "04-2359-2525",
+      "registrationUrl": "https://register.vghtc.gov.tw"
+    },
+    {
+      "id": "csmu",
+      "name": "中山醫學大學附設醫院",
+      "level": "醫學中心",
+      "region": "臺中市",
+      "address": "臺中市南區建國北路一段110號",
+      "phone": "04-2473-9595",
+      "registrationUrl": "https://www.csh.org.tw/reg/"
+    },
+    {
+      "id": "cch",
+      "name": "彰化基督教醫院",
+      "level": "醫學中心",
+      "region": "彰化縣",
+      "address": "彰化縣彰化市南校街135號",
+      "phone": "04-723-8595",
+      "registrationUrl": "https://www.cch.org.tw/reg/"
+    },
+    {
+      "id": "ncku",
+      "name": "成大醫院",
+      "level": "醫學中心",
+      "region": "臺南市",
+      "address": "臺南市北區勝利路138號",
+      "phone": "06-235-3535",
+      "registrationUrl": "https://tandem.hosp.ncku.edu.tw/"
+    },
+    {
+      "id": "chimei",
+      "name": "奇美醫院",
+      "level": "醫學中心",
+      "region": "臺南市",
+      "address": "臺南市永康區中華路901號",
+      "phone": "06-281-2811",
+      "registrationUrl": "https://www.chimei.org.tw/opdschedule/index.aspx?ihosp=10&lang=CH"
+    },
+    {
+      "id": "kmuh",
+      "name": "高雄醫學大學附設中和紀念醫院",
+      "level": "醫學中心",
+      "region": "高雄市",
+      "address": "高雄市三民區自由一路100號",
+      "phone": "07-312-1101",
+      "registrationUrl": "http://www.kmuh.org.tw/"
+    },
+    {
+      "id": "cgmh_kaohsiung",
+      "name": "高雄長庚紀念醫院",
+      "level": "醫學中心",
+      "region": "高雄市",
+      "address": "高雄市鳥松區大埤路123號",
+      "phone": "07-731-7123",
+      "registrationUrl": "https://register.cgmh.org.tw/"
+    },
+    {
+      "id": "vghks",
+      "name": "高雄榮民總醫院",
+      "level": "醫學中心",
+      "region": "高雄市",
+      "address": "高雄市左營區大中一路386號",
+      "phone": "07-342-2121",
+      "registrationUrl": "https://www.vghks.gov.tw/reg/"
+    },
+    {
+      "id": "edah",
+      "name": "義大醫院",
+      "level": "醫學中心",
+      "region": "高雄市",
+      "address": "高雄市燕巢區角宿里義大路1號",
+      "phone": "07-615-0011",
+      "registrationUrl": "https://www.edah.org.tw/reg/"
+    },
+    {
+      "id": "tzuchi_hualien",
+      "name": "花蓮慈濟醫院",
+      "level": "醫學中心",
+      "region": "花蓮縣",
+      "address": "花蓮縣花蓮市中央路三段707號",
+      "phone": "03-856-1825",
+      "registrationUrl": "https://reg.tzuchi.com.tw/"
+    },
+    {
+      "id": "tzuchi_dalin",
+      "name": "大林慈濟醫院",
+      "level": "準醫學中心",
+      "region": "嘉義縣",
+      "address": "嘉義縣大林鎮民生路2號",
+      "phone": "05-264-8000",
+      "registrationUrl": "https://reg.tzuchi.com.tw/"
+    },
+    {
+      "id": "ntuh_yunlin",
+      "name": "臺大醫院雲林分院",
+      "level": "準醫學中心",
+      "region": "雲林縣",
+      "address": "雲林縣斗六市雲林路二段579號",
+      "phone": "05-532-3911",
+      "registrationUrl": "https://reg.ntuh.gov.tw"
+    },
+    {
+      "id": "kln",
+      "name": "基隆長庚紀念醫院",
+      "level": "區域醫院",
+      "region": "基隆市",
+      "address": "基隆市安樂區麥金路222號",
+      "phone": "02-2431-3131",
+      "registrationUrl": "https://register.cgmh.org.tw/"
+    },
+    {
+      "id": "tpe_hospital",
+      "name": "衛生福利部臺北醫院",
+      "level": "區域醫院",
+      "region": "新北市",
+      "address": "新北市新莊區思源路127號",
+      "phone": "02-2276-5566",
+      "registrationUrl": "https://www.tph.mohw.gov.tw/"
+    },
+    {
+      "id": "tzuchi_taichung",
+      "name": "台中慈濟醫院",
+      "level": "區域醫院",
+      "region": "臺中市",
+      "address": "臺中市潭子區豐興路一段66號",
+      "phone": "04-3606-0666",
+      "registrationUrl": "https://reg.tzuchi.com.tw/"
+    },
+    {
+      "id": "jenai_dali",
+      "name": "大里仁愛醫院",
+      "level": "區域醫院",
+      "region": "臺中市",
+      "address": "臺中市大里區東榮路483號",
+      "phone": "04-2481-9900",
+      "registrationUrl": "https://www.jah.org.tw/"
+    },
+    {
+      "id": "changhua_hospital",
+      "name": "衛生福利部彰化醫院",
+      "level": "區域醫院",
+      "region": "彰化縣",
+      "address": "彰化縣埔心鄉舊館村中正路二段80號",
+      "phone": "04-829-8686",
+      "registrationUrl": "https://www.chhw.mohw.gov.tw/"
+    },
+    {
+      "id": "show_chwan",
+      "name": "秀傳紀念醫院",
+      "level": "區域醫院",
+      "region": "彰化縣",
+      "address": "彰化縣彰化市南瑞里中山路一段542號",
+      "phone": "04-725-6166",
+      "registrationUrl": "https://www.scmh.org.tw/"
+    },
+    {
+      "id": "nanto_hospital",
+      "name": "衛生福利部南投醫院",
+      "level": "區域醫院",
+      "region": "南投縣",
+      "address": "南投縣南投市康壽里復興路478號",
+      "phone": "049-223-1150",
+      "registrationUrl": "https://www.nant.mohw.gov.tw/"
+    },
+    {
+      "id": "puli_christian",
+      "name": "埔里基督教醫院",
+      "level": "區域醫院",
+      "region": "南投縣",
+      "address": "南投縣埔里鎮愛蘭里鐵山路1號",
+      "phone": "049-291-2151",
+      "registrationUrl": "https://www.pch.org.tw/"
+    },
+    {
+      "id": "sinlau",
+      "name": "台南新樓醫院",
+      "level": "區域醫院",
+      "region": "臺南市",
+      "address": "臺南市東區東門路一段57號",
+      "phone": "06-274-8316",
+      "registrationUrl": "https://www.sinn-lau.org.tw/"
+    },
+    {
+      "id": "kmuh_siaogang",
+      "name": "高雄市立小港醫院",
+      "level": "區域醫院",
+      "region": "高雄市",
+      "address": "高雄市小港區山明路482號",
+      "phone": "07-803-6783",
+      "registrationUrl": "https://www.kmhk.org.tw/"
+    },
+    {
+      "id": "pingtung_christian",
+      "name": "屏東基督教醫院",
+      "level": "區域醫院",
+      "region": "屏東縣",
+      "address": "屏東縣屏東市大連路60號",
+      "phone": "08-736-8686",
+      "registrationUrl": "https://www.ptch.org.tw/"
+    },
+    {
+      "id": "mennonite",
+      "name": "門諾醫院",
+      "level": "區域醫院",
+      "region": "花蓮縣",
+      "address": "花蓮縣花蓮市民權路44號",
+      "phone": "03-824-1234",
+      "registrationUrl": "https://www.mch.org.tw/"
+    },
+    {
+      "id": "kinmen_hospital",
+      "name": "衛生福利部金門醫院",
+      "level": "區域醫院",
+      "region": "金門縣",
+      "address": "金門縣金湖鎮新市里復興路2號",
+      "phone": "082-332-546",
+      "registrationUrl": "https://www.kmhp.mohw.gov.tw/"
+    }
+  ]
 }

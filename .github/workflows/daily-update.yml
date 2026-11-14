@@ -24,8 +24,6 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/fetch-headlines.mjs
-      - name: 抓取全台醫院名錄
-        run: node scripts/fetch-hospitals.mjs
       - name: 抓取健保診所資料
         run: node scripts/fetch-clinics.mjs
 
@@ -33,7 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/headlines.json data/clinics.json data/hospitals.json
+          git add data/headlines.json data/clinics.json
           git diff --staged --quiet && echo "无变化，跳过提交" && exit 0
           git commit -m "chore: 每日自動更新醫療資訊 [skip ci]"
           git push
