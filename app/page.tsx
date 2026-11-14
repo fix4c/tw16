@@ -76,6 +76,12 @@ export default function HomePage() {
             </p>
           </div>
           <Link
+            href="/hospitals"
+            className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
+          >
+            醫院掛號
+          </Link>
+          <Link
             href="/about"
             className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
           >

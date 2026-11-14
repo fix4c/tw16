@@ -1,0 +1,77 @@
+{
+  "lastUpdated": "2026-11-14T12:00:00+08:00",
+  "hospitals": [
+    {
+      "id": "ntuh",
+      "name": "臺大醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市中正區中山南路7號",
+      "phone": "02-2312-3456",
+      "registrationUrl": "https://reg.ntuh.gov.tw"
+    },
+    {
+      "id": "vghtpe",
+      "name": "臺北榮民總醫院",
+      "level": "醫學中心",
+      "region": "臺北市",
+      "address": "臺北市北投區石牌路二段201號",
+      "phone": "02-2871-2151",
+      "registrationUrl": "https://www6.vghtpe.gov.tw/reg/home.do"
+    },
+    {
+      "id": "cgmh-linkou",
+      "name": "林口長庚紀念醫院",
+      "level": "醫學中心",
+      "region": "桃園市",
+      "address": "桃園市龜山區復興街5號",
+      "phone": "03-328-1200",
+      "registrationUrl": "https://register.cgmh.org.tw/"
+    },
+    {
+      "id": "cmuh",
+      "name": "中國醫藥大學附設醫院",
+      "level": "醫學中心",
+      "region": "臺中市",
+      "address": "臺中市北區育德路2號",
+      "phone": "04-2205-2121",
+      "registrationUrl": "https://www.cmuh.cmu.edu.tw/OnlineAppointment/RegBooking"
+    },
+    {
+      "id": "vghtc",
+      "name": "臺中榮民總醫院",
+      "level": "醫學中心",
+      "region": "臺中市",
+      "address": "臺中市西屯區臺灣大道四段1650號",
+      "phone": "04-2359-2525",
+      "registrationUrl": "https://register.vghtc.gov.tw"
+    },
+    {
+      "id": "ncku",
+      "name": "成大醫院",
+      "level": "醫學中心",
+      "region": "臺南市",
+      "address": "臺南市北區勝利路138號",
+      "phone": "06-235-3535",
+      "registrationUrl": "https://tandem.hosp.ncku.edu.tw/"
+    },
+    {
+      "id": "chimei",
+      "name": "奇美醫院",
+      "level": "醫學中心",
+      "region": "臺南市",
+      "address": "臺南市永康區中華路901號",
+      "phone": "06-281-2811",
+      "registrationUrl": "https://www.chimei.org.tw/opdschedule/index.aspx?ihosp=10&lang=CH"
+    },
+    {
+      "id": "kmuh",
+      "name": "高雄醫學大學附設中和紀念醫院",
+      "level": "醫學中心",
+      "region": "高雄市",
+      "address": "高雄市三民區自由一路100號",
+      "phone": "07-312-1101",
+      "registrationUrl": "http://www.kmuh.org.tw/"
+    }
+  ]
+}
