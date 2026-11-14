@@ -81,6 +81,9 @@ export default function HomePage() {
           >
             醫院掛號
           </Link>
+          <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+            診所查找
+          </Link>
           <Link
             href="/about"
             className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
