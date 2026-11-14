@@ -1,6 +1,7 @@
 import Parser from "rss-parser";
 import OpenAI from "openai";
 import fs from "fs";
+import { createConverter } from "js-opencc"; // 引入简繁转换
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
@@ -29,25 +30,41 @@ async function callWithRetry(fn, maxRetries = 5) {
   }
 }
 
+// 四个数据源（新增新华网，并标记 isSimplified: true）
 const SOURCES = [
   { name: "衛生福利部", tier: 1, url: "https://www.mohw.gov.tw/rss-16-1-1.html" },
   { name: "疾病管制署", tier: 1, url: "https://www.cdc.gov.tw/RSS/RssXml/Hh094B49-DRwe2RR4eFfrQ?type=1" },
   { name: "食品藥物管理署", tier: 1, url: "https://www.fda.gov.tw/TC/rssNews.ashx" },
+  { name: "新華網", tier: 1, url: "http://www.xinhuanet.com/health/news_health.xml", isSimplified: true },
 ];
 
 async function fetchAll() {
   const parser = new Parser({ timeout: 30000 });
+  // 初始化 OpenCC 转换器 (cn -> twp: 简体转繁体台湾正体，含词汇转换)
+  const converter = await createConverter({ from: "cn", to: "twp" });
+  
   const results = [];
   for (const src of SOURCES) {
     try {
       const feed = await parser.parseURL(src.url);
-      const items = (feed.items || []).slice(0, 6).map((item) => ({
-        title: item.title || "",
-        link: item.link || "",
-        contentSnippet: (item.contentSnippet || item.content || "").slice(0, 400),
-        sourceName: src.name,
-        sourceTier: src.tier,
-      }));
+      const items = (feed.items || []).slice(0, 6).map((item) => {
+        let title = item.title || "";
+        let snippet = (item.contentSnippet || item.content || "").slice(0, 400);
+        
+        // 如果是大陆来源，进行简体转繁体处理
+        if (src.isSimplified) {
+          title = converter(title);
+          snippet = converter(snippet);
+        }
+
+        return {
+          title,
+          link: item.link || "",
+          contentSnippet: snippet,
+          sourceName: src.name,
+          sourceTier: src.tier,
+        };
+      });
       results.push(...items);
       console.log(`  ${src.name}：抓到 ${items.length} 条`);
     } catch (err) {
@@ -57,14 +74,13 @@ async function fetchAll() {
   return results;
 }
 
-// 清理 AI 偶發生成的 UTF-8 替換字符（�）與多餘空白
 function cleanText(s) {
   if (typeof s !== "string") return s;
   return s.replace(/\uFFFD+/g, "").replace(/\s+/g, " ").trim();
 }
 
 async function main() {
-  console.log("开始抓取三个官方来源...");
+  console.log("开始抓取四个官方来源...");
   const items = await fetchAll();
   if (items.length === 0) {
     console.error("所有来源均无数据");
@@ -73,9 +89,10 @@ async function main() {
   console.log(`共 ${items.length} 条候选，交给 AI 筛选...`);
 
   const prompt = `
-你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署的最新公告 RSS 條目。
+你是台灣醫療資訊編輯。以下是來自衛生福利部、疾病管制署、食品藥物管理署、新華網的最新醫療資訊 RSS 條目。
 
 請從中選出「3 則」對一般民眾最相關、且主題不重複的公告，改寫成繁體中文的結構化摘要。
+（備註：新華網屬於大陸媒體，請確保改寫時使用台灣慣用語，並過濾掉過度政治宣傳的用語，保留純粹的醫療新知與公共衛生資訊。）
 
 原始條目：
 ${JSON.stringify(items, null, 2)}
@@ -90,7 +107,7 @@ ${JSON.stringify(items, null, 2)}
   title: 改寫成一般民眾看得懂的標題（30 字以內）
   summary: 2-3 句摘要，說明公告內容
   whyItMatters: 1-2 句「為什麼與你有關」，具體說明對生活的影響
-  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署）
+  sourceName: 原始來源名稱（衛生福利部 / 疾病管制署 / 食品藥物管理署 / 新華網）
   sourceUrl: 原始 link
   sourceTier: 1
   publishedAt: 原始發布時間或抓取時間
@@ -120,7 +137,6 @@ ${JSON.stringify(items, null, 2)}
     return true;
   });
 
-  // 對最終輸出做清理
   const cleanedHeadlines = unique.slice(0, 3).map((h) => ({
     ...h,
     title: cleanText(h.title),
@@ -133,7 +149,7 @@ ${JSON.stringify(items, null, 2)}
     headlines: cleanedHeadlines,
   };
 
-  // 終極清理：對整個 JSON 字串移除所有 Unicode 替換字符與私有區字符
+  // 终极清理
   let jsonStr = JSON.stringify(output, null, 2);
   jsonStr = jsonStr.replace(/[\uFFFC-\uFFFF]/g, "");
   jsonStr = jsonStr.replace(/[\uE000-\uF8FF]/g, "");
