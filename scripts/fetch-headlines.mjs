@@ -33,7 +33,6 @@ const SOURCES = [
   { name: "衛生福利部", tier: 1, url: "https://www.mohw.gov.tw/rss-16-1-1.html" },
   { name: "疾病管制署", tier: 1, url: "https://www.cdc.gov.tw/RSS/RssXml/Hh094B49-DRwe2RR4eFfrQ?type=1" },
   { name: "食品藥物管理署", tier: 1, url: "https://www.fda.gov.tw/TC/rssNews.ashx" },
-  { name: "國民健康署", tier: 1, url: "https://www.hpa.gov.tw/wf/newsapi.ashx" },
 ];
 
 async function fetchAll() {
@@ -59,7 +58,7 @@ async function fetchAll() {
 }
 
 async function main() {
-  console.log("开始抓取四个官方来源...");
+  console.log("开始抓取三个官方来源...");
   const items = await fetchAll();
   if (items.length === 0) {
     console.error("所有来源均无数据");

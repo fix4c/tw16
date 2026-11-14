@@ -1,38 +1,38 @@
 {
-  "lastUpdated": "2026-11-14T11:17:05.479Z",
+  "lastUpdated": "2026-11-14T11:26:35.558Z",
   "headlines": [
     {
-      "id": "WbcJELHHghLEXDcmoH9ixQ",
-      "title": "65歲以上與高風險族群免費施打肺炎鏈球菌疫苗",
-      "summary": "疾管署公布今年侵襲性肺炎鏈球菌感染症病例創三年新低，顯示公費疫苗政策奏效。目前公費提供65歲以上長者、55至64歲原住民及19至64歲高風險對象接種1劑結合型肺炎鏈球菌疫苗（PCV20或PCV21），符合資格者可檢具身分證明前往接種。",
-      "whyItMatters": "肺炎為國人第三大死因，符合資格的高風險族群與長者施打疫苗能顯著降低重症及死亡風險，為家中長輩做好健康防護。",
+      "id": "57M9H7NQtbjNyO5ygCgNiA",
+      "title": "公費流感與新冠疫苗第二階段開打！開放50歲以上民眾接種",
+      "summary": "115年度公費流感及新冠疫苗第二階段已正式開打，接種對象擴大至50至64歲無高風險慢性病之成人。疾管署提醒，隨著氣溫下降、呼吸道病毒活躍，符合資格的民眾應儘速前往合約院所接種，以降低感染後重症與死亡風險。",
+      "whyItMatters": "年滿50歲即可免費接種最新病毒株的流感及新冠疫苗，不僅能建立個人防護力，完成接種還可獲得健康幣獎勵。",
       "sourceName": "疾病管制署",
-      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/WbcJELHHghLEXDcmoH9ixQ?typeId=9",
-      "sourceTier": 1,
-      "publishedAt": "2026-11-10",
-      "fetchedAt": "2026-11-14T11:16:49.211Z"
-    },
-    {
-      "id": "2mi2li9PETT6m3FtutKJxA",
-      "title": "國內新增登革熱本土病例 呼籲民眾定期清除積水容器",
-      "summary": "疾管署公布新北市新增1例登革熱本土病例及越南境外移入群聚。受降雨及白天氣溫影響，病媒蚊仍活躍且流行風險偏高，呼籲民眾持續清除戶內外積水容器，並落實防蚊措施。",
-      "whyItMatters": "雨後積水易孳生病媒蚊，民眾外出應加強防蚊，如出現發燒、倦怠等疑似症狀應儘速就醫並告知活動史。",
-      "sourceName": "疾病管制署",
-      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/2mi2li9PETT6m3FtutKJxA?typeId=9",
-      "sourceTier": 1,
-      "publishedAt": "2026-11-09",
-      "fetchedAt": "2026-11-14T11:16:49.211Z"
-    },
-    {
-      "id": "mXGXp81PJ_IN6eJ__i5Y3A",
-      "title": "幼兒接種流感疫苗 注意首打族與未滿3歲需打第二劑",
-      "summary": "疾管署提醒學齡前幼兒為流感重症高風險群，感染後易併發中耳炎、肺炎或腦炎。今年首次接種流感疫苗的「首打族」幼兒，以及未滿3歲且過往僅打過1劑的「再打族」，均需與前一劑間隔28天以上再接種第二劑，保護力才算完整。",
-      "whyItMatters": "家中有學齡前幼兒的家長請留意接種紀錄，務必依時程帶孩子完成第二劑接種，才能及早建立完整的免疫保護力。",
-      "sourceName": "疾病管制署",
-      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/mXGXp81PJ_IN6eJ__i5Y3A?typeId=9",
+      "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/57M9H7NQtbjNyO5ygCgNiA?typeId=9",
       "sourceTier": 1,
       "publishedAt": "2026-11-03",
-      "fetchedAt": "2026-11-14T11:16:49.211Z"
+      "fetchedAt": "2026-11-14T11:26:14.103Z"
+    },
+    {
+      "id": "t634723",
+      "title": "注意誇大廣告！「活化勝」宣稱逆轉腎病遭重罰 切勿延誤就醫",
+      "summary": "食藥署監測發現「活化勝」產品及其代言人持續於媒體發布違規廣告，誇大宣稱具有「逆轉腎病」等醫療效能，涉嫌嚴重違反食品安全衛生管理法。地方衛生局已多次裁罰累計數百萬元，食藥署強調食品非藥品，無法治療疾病。",
+      "whyItMatters": "若誤信食品廣告的神奇療效而擅自停藥或延誤正規醫療處置，可能導致腎功能惡化，民眾購買保健食品前應提高警覺。",
+      "sourceName": "食品藥物管理署",
+      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-10",
+      "fetchedAt": "2026-11-14T11:26:14.103Z"
+    },
+    {
+      "id": "t634764",
+      "title": "別等骨折才發現！正確認識 DXA 與足跟超音波骨密度檢查",
+      "summary": "評估骨質疏鬆主要以雙能量X光吸光式測定儀（DXA）為標準診斷依據，測量腰椎與髖部。雖然足跟超音波（QUS）便利且無輻射，但僅能作為初步篩檢，數值無法直接取代 DXA。若篩檢異常，仍需進一步由醫師進行 DXA 評估。",
+      "whyItMatters": "瞭解不同骨密度檢測儀器的用途與限制，有助於在篩檢出現異常時及時尋求專業診斷，早期預防骨質疏鬆與併發骨折。",
+      "sourceName": "食品藥物管理署",
+      "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
+      "sourceTier": 1,
+      "publishedAt": "2026-11-10",
+      "fetchedAt": "2026-11-14T11:26:14.103Z"
     }
   ]
 }
