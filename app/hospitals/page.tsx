@@ -56,7 +56,7 @@ export default function HospitalsPage() {
       <section className="max-w-5xl mx-auto px-6 pt-10 pb-6 w-full">
         <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">醫院掛號導航</p>
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-4">
-          找到醫院，直達官方掛號
+          查詢線上掛號
         </h1>
         <p className="text-neutral-600 leading-relaxed max-w-2xl">
           全台 {hospitals.length} 家主要醫院（包含醫學中心、區域醫院與地區醫院）。本站不代掛號，僅提供官方掛號入口；部分醫院點擊後會以 Google 搜尋該院官方掛號頁。

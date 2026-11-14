@@ -135,15 +135,15 @@ export default function AboutPage() {
             <h2 className="font-serif text-xl font-semibold text-neutral-900 mb-3">
               聯絡
             </h2>
-            <p className="text-neutral-700 leading-relaxed">
-              發現內容錯誤、來源失效、或任何建議，歡迎來信：
-              <a
-                href="mailto:contact@tw16.net"
-                className="text-blue-700 hover:underline ml-1"
-              >
-                contact@tw16.net
-              </a>
-            </p>
+<p className="text-neutral-700 leading-relaxed">
+  發現內容錯誤、來源失效、或任何建議，歡迎來信：
+  <a
+    href="mailto:tw16.net@gmail.com"
+    className="text-blue-700 hover:underline ml-1"
+  >
+    tw16.net@gmail.com
+  </a>
+</p>
           </div>
         </section>
 
