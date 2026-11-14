@@ -1,7 +1,7 @@
 import Parser from "rss-parser";
 import OpenAI from "openai";
 import fs from "fs";
-import { createConverter } from "js-opencc"; // 引入简繁转换
+import { createConverter } from "js-opencc";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
@@ -30,7 +30,6 @@ async function callWithRetry(fn, maxRetries = 5) {
   }
 }
 
-// 四个数据源（新增新华网，并标记 isSimplified: true）
 const SOURCES = [
   { name: "衛生福利部", tier: 1, url: "https://www.mohw.gov.tw/rss-16-1-1.html" },
   { name: "疾病管制署", tier: 1, url: "https://www.cdc.gov.tw/RSS/RssXml/Hh094B49-DRwe2RR4eFfrQ?type=1" },
@@ -39,8 +38,12 @@ const SOURCES = [
 ];
 
 async function fetchAll() {
-  const parser = new Parser({ timeout: 30000 });
-  // 初始化 OpenCC 转换器 (cn -> twp: 简体转繁体台湾正体，含词汇转换)
+  const parser = new Parser({ 
+    timeout: 30000,
+    headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" }
+  });
+  
+  // ✅ 关键修复：在这里初始化简体转繁体转换器
   const converter = await createConverter({ from: "cn", to: "twp" });
   
   const results = [];
@@ -51,7 +54,6 @@ async function fetchAll() {
         let title = item.title || "";
         let snippet = (item.contentSnippet || item.content || "").slice(0, 400);
         
-        // 如果是大陆来源，进行简体转繁体处理
         if (src.isSimplified) {
           title = converter(title);
           snippet = converter(snippet);
@@ -149,7 +151,6 @@ ${JSON.stringify(items, null, 2)}
     headlines: cleanedHeadlines,
   };
 
-  // 终极清理
   let jsonStr = JSON.stringify(output, null, 2);
   jsonStr = jsonStr.replace(/[\uFFFC-\uFFFF]/g, "");
   jsonStr = jsonStr.replace(/[\uE000-\uF8FF]/g, "");
