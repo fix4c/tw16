@@ -1,3 +1,4 @@
+import Script from "next/script";
 import type { Metadata } from "next";
 import { Noto_Sans_TC, Noto_Serif_TC } from "next/font/google";
 import "./globals.css";
@@ -29,6 +30,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-Hant" className={`${sans.variable} ${serif.variable}`}>
+      <head>
+        {/* 👇 Google AdSense 全局自動廣告腳本 */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289252603428818"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="bg-neutral-50 text-neutral-900 antialiased">
         {children}
       </body>
