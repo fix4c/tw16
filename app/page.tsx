@@ -1,3 +1,4 @@
+import { AdPlaceholder } from "./AdPlaceholder";
 import Link from "next/link";
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";

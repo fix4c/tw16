@@ -1,5 +1,5 @@
 "use client";
-
+import { AdPlaceholder } from "../AdPlaceholder";
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import rawData from "@/data/clinics.json";
