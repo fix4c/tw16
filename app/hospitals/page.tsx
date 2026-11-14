@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import rawData from "@/data/hospitals.json";
-
-export const metadata: Metadata = {
-  title: "醫院掛號導航 | 台灣醫療入口",
-  description:
-    "全台主要醫學中心與區域醫院的官方網路掛號直達入口，按地區與醫院層級篩選，一鍵前往官方掛號頁面。",
-};
 
 type Hospital = {
   id: string;
@@ -16,22 +12,42 @@ type Hospital = {
   address: string;
   phone: string;
   registrationUrl: string;
+  hasDirectLink: boolean;
 };
 
 const hospitals = (rawData as { hospitals: Hospital[] }).hospitals;
 
-const regions = ["全部", ...new Set(hospitals.map((h) => h.region))];
-const levels = ["全部", ...new Set(hospitals.map((h) => h.level))];
-
 export default function HospitalsPage() {
+  const [selectedRegion, setSelectedRegion] = useState("全部");
+  const [selectedLevel, setSelectedLevel] = useState("全部");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const regions = useMemo(() => {
+    const set = new Set<string>();
+    hospitals.forEach((h) => set.add(h.region));
+    return ["全部", ...Array.from(set).sort()];
+  }, []);
+
+  const levels = useMemo(() => {
+    const set = new Set<string>();
+    hospitals.forEach((h) => set.add(h.level));
+    return ["全部", ...Array.from(set)];
+  }, []);
+
+  const filtered = useMemo(() => {
+    return hospitals.filter((h) => {
+      if (selectedRegion !== "全部" && h.region !== selectedRegion) return false;
+      if (selectedLevel !== "全部" && h.level !== selectedLevel) return false;
+      if (searchTerm && !h.name.includes(searchTerm) && !h.address.includes(searchTerm)) return false;
+      return true;
+    });
+  }, [selectedRegion, selectedLevel, searchTerm]);
+
   return (
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-neutral-200 bg-white">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-serif text-xl font-bold text-neutral-900 hover:text-teal-700 transition-colors"
-          >
+          <Link href="/" className="font-serif text-xl font-bold text-neutral-900 hover:text-teal-700 transition-colors">
             ← 台灣醫療入口
           </Link>
           <span className="text-xs text-neutral-500">醫院掛號導航</span>
@@ -39,76 +55,91 @@ export default function HospitalsPage() {
       </header>
 
       <section className="max-w-5xl mx-auto px-6 pt-10 pb-6 w-full">
-        <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">
-          醫院掛號導航
-        </p>
+        <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">醫院掛號導航</p>
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-4">
           找到醫院，直達官方掛號
         </h1>
         <p className="text-neutral-600 leading-relaxed max-w-2xl">
-          本站不代掛號，只提供全台主要醫院的官方網路掛號入口。選擇地區與醫院層級，一鍵前往該院掛號頁面。
+          全台 {hospitals.length} 家醫學中心與區域醫院。本站不代掛號，僅提供官方掛號入口；未收錄精確連結的醫院，點擊後會以 Google 搜尋該院官方掛號頁。
         </p>
       </section>
 
-      {/* 篩選器（純前端表單，無需 JavaScript 交互即可用 GET 參數實現，但此處先做靜態展示，後續可加交互） */}
-      <section className="max-w-5xl mx-auto px-6 pb-8 w-full">
-        <div className="flex flex-wrap gap-3">
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm text-neutral-500 py-1.5">地區：</span>
-            {regions.map((r) => (
-              <span
-                key={r}
-                className="px-3 py-1.5 text-sm bg-white border border-neutral-200 rounded-full text-neutral-700"
-              >
-                {r}
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm text-neutral-500 py-1.5">層級：</span>
-            {levels.map((l) => (
-              <span
-                key={l}
-                className="px-3 py-1.5 text-sm bg-white border border-neutral-200 rounded-full text-neutral-700"
-              >
-                {l}
-              </span>
-            ))}
-          </div>
-        </div>
-        <p className="text-xs text-neutral-400 mt-2">
-          （篩選功能將在下一階段加入互動）
-        </p>
-      </section>
-
-      {/* 醫院列表 */}
-      <section className="max-w-5xl mx-auto px-6 pb-16 w-full grid md:grid-cols-2 gap-4">
-        {hospitals.map((h) => (
-          <article
-            key={h.id}
-            className="bg-white border border-neutral-200 rounded-2xl p-5 flex flex-col"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full border bg-blue-100 text-blue-800 border-blue-200">
-                {h.level}
-              </span>
-              <span className="text-xs text-neutral-500">{h.region}</span>
-            </div>
-            <h2 className="font-serif text-lg font-semibold text-neutral-900 mb-1">
-              {h.name}
-            </h2>
-            <p className="text-sm text-neutral-600 mb-1">{h.address}</p>
-            <p className="text-sm text-neutral-500 mb-4">電話：{h.phone}</p>
-            <a
-              href={h.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center justify-center px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition-colors"
+      <section className="max-w-5xl mx-auto px-6 pb-6 w-full space-y-4">
+        <div className="flex flex-wrap gap-2 items-center">
+          <span className="text-sm text-neutral-500">地區：</span>
+          {regions.map((r) => (
+            <button
+              key={r}
+              onClick={() => setSelectedRegion(r)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
+                selectedRegion === r
+                  ? "bg-teal-600 text-white border-teal-600"
+                  : "bg-white text-neutral-700 border-neutral-200 hover:border-teal-400"
+              }`}
             >
-              前往官方掛號 →
-            </a>
-          </article>
-        ))}
+              {r}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-2 items-center">
+          <span className="text-sm text-neutral-500">層級：</span>
+          {levels.map((l) => (
+            <button
+              key={l}
+              onClick={() => setSelectedLevel(l)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
+                selectedLevel === l
+                  ? "bg-teal-600 text-white border-teal-600"
+                  : "bg-white text-neutral-700 border-neutral-200 hover:border-teal-400"
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+        <input
+          type="text"
+          placeholder="搜尋醫院名稱或地址..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border border-neutral-200 rounded-full text-sm focus:outline-none focus:border-teal-500"
+        />
+      </section>
+
+      <section className="max-w-5xl mx-auto px-6 pb-16 w-full">
+        <p className="text-xs text-neutral-400 mb-4">顯示 {filtered.length} 家</p>
+        <div className="grid md:grid-cols-2 gap-3">
+          {filtered.map((h) => (
+            <article key={h.id} className="bg-white border border-neutral-200 rounded-xl p-5 flex flex-col">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full border bg-blue-100 text-blue-800 border-blue-200">
+                  {h.level}
+                </span>
+                <span className="text-xs text-neutral-500">{h.region}</span>
+                {h.hasDirectLink && (
+                  <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200">
+                    直達
+                  </span>
+                )}
+              </div>
+              <h3 className="font-serif text-lg font-semibold text-neutral-900 mb-1">{h.name}</h3>
+              <p className="text-sm text-neutral-600 mb-1">{h.address}</p>
+              <p className="text-sm text-neutral-500 mb-4">電話：{h.phone || "—"}</p>
+              <a
+                href={h.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`mt-auto inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                  h.hasDirectLink
+                    ? "bg-teal-600 text-white hover:bg-teal-700"
+                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200"
+                }`}
+              >
+                {h.hasDirectLink ? "前往官方掛號 →" : "搜尋掛號入口 →"}
+              </a>
+            </article>
+          ))}
+        </div>
       </section>
 
       <footer className="border-t border-neutral-200 bg-neutral-100 mt-auto">

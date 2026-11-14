@@ -23,9 +23,7 @@ function TierBadge({ tier }: { tier: 1 | 2 | 3 }) {
   };
   const c = config[tier];
   return (
-    <span
-      className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full border ${c.className}`}
-    >
+    <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full border ${c.className}`}>
       {c.label}
     </span>
   );
@@ -38,12 +36,10 @@ function HeadlineCard({ headline }: { headline: Headline }) {
         <TierBadge tier={headline.sourceTier} />
         <span className="text-xs text-neutral-500">{headline.sourceName}</span>
       </div>
-      <h2 className="font-serif text-xl font-semibold text-neutral-900 leading-snug mb-3">
+      <h3 className="font-serif text-xl font-semibold text-neutral-900 leading-snug mb-3">
         {headline.title}
-      </h2>
-      <p className="text-sm text-neutral-700 leading-relaxed mb-4">
-        {headline.summary}
-      </p>
+      </h3>
+      <p className="text-sm text-neutral-700 leading-relaxed mb-4">{headline.summary}</p>
       <div className="bg-teal-50 border-l-2 border-teal-500 px-4 py-2 mb-4 mt-auto">
         <p className="text-sm text-teal-900 leading-relaxed">
           <span className="font-semibold">為什麼與你有關：</span>
@@ -62,75 +58,108 @@ function HeadlineCard({ headline }: { headline: Headline }) {
   );
 }
 
+function EntryIcon({ type }: { type: "hospital" | "clinic" | "news" }) {
+  const paths = {
+    hospital: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+    clinic: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
+    news: "M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z",
+  };
+  return (
+    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d={paths[type]} />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-neutral-200 bg-white">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-2xl font-bold text-neutral-900">
-              台灣醫療入口
-            </h1>
-            <p className="text-xs text-neutral-500 mt-1">
-              由 AI 自動策展的權威醫療資訊導航
-            </p>
-          </div>
-          <Link
-            href="/hospitals"
-            className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
-          >
-            醫院掛號
+          <Link href="/" className="block">
+            <h1 className="font-serif text-2xl font-bold text-neutral-900">台灣醫療入口</h1>
+            <p className="text-xs text-neutral-500 mt-1">由 AI 自動策展的權威醫療資訊導航</p>
           </Link>
-          <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-            診所查找
-          </Link>
-          <Link
-            href="/about"
-            className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors"
-          >
-            關於本站
-          </Link>
+          <nav className="flex items-center gap-5">
+            <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
+            <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
+            <Link href="/about" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">關於本站</Link>
+          </nav>
         </div>
       </header>
 
+      {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-12 pb-8 w-full">
-        <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">
-          今日台灣醫療大事
-        </p>
         <h2 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-4">
-          每天清晨，為你篩選
+          從找醫院、找診所
           <br className="hidden md:block" />
-          最值得知道的醫療資訊
+          到讀懂每日醫療大事
         </h2>
         <p className="text-neutral-600 max-w-2xl leading-relaxed">
-          本站不生產內容，所有資訊由 AI 從衛福部、疾管署、健保署等公開權威來源自動聚合。
-          零人工編輯，內容永遠反映第一手公告。
+          本站不生產內容，所有醫療資訊由 AI 從衛福部、疾管署、食藥署等公開權威來源自動聚合。零人工編輯，內容永遠反映第一手公告。
         </p>
       </section>
 
-      <section className="max-w-5xl mx-auto px-6 pb-16 w-full grid md:grid-cols-3 gap-6">
-        {data.headlines.map((h) => (
-          <HeadlineCard key={h.id} headline={h} />
-        ))}
-      </section>
-
-      <section className="border-t border-neutral-200 bg-white mt-auto">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
-          <span>最後自動更新：{formatDateTime(data.lastUpdated)}</span>
-          <span className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-            自動化流水線運作中
-          </span>
+      {/* 三大入口 */}
+      <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
+        <div className="grid md:grid-cols-3 gap-4">
+          <Link
+            href="/hospitals"
+            className="group bg-white border border-neutral-200 rounded-2xl p-6 hover:border-teal-400 hover:shadow-md transition-all flex flex-col"
+          >
+            <div className="text-teal-600 mb-4"><EntryIcon type="hospital" /></div>
+            <h3 className="font-serif text-xl font-semibold text-neutral-900 mb-2">醫院掛號</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-4">
+              全台醫學中心與區域醫院的官方網路掛號入口
+            </p>
+            <span className="mt-auto text-sm font-medium text-teal-700 group-hover:underline">前往 →</span>
+          </Link>
+          <Link
+            href="/clinics"
+            className="group bg-white border border-neutral-200 rounded-2xl p-6 hover:border-teal-400 hover:shadow-md transition-all flex flex-col"
+          >
+            <div className="text-teal-600 mb-4"><EntryIcon type="clinic" /></div>
+            <h3 className="font-serif text-xl font-semibold text-neutral-900 mb-2">診所查找</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-4">
+              健保特約診所依縣市與科別篩選，資料每日更新
+            </p>
+            <span className="mt-auto text-sm font-medium text-teal-700 group-hover:underline">前往 →</span>
+          </Link>
+          <Link
+            href="#today"
+            className="group bg-white border border-neutral-200 rounded-2xl p-6 hover:border-teal-400 hover:shadow-md transition-all flex flex-col"
+          >
+            <div className="text-teal-600 mb-4"><EntryIcon type="news" /></div>
+            <h3 className="font-serif text-xl font-semibold text-neutral-900 mb-2">今日醫療資訊</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-4">
+              每日自動彙整三大官方機關的最新公告
+            </p>
+            <span className="mt-auto text-sm font-medium text-teal-700 group-hover:underline">查看 →</span>
+          </Link>
         </div>
       </section>
 
-      <footer className="border-t border-neutral-200 bg-neutral-100">
+      {/* 今日醫療資訊 */}
+      <section id="today" className="max-w-5xl mx-auto px-6 pt-8 pb-8 w-full border-t border-neutral-200">
+        <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">今日台灣醫療大事</p>
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-neutral-900 leading-tight mb-2">
+          每天清晨，為你篩選最值得知道的醫療資訊
+        </h2>
+        <p className="text-sm text-neutral-500 mb-6">
+          最後自動更新：{formatDateTime(data.lastUpdated)}
+        </p>
+        <div className="grid md:grid-cols-3 gap-6">
+          {data.headlines.map((h) => (
+            <HeadlineCard key={h.id} headline={h} />
+          ))}
+        </div>
+      </section>
+
+      <footer className="border-t border-neutral-200 bg-neutral-100 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-8 text-xs text-neutral-600 leading-relaxed">
           <p className="mb-2 font-semibold text-neutral-700">重要聲明</p>
           <p className="mb-4">
-            本站不提供醫療診斷或治療建議。所有內容由 AI
-            從公開權威來源自動聚合，僅供資訊導覽參考。任何健康問題請諮詢醫師或撥打
-            1922 防疫專線、1995 安心專線。
+            本站不提供醫療診斷或治療建議。所有內容由 AI 從公開權威來源自動聚合，僅供資訊導覽參考。任何健康問題請諮詢醫師或撥打 1922 防疫專線、1995 安心專線。
           </p>
           <p className="text-neutral-400">
             © {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站
