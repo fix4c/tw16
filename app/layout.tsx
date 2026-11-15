@@ -37,6 +37,7 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289252603428818"
           crossOrigin="anonymous"
           strategy="afterInteractive"
+          data-nscript={undefined} // 👈 加上這行，消除 AdSense 警告
         />
       </head>
       <body className="bg-neutral-50 text-neutral-900 antialiased">
