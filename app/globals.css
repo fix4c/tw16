@@ -1,11 +1,17 @@
 @import "tailwindcss";
 
 html {
-  font-family: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei",
-    system-ui, sans-serif;
+  font-family: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
 }
 
 .font-serif {
-  font-family: var(--font-noto-serif), "PingFang TC", "Microsoft JhengHei",
-    serif;
+  font-family: var(--font-noto-serif), "PingFang TC", "Microsoft JhengHei", serif;
+}
+
+/* 全局背景：淡淡的冷灰藍漸變，提升高級感 */
+body {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%);
+  background-attachment: fixed;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
 }
