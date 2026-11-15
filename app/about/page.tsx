@@ -141,8 +141,12 @@ export default function AboutPage() {
       </article>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
-        <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-slate-500">
-          © {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站
+        <div className="max-w-3xl mx-auto px-6 py-8 text-xs text-slate-500 text-center leading-relaxed">
+          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
+            <span>🏆</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
+          </div>
+          <p>© {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站</p>
         </div>
       </footer>
     </main>
