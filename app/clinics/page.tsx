@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { Header } from "../components/Header"; 
 import rawData from "@/data/clinics.json";
 
 type Clinic = {
@@ -25,6 +24,7 @@ export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
   const [searchTerm, setSearchTerm] = useState("");
+  const [reviews, setReviews] = useState<Record<string, { good: number, bad: number }>>({});
 
   const counties = useMemo(() => {
     const set = new Set<string>();
@@ -54,9 +54,57 @@ export default function ClinicsPage() {
     }).slice(0, 50);
   }, [selectedCounty, selectedSpecialty, searchTerm]);
 
+  // 當頁面載入或篩選結果改變時，去抓取這 50 家診所的評價
+  useEffect(() => {
+    filtered.forEach(async (c) => {
+      if (reviews[c.name]) return; // 已抓過就不重複抓
+      try {
+        const res = await fetch(`/api/reviews/${encodeURIComponent(c.name)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setReviews(prev => ({ ...prev, [c.name]: data }));
+        }
+      } catch (e) {}
+    });
+  }, [filtered]);
+
+  const handleVote = async (id: string, type: "good" | "bad") => {
+    const current = reviews[id] || { good: 0, bad: 0 };
+    // 樂觀更新 UI
+    setReviews(prev => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
+
+    try {
+      const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setReviews(prev => ({ ...prev, [id]: data }));
+      }
+    } catch (e) {
+      alert("投票失敗，請稍後再試。");
+    }
+  };
+
   return (
     <main className="min-h-screen flex flex-col">
-      <Header />
+      <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
+          </Link>
+          
+          <nav className="flex items-center gap-4 md:gap-6 text-sm font-medium">
+            <Link href="/hospitals" className="text-slate-600 hover:text-teal-700 transition-colors">醫院掛號</Link>
+            <Link href="/clinics" className="text-teal-700">院所查詢</Link>
+            <Link href="/tools/symptoms" className="text-slate-600 hover:text-teal-700 transition-colors">症狀查科別</Link>
+            <Link href="/tools/bmi" className="text-slate-600 hover:text-teal-700 transition-colors">BMI計算</Link>
+            <Link href="/guides" className="text-slate-600 hover:text-teal-700 transition-colors">就醫指南</Link>
+          </nav>
+        </div>
+      </header>
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-50/40 to-transparent pointer-events-none"></div>
@@ -119,7 +167,7 @@ export default function ClinicsPage() {
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           {filtered.map((c, i) => (
-            <article key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300">
+            <article key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col">
               <div className="flex items-center gap-2 mb-2">
                 {c.type && (
                   <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">
@@ -133,18 +181,30 @@ export default function ClinicsPage() {
               {c.specialty && (
                 <p className="text-xs font-medium text-blue-600 mt-3 bg-blue-50 inline-block px-2 py-1 rounded-md">科別：{c.specialty}</p>
               )}
+
+              {/* 評價區塊 */}
+              <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-3 mt-auto">
+                <button 
+                  className="flex items-center gap-1 text-sm font-medium text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-100 transition-colors"
+                  onClick={() => handleVote(c.name, "good")}
+                >
+                  👍 值得推薦 <span className="text-xs bg-white px-1.5 rounded-md text-teal-700">{reviews[c.name]?.good || 0}</span>
+                </button>
+                <button 
+                  className="flex items-center gap-1 text-sm font-medium text-rose-600 hover:text-rose-800 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 transition-colors"
+                  onClick={() => handleVote(c.name, "bad")}
+                >
+                  👎 有待加強 <span className="text-xs bg-white px-1.5 rounded-md text-rose-700">{reviews[c.name]?.bad || 0}</span>
+                </button>
+              </div>
             </article>
           ))}
         </div>
       </section>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
-        <div className="max-w-3xl mx-auto px-6 py-8 text-xs text-slate-500 text-center leading-relaxed">
-          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
-            <span>🏆</span>
-            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
-          </div>
-          <p>© {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站</p>
+        <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-slate-500">
+          <p>資料來源：衛生福利部中央健康保險署開放資料平台 · 每日更新</p>
         </div>
       </footer>
     </main>
