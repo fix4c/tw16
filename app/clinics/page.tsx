@@ -20,6 +20,13 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
+// 宣告 window.turnstile 型別，避免 TypeScript 報錯
+declare global {
+  interface Window {
+    turnstile: any;
+  }
+}
+
 export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
@@ -68,24 +75,75 @@ export default function ClinicsPage() {
     });
   }, [filtered]);
 
-  const handleVote = async (id: string, type: "good" | "bad") => {
-    const current = reviews[id] || { good: 0, bad: 0 };
-    // 樂觀更新 UI
-    setReviews(prev => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
-
-    try {
-      const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setReviews(prev => ({ ...prev, [id]: data }));
-      }
-    } catch (e) {
-      alert("投票失敗，請稍後再試。");
+  // 生成簡單的瀏覽器指紋（用於防重複，非絕對安全，但足以擋住一般用戶）
+  const getFingerprint = () => {
+    let fp = localStorage.getItem("tw16-fp");
+    if (!fp) {
+      fp = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("tw16-fp", fp);
     }
+    return fp;
+  };
+
+  const handleVote = async (id: string, type: "good" | "bad") => {
+    // 檢查前端是否已投過
+    const votedKey = `tw16-voted-${id}`;
+    if (localStorage.getItem(votedKey)) {
+      alert("您已經給這家機構投過票了！");
+      return;
+    }
+
+    // 觸發 Turnstile 驗證
+    if (!window.turnstile) {
+      alert("人機驗證載入中，請稍後再試。");
+      return;
+    }
+
+    window.turnstile.ready(async () => {
+      // 建立一個隱藏的容器來獲取 token
+      let container = document.getElementById("turnstile-container");
+      if (!container) {
+        container = document.createElement("div");
+        container.id = "turnstile-container";
+        document.body.appendChild(container);
+      }
+
+      const token = await new Promise<string>((resolve) => {
+        window.turnstile.render(container, {
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 👈 你的 Site Key
+          callback: (token: string) => resolve(token),
+        });
+      });
+
+      const current = reviews[id] || { good: 0, bad: 0 };
+      // 樂觀更新 UI
+      setReviews(prev => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
+
+      try {
+        const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type, token, fingerprint: getFingerprint() })
+        });
+
+        if (res.status === 409) {
+          alert("您已經投票過了！");
+          localStorage.setItem(votedKey, "true");
+          return;
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          setReviews(prev => ({ ...prev, [id]: data }));
+          localStorage.setItem(votedKey, "true"); // 標記已投票
+        } else {
+          const err = await res.json();
+          alert(err.error || "投票失敗");
+        }
+      } catch (e) {
+        alert("網路錯誤，請稍後再試。");
+      }
+    });
   };
 
   return (
@@ -201,6 +259,10 @@ export default function ClinicsPage() {
           ))}
         </div>
       </section>
+
+      {/* Turnstile 隱藏容器與腳本 */}
+      <div id="turnstile-container" className="hidden"></div>
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-slate-500">
