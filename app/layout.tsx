@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: "台灣醫療入口 | 由 AI 自動策展的權威醫療資訊導航",
   description:
     "從衛福部、疾管署、健保署等權威來源自動聚合，每日更新的台灣醫療資訊入口網站。",
+  // 👇 新增這段，強制指定瀏覽器標籤圖標
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -37,7 +41,7 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289252603428818"
           crossOrigin="anonymous"
           strategy="afterInteractive"
-          data-nscript={undefined} // 👈 加上這行，消除 AdSense 警告
+          data-nscript={undefined}
         />
       </head>
       <body className="bg-neutral-50 text-neutral-900 antialiased">
