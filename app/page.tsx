@@ -83,6 +83,7 @@ export default function HomePage() {
           <nav className="flex items-center gap-5">
             <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
             <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
+            <Link href="/tools/bmi" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">健康小工具</Link>
             <Link href="/guides" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">就醫指南</Link>
             <Link href="/about" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">關於本站</Link>
           </nav>
@@ -158,6 +159,22 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* 健康小工具直達 */}
+      <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
+        <div className="bg-teal-50 border border-teal-100 rounded-2xl p-6 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h3 className="font-serif text-lg font-bold text-teal-900 mb-1">計算你的 BMI 身體質量指數</h3>
+            <p className="text-sm text-teal-700">輸入身高體重，快速了解目前的體位狀態。</p>
+          </div>
+          <Link
+            href="/tools/bmi"
+            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-full hover:bg-teal-700 transition-colors whitespace-nowrap"
+          >
+            立即計算 →
+          </Link>
+        </div>
+      </section>      
 
       {/* 內容底部矩形廣告 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
