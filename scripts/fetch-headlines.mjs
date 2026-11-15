@@ -38,7 +38,6 @@ const RSS_SOURCES = [
   { name: "新華網", tier: 1, url: "http://www.xinhuanet.com/health/news_health.xml", isSimplified: true },
 ];
 
-// 专门抓取 WHO 中文新闻网页的简易函数
 async function fetchWhoNews() {
   try {
     const res = await fetch("https://www.who.int/zh/news", {
@@ -50,22 +49,33 @@ async function fetchWhoNews() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
-    // 提取 h3 里的标题和链接（WHO 页面结构大致如此）
-    // 这是一个极其轻量的提取，不依赖复杂的 DOM 解析库
     const items = [];
-    const regex = /<h3[^>]*class="[^"]*heading[^"]*"[^>]*>[\s\S]*?<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
+    // WHO 的新闻链接通常带有 /zh/news/item/ 或 /zh/news/ 路径
+    // 我们提取所有带有这些路径的 a 标签，并抓取其内部的文本作为标题
+    const regex = /<a[^>]*href="([^"]*\/zh\/news\/[^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
     let match;
+    const seenUrls = new Set();
+
     while ((match = regex.exec(html)) !== null && items.length < 6) {
-      const link = match[1].startsWith("http") ? match[1] : `https://www.who.int${match[1]}`;
-      const title = match[2].replace(/<[^>]+>/g, "").trim();
-      if (title && link) {
+      const rawLink = match[1];
+      // 过滤掉导航栏、页脚等干扰链接，只保留具体新闻条目
+      if (!rawLink.includes("/item/") && rawLink.endsWith("/news")) continue;
+      
+      const link = rawLink.startsWith("http") ? rawLink : `https://www.who.int${rawLink}`;
+      if (seenUrls.has(link)) continue;
+      
+      // 去除 HTML 标签，清理多余空白
+      const title = match[2].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+      
+      if (title && title.length > 5) {
         items.push({
           title,
           link,
-          contentSnippet: "", // WHO 的摘要通常在详情页，这里留空，交给 AI 去推断
+          contentSnippet: "", 
           sourceName: "世界衛生組織 (WHO)",
           sourceTier: 1,
         });
+        seenUrls.add(link);
       }
     }
     return items;
