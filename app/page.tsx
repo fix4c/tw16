@@ -153,21 +153,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 健康小工具直達 */}
+      {/* 健康工具專區 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
-        <div className="bg-white/80 backdrop-blur-md border border-teal-100 rounded-3xl p-6 flex items-center justify-between flex-wrap gap-4 shadow-sm">
-          <div>
-            <h3 className="font-serif text-lg font-bold text-slate-900 mb-1">計算你的 BMI 身體質量指數</h3>
-            <p className="text-sm text-slate-500">輸入身高體重，快速了解目前的體位狀態。</p>
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+          <h3 className="font-serif text-xl font-bold text-slate-900 mb-6">免費健康管理小工具</h3>
+          <div className="grid md:grid-cols-4 gap-4">
+            <Link href="/tools/bmi" className="group p-4 rounded-2xl bg-teal-50 hover:bg-teal-100 transition-colors border border-teal-100 flex flex-col items-center text-center">
+              <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">⚖️</span>
+              <span className="font-bold text-teal-900 text-sm">BMI 計算</span>
+              <span className="text-xs text-teal-600 mt-1">了解體位狀態</span>
+            </Link>
+            <Link href="/tools/water" className="group p-4 rounded-2xl bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-100 flex flex-col items-center text-center">
+              <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">💧</span>
+              <span className="font-bold text-blue-900 text-sm">飲水量計算</span>
+              <span className="text-xs text-blue-600 mt-1">每日該喝多少水</span>
+            </Link>
+            <Link href="/tools/health-tracker" className="group p-4 rounded-2xl bg-rose-50 hover:bg-rose-100 transition-colors border border-rose-100 flex flex-col items-center text-center">
+              <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">🩺</span>
+              <span className="font-bold text-rose-900 text-sm">三高記錄表</span>
+              <span className="text-xs text-rose-600 mt-1">血壓血糖追蹤</span>
+            </Link>
+            <Link href="/tools/symptoms" className="group p-4 rounded-2xl bg-indigo-50 hover:bg-indigo-100 transition-colors border border-indigo-100 flex flex-col items-center text-center">
+              <span className="text-2xl mb-2 group-hover:scale-110 transition-transform">🔍</span>
+              <span className="font-bold text-indigo-900 text-sm">症狀查科別</span>
+              <span className="text-xs text-indigo-600 mt-1">該看哪一科？</span>
+            </Link>
           </div>
-          <Link
-            href="/tools/bmi"
-            className="px-6 py-2.5 bg-teal-50 text-teal-700 font-semibold rounded-full hover:bg-teal-100 border border-teal-200 transition-colors whitespace-nowrap"
-          >
-            立即計算 →
-          </Link>
         </div>
-      </section>      
+      </section>
 
       {/* 今日醫療資訊 */}
       <section id="today" className="max-w-5xl mx-auto px-6 pt-10 pb-16 w-full border-t border-slate-200/60">
