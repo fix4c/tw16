@@ -160,6 +160,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 醫療小幫手直達 */}
+      <section className="max-w-5xl mx-auto px-6 pb-6 w-full">
+        <div className="bg-gradient-to-r from-teal-600 to-teal-800 rounded-3xl p-8 text-white shadow-lg flex items-center justify-between flex-wrap gap-6">
+          <div>
+            <h3 className="font-serif text-2xl font-bold mb-2">不知道該看哪一科？</h3>
+            <p className="text-teal-100">透過簡單點選，互動式醫療小幫手幫您釐清症狀，給出建議。</p>
+          </div>
+          <Link
+            href="/tools/assistant"
+            className="px-6 py-3 bg-white text-teal-800 font-bold rounded-full hover:bg-teal-50 transition-colors whitespace-nowrap shadow-sm"
+          >
+            開始評估 →
+          </Link>
+        </div>
+      </section>
+
       {/* 健康小工具直達 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
         <div className="bg-teal-50 border border-teal-100 rounded-2xl p-6 flex items-center justify-between flex-wrap gap-4">
