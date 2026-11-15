@@ -80,12 +80,12 @@ export default function HomePage() {
 <Link href="/" className="flex items-center gap-2">
   <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
 </Link>
-          <nav className="flex items-center gap-5">
-            <Link href="/hospitals" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">醫院掛號</Link>
-            <Link href="/clinics" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">診所查找</Link>
-            <Link href="/tools/bmi" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">健康小工具</Link>
-            <Link href="/guides" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">就醫指南</Link>
-            <Link href="/about" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">關於本站</Link>
+          <nav className="flex items-center gap-4 md:gap-6 text-sm">
+            <Link href="/hospitals" className="text-neutral-500 hover:text-teal-700 transition-colors">醫院掛號</Link>
+            <Link href="/clinics" className="text-neutral-500 hover:text-teal-700 transition-colors">院所查詢</Link>
+            <Link href="/tools/symptoms" className="font-medium text-teal-700">症狀查科別</Link>
+            <Link href="/tools/bmi" className="text-neutral-500 hover:text-teal-700 transition-colors">BMI計算</Link>
+            <Link href="/guides" className="text-neutral-500 hover:text-teal-700 transition-colors">就醫指南</Link>
           </nav>
         </div>
       </header>

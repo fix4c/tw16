@@ -1,0 +1,144 @@
+{
+  "symptoms": [
+    {
+      "id": "headache",
+      "name": "頭痛",
+      "category": "神經與感官",
+      "departments": ["神經內科", "家醫科"],
+      "note": "伴隨突發劇烈疼痛、發燒或頸部僵硬，請立即至急診。"
+    },
+    {
+      "id": "dizziness",
+      "name": "頭暈/眩暈",
+      "category": "神經與感官",
+      "departments": ["耳鼻喉科", "神經內科", "家醫科"],
+      "note": "若伴隨複視、口齒不清或單側無力，可能是中風前兆，請速就醫。"
+    },
+    {
+      "id": "fever",
+      "name": "發燒",
+      "category": "全身性",
+      "departments": ["家醫科", "感染科", "小兒科(兒童)"],
+      "note": "持續高燒超過3天、伴隨呼吸困難或意識不清，請盡速就醫。"
+    },
+    {
+      "id": "cough",
+      "name": "咳嗽",
+      "category": "呼吸道",
+      "departments": ["胸腔內科", "家醫科", "耳鼻喉科"],
+      "note": "咳嗽超過兩週、伴隨咳血或體重減輕，請盡速檢查。"
+    },
+    {
+      "id": "stomachache",
+      "name": "腹痛/胃痛",
+      "category": "消化系統",
+      "departments": ["胃腸肝膽科", "一般外科", "家醫科"],
+      "note": "右上腹劇痛、吐血或解黑便，請立即至急診。"
+    },
+    {
+      "id": "diarrhea",
+      "name": "腹瀉",
+      "category": "消化系統",
+      "departments": ["胃腸肝膽科", "家醫科"],
+      "note": "伴隨嚴重脫水、高燒或血便，請盡速就醫。"
+    },
+    {
+      "id": "chest_pain",
+      "name": "胸痛/胸悶",
+      "category": "心血管",
+      "departments": ["心臟內科", "急診(嚴重時)"],
+      "note": "若感覺像被重物壓住、冒冷汗或延伸至左肩，請立即撥打119。"
+    },
+    {
+      "id": "palpitations",
+      "name": "心悸",
+      "category": "心血管",
+      "departments": ["心臟內科", "家醫科"],
+      "note": "伴隨暈厥、呼吸困難或胸痛，請盡速就醫。"
+    },
+    {
+      "id": "back_pain",
+      "name": "背痛/腰痛",
+      "category": "骨骼肌肉",
+      "departments": ["骨科", "復健科", "神經外科"],
+      "note": "伴隨下肢無力、麻木或大小便失禁，請盡速就醫。"
+    },
+    {
+      "id": "joint_pain",
+      "name": "關節痛",
+      "category": "骨骼肌肉",
+      "departments": ["風濕免疫科", "骨科", "復健科"],
+      "note": "多處關節同時腫痛、伴隨晨間僵硬，建議至風濕免疫科檢查。"
+    },
+    {
+      "id": "rash",
+      "name": "皮膚紅疹/癢",
+      "category": "皮膚",
+      "departments": ["皮膚科", "家醫科"],
+      "note": "伴隨發燒、呼吸困難或黏膜潰爛，可能是嚴重過敏或感染，請速就醫。"
+    },
+    {
+      "id": "eye_pain",
+      "name": "眼睛紅腫/痛",
+      "category": "神經與感官",
+      "departments": ["眼科"],
+      "note": "突發視力模糊、視野缺損或劇痛，請立即就醫。"
+    },
+    {
+      "id": "ear_pain",
+      "name": "耳朵痛/耳鳴",
+      "category": "神經與感官",
+      "departments": ["耳鼻喉科"],
+      "note": "伴隨突發性聽力喪失，請盡速就醫（黃金治療期短）。"
+    },
+    {
+      "id": "urinary_pain",
+      "name": "頻尿/排尿痛",
+      "category": "泌尿系統",
+      "departments": ["泌尿科", "婦產科(女性)"],
+      "note": "伴隨發燒、腰痛（疑似腎盂腎炎），請盡速就醫。"
+    },
+    {
+      "id": "menstrual_pain",
+      "name": "經痛/生理痛",
+      "category": "婦科",
+      "departments": ["婦產科"],
+      "note": "痛到無法下床、吃止痛藥無效，建議檢查是否有子宮內膜異位等問題。"
+    },
+    {
+      "id": "anxiety",
+      "name": "焦慮/失眠",
+      "category": "精神心理",
+      "departments": ["精神科", "身心科", "家醫科"],
+      "note": "嚴重影響日常生活、出現輕生念頭，請立即尋求專業協助（1925安心專線）。"
+    },
+    {
+      "id": "fatigue",
+      "name": "疲勞/嗜睡",
+      "category": "全身性",
+      "departments": ["家醫科", "內分泌科"],
+      "note": "持續超過數週、伴隨體重減輕或發燒，建議抽血檢查。"
+    },
+    {
+      "id": "numbness",
+      "name": "手腳麻木",
+      "category": "神經與感官",
+      "departments": ["神經內科", "復健科"],
+      "note": "單側突然麻木無力，請立即至急診（疑似中風）。"
+    },
+    {
+      "id": "shortness_breath",
+      "name": "呼吸困難/喘",
+      "category": "呼吸道",
+      "departments": ["胸腔內科", "心臟內科", "急診(嚴重時)"],
+      "note": "突發嚴重呼吸困難、嘴唇發紫，請立即撥打119。"
+    },
+    {
+      "id": "child_fever",
+      "name": "兒童發燒/哭鬧",
+      "category": "小兒科",
+      "departments": ["小兒科", "急診(三個月以下嬰兒)"],
+      "note": "三個月以下嬰兒發燒、活動力極差或抽搐，請立即就醫。"
+    }
+  ]
+}
