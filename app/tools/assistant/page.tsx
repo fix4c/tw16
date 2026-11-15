@@ -306,7 +306,7 @@ export default function AssistantPage() {
         <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-neutral-500 text-center">
           <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
             <span>🏆</span>
-            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站</span>
           </div>
           <p className="mb-2">本工具僅供初步導航參考，無法取代專業醫師的診斷與治療。若症狀緊急，請立即撥打 119。</p>
           <p>© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
