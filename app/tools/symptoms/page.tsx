@@ -119,7 +119,7 @@ export default function SymptomsPage() {
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-neutral-500">
           <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
             <span>🏆</span>
-            <span>本站入圍衛福部 95 年度優良健康資訊網站</span>
+            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
           </div>
           <p className="mb-2 text-red-500 font-medium">免責聲明：本頁面資訊僅供就醫參考，不構成醫療診斷或建議。如有緊急狀況，請立即就醫或撥打 119。</p>
           <p>© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
