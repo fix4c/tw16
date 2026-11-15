@@ -28,6 +28,8 @@ export default function HospitalsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
   const [widgetId, setWidgetId] = useState<string | null>(null);
+  // 紀錄正在投票的醫院名稱，用於顯示 Loading
+  const [votingId, setVotingId] = useState<string | null>(null);
 
   const regions = useMemo(() => {
     const set = new Set<string>();
@@ -115,6 +117,14 @@ export default function HospitalsPage() {
       return;
     }
 
+    // 1. 立即設定該醫院為投票中狀態（觸發 UI 放大與轉圈圈）
+    setVotingId(id);
+    
+    // 2. 立刻給出樂觀更新（先加 1，讓用戶覺得瞬間生效）
+    const current = reviews[id] || { good: 0, bad: 0 };
+    setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
+
+    // 3. 背景執行驗證與 API 請求
     window.turnstile.execute(widgetId);
 
     const token = await new Promise<string>((resolve, reject) => {
@@ -134,11 +144,11 @@ export default function HospitalsPage() {
 
     if (!token) {
       alert("人機驗證失敗，請稍後再試。");
+      setVotingId(null);
+      // 失敗了，把數字扣回來
+      setReviews((prev) => ({ ...prev, [id]: current }));
       return;
     }
-
-    const current = reviews[id] || { good: 0, bad: 0 };
-    setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
     try {
       const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
@@ -150,6 +160,7 @@ export default function HospitalsPage() {
       if (res.status === 409) {
         alert("您已經投票過了！");
         localStorage.setItem(votedKey, "true");
+        setVotingId(null);
         return;
       }
 
@@ -159,12 +170,20 @@ export default function HospitalsPage() {
         localStorage.setItem(votedKey, "true");
         (window as any).turnstileToken = null;
         window.turnstile.reset(widgetId);
+        
+        // 投票成功！彈出提示
+        alert("✅ 感謝您的投票！您的意見已成功記錄。");
       } else {
         const err = await res.json();
         alert(err.error || "投票失敗");
+        setReviews((prev) => ({ ...prev, [id]: current }));
       }
     } catch (e) {
       alert("網路錯誤，請稍後再試。");
+      setReviews((prev) => ({ ...prev, [id]: current }));
+    } finally {
+      // 結束 Loading 狀態
+      setVotingId(null);
     }
   };
 
@@ -266,20 +285,39 @@ export default function HospitalsPage() {
 
               <div className="mt-auto pt-4 border-t border-slate-100 flex items-center gap-3">
                 <button
-                  className="flex items-center gap-1 text-sm font-medium text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-100 transition-colors"
+                  disabled={votingId === h.name}
+                  className={`flex items-center gap-1 text-sm font-medium text-teal-600 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-100 transition-all duration-300 ${
+                    votingId === h.name ? "opacity-50 scale-95 cursor-not-allowed" : "hover:text-teal-800 hover:bg-teal-100"
+                  }`}
                   onClick={() => handleVote(h.name, "good")}
                 >
-                  👍 值得推薦{" "}
-                  <span className="text-xs bg-white px-1.5 rounded-md text-teal-700">
+                  {votingId === h.name ? (
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-teal-600 border-t-transparent rounded-full" />
+                  ) : (
+                    "👍 值得推薦"
+                  )}
+                  <span className={`text-xs px-1.5 rounded-md transition-all duration-300 ${
+                    votingId === h.name ? "bg-teal-600 text-white text-lg py-0.5 px-2 font-bold scale-110 shadow-md" : "bg-white text-teal-700"
+                  }`}>
                     {reviews[h.name]?.good || 0}
                   </span>
                 </button>
+                
                 <button
-                  className="flex items-center gap-1 text-sm font-medium text-rose-600 hover:text-rose-800 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 transition-colors"
+                  disabled={votingId === h.name}
+                  className={`flex items-center gap-1 text-sm font-medium text-rose-600 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 transition-all duration-300 ${
+                    votingId === h.name ? "opacity-50 scale-95 cursor-not-allowed" : "hover:text-rose-800 hover:bg-rose-100"
+                  }`}
                   onClick={() => handleVote(h.name, "bad")}
                 >
-                  👎 有待加強{" "}
-                  <span className="text-xs bg-white px-1.5 rounded-md text-rose-700">
+                  {votingId === h.name ? (
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-rose-600 border-t-transparent rounded-full" />
+                  ) : (
+                    "👎 有待加強"
+                  )}
+                  <span className={`text-xs px-1.5 rounded-md transition-all duration-300 ${
+                    votingId === h.name ? "bg-rose-600 text-white text-lg py-0.5 px-2 font-bold scale-110 shadow-md" : "bg-white text-rose-700"
+                  }`}>
                     {reviews[h.name]?.bad || 0}
                   </span>
                 </button>
