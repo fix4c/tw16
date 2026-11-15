@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Header } from "../components/Header"; 
 
 export const metadata: Metadata = {
   title: "就醫指南 | 台灣醫療入口",

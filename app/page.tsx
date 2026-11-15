@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Header } from "./components/Header"; 
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";
 

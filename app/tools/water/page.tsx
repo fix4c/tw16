@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Header } from "../../components/Header"; 
 
 export default function WaterCalculatorPage() {
   const [weight, setWeight] = useState("");

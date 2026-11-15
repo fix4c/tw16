@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { Header } from "../components/Header"; 
 import rawData from "@/data/clinics.json";
 
 type Clinic = {
