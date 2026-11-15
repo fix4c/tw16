@@ -33,6 +33,7 @@ export default function ClinicsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number, bad: number }>>({});
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [widgetId, setWidgetId] = useState<string | null>(null);
 
   const counties = useMemo(() => {
     const set = new Set<string>();
@@ -75,23 +76,25 @@ export default function ClinicsPage() {
     });
   }, [filtered]);
 
-  // Turnstile 載入完成後初始化
+  // 初始化 Turnstile（隱藏模式，不渲染可見 widget，僅準備執行環境）
   useEffect(() => {
     if (scriptLoaded && window.turnstile) {
-      window.turnstile.ready(() => {
-        window.turnstile.render("#turnstile-container", {
-          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
-          callback: (token: string) => {
-            (window as any).turnstileToken = token;
-          },
-          "error-callback": () => {
-            console.error("Turnstile 驗證失敗");
-          },
-          "expired-callback": () => {
-            (window as any).turnstileToken = null;
-          }
-        });
+      // 使用 execute 模式，不需要可見容器
+      const id = window.turnstile.render({
+        sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
+        execution: "execute", // 關鍵：改為手動執行模式
+        appearance: "always",  // 配合 execute 使用
+        callback: (token: string) => {
+          (window as any).turnstileToken = token;
+        },
+        "error-callback": () => {
+          console.error("Turnstile 驗證失敗");
+        },
+        "expired-callback": () => {
+          (window as any).turnstileToken = null;
+        }
       });
+      setWidgetId(id);
     }
   }, [scriptLoaded]);
 
@@ -111,9 +114,32 @@ export default function ClinicsPage() {
       return;
     }
 
-    const token = (window as any).turnstileToken;
+    if (!window.turnstile || !widgetId) {
+      alert("人機驗證載入中，請稍後再點擊。");
+      return;
+    }
+
+    // 手動執行驗證
+    window.turnstile.execute(widgetId);
+
+    // 等待 token（最多 5 秒）
+    const token = await new Promise<string>((resolve, reject) => {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        const t = (window as any).turnstileToken;
+        if (t) {
+          clearInterval(interval);
+          resolve(t);
+        }
+        if (++attempts > 50) {
+          clearInterval(interval);
+          reject(new Error("驗證超時"));
+        }
+      }, 100);
+    }).catch(() => null);
+
     if (!token) {
-      alert("人機驗證準備中，請稍後再點擊一次。");
+      alert("人機驗證失敗，請稍後再試。");
       return;
     }
 
@@ -137,6 +163,9 @@ export default function ClinicsPage() {
         const data = await res.json();
         setReviews(prev => ({ ...prev, [id]: data }));
         localStorage.setItem(votedKey, "true");
+        // 重置 token，以便下次使用
+        (window as any).turnstileToken = null;
+        window.turnstile.reset(widgetId);
       } else {
         const err = await res.json();
         alert(err.error || "投票失敗");
@@ -148,9 +177,8 @@ export default function ClinicsPage() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      {/* 使用 Next.js Script 確保載入順序 */}
       <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
         strategy="beforeInteractive"
         onLoad={() => setScriptLoaded(true)}
       />
@@ -265,9 +293,6 @@ export default function ClinicsPage() {
           ))}
         </div>
       </section>
-
-      {/* 隱藏的 Turnstile 容器 */}
-      <div id="turnstile-container" className="hidden"></div>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-slate-500">
