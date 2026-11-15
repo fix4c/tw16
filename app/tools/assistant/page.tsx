@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ToolNav } from "../../components/ToolNav";
 
 type Step = {
   question: string;
@@ -218,6 +219,7 @@ export default function AssistantPage() {
         <p className="text-neutral-600 leading-relaxed">
           透過簡單的點選，幫助您釐清症狀，並提供建議的就醫科別。本工具無法取代醫師診斷，若有不適請盡速就醫。
         </p>
+        <ToolNav />
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-16 w-full flex-1">
@@ -302,6 +304,10 @@ export default function AssistantPage() {
 
       <footer className="border-t border-neutral-200 bg-white mt-auto">
         <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-neutral-500 text-center">
+          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
+            <span>🏆</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
+          </div>
           <p className="mb-2">本工具僅供初步導航參考，無法取代專業醫師的診斷與治療。若症狀緊急，請立即撥打 119。</p>
           <p>© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
         </div>

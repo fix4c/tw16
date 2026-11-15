@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ToolNav } from "../../components/ToolNav";
 
 export default function WaterCalculatorPage() {
   const [weight, setWeight] = useState("");
@@ -38,6 +39,7 @@ export default function WaterCalculatorPage() {
           <p className="text-slate-600 leading-relaxed">
             輸入您的體重與運動時間，快速算出今天該喝多少水。此數值僅供參考，實際需求依個人體質、氣候與健康狀況而異。
           </p>
+          <ToolNav />
         </div>
       </section>
 

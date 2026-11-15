@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ToolNav } from "../../components/ToolNav";
 
 export default function BmiCalculatorPage() {
   const [height, setHeight] = useState("");
@@ -50,6 +51,7 @@ export default function BmiCalculatorPage() {
         <p className="text-neutral-600 leading-relaxed">
           輸入您的身高與體重，快速了解目前的體位狀態。本工具僅供參考，無法取代專業醫師的診斷與建議。
         </p>
+        <ToolNav />
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-16 w-full">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ToolNav } from "../../components/ToolNav";
 
 type Record = {
   id: string;
@@ -76,6 +77,7 @@ export default function HealthTrackerPage() {
           <p className="text-slate-600 leading-relaxed max-w-3xl">
             記錄您每日的血壓與血糖。所有資料僅保存在您的瀏覽器中，不會上傳至伺服器，保障您的隱私安全。
           </p>
+          <ToolNav />
         </div>
       </section>
 

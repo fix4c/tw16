@@ -15,3 +15,11 @@ body {
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
 }
+/* 隱藏橫向捲軸，優化手機端滑動體驗 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

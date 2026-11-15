@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ToolNav } from "../../components/ToolNav";
 import symptomData from "@/data/symptoms.json";
 
 type Symptom = {
@@ -45,6 +46,7 @@ export default function SymptomsPage() {
         <p className="text-neutral-600 leading-relaxed max-w-2xl">
           輸入您的症狀或想查詢的科別。本站提供初步的就醫導航建議，無法取代專業醫師的診斷，若症狀緊急請直接撥打 119 或前往急診。
         </p>
+        <ToolNav />
       </section>
 
       <section className="max-w-5xl mx-auto px-6 pb-8 w-full space-y-4">
@@ -115,6 +117,10 @@ export default function SymptomsPage() {
 
       <footer className="border-t border-neutral-200 bg-neutral-100 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-neutral-500">
+          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
+            <span>🏆</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
+          </div>
           <p className="mb-2 text-red-500 font-medium">免責聲明：本頁面資訊僅供就醫參考，不構成醫療診斷或建議。如有緊急狀況，請立即就醫或撥打 119。</p>
           <p>© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
         </div>
