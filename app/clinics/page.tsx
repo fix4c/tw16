@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
 import rawData from "@/data/clinics.json";
 import { Header } from "../components/Header";
 
@@ -33,7 +32,6 @@ export default function ClinicsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
   const [widgetId, setWidgetId] = useState<string | null>(null);
-  // 新增：紀錄正在投票的院所名稱，用於顯示 Loading
   const [votingId, setVotingId] = useState<string | null>(null);
 
   const counties = useMemo(() => {
@@ -130,14 +128,10 @@ export default function ClinicsPage() {
       return;
     }
 
-    // 1. 立即設定該院所為投票中狀態（觸發 UI 放大與轉圈圈）
     setVotingId(id);
-    
-    // 2. 立刻給出樂觀更新（先加 1，讓用戶覺得瞬間生效）
     const current = reviews[id] || { good: 0, bad: 0 };
     setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
-    // 3. 背景執行驗證與 API 請求
     window.turnstile.execute(widgetId);
 
     const token = await new Promise<string>((resolve, reject) => {
@@ -158,7 +152,6 @@ export default function ClinicsPage() {
     if (!token) {
       alert("人機驗證失敗，請稍後再試。");
       setVotingId(null);
-      // 失敗了，把數字扣回來
       setReviews((prev) => ({ ...prev, [id]: current }));
       return;
     }
@@ -183,8 +176,6 @@ export default function ClinicsPage() {
         localStorage.setItem(votedKey, "true");
         (window as any).turnstileToken = null;
         window.turnstile.reset(widgetId);
-        
-        // 投票成功！彈出提示
         alert("✅ 感謝您的投票！您的意見已成功記錄。");
       } else {
         const err = await res.json();
@@ -195,26 +186,14 @@ export default function ClinicsPage() {
       alert("網路錯誤，請稍後再試。");
       setReviews((prev) => ({ ...prev, [id]: current }));
     } finally {
-      // 結束 Loading 狀態
       setVotingId(null);
     }
   };
 
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-           <Header />
-
-          <nav className="flex items-center gap-4 md:gap-6 text-sm font-medium">
-            <Link href="/hospitals" className="text-slate-600 hover:text-teal-700 transition-colors">醫院掛號</Link>
-            <Link href="/clinics" className="text-teal-700">院所查詢</Link>
-            <Link href="/tools/symptoms" className="text-slate-600 hover:text-teal-700 transition-colors">症狀查科別</Link>
-            <Link href="/tools/bmi" className="text-slate-600 hover:text-teal-700 transition-colors">BMI計算</Link>
-            <Link href="/guides" className="text-slate-600 hover:text-teal-700 transition-colors">就醫指南</Link>
-          </nav>
-        </div>
-      </header>
+      {/* 👇 只保留這一個 Header，原本的 <header> 已完全刪除 */}
+      <Header />
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-50/40 to-transparent pointer-events-none"></div>
