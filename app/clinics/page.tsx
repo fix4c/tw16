@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import rawData from "@/data/clinics.json";
 
 type Clinic = {
@@ -20,7 +21,6 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 宣告 window.turnstile 型別，避免 TypeScript 報錯
 declare global {
   interface Window {
     turnstile: any;
@@ -32,6 +32,7 @@ export default function ClinicsPage() {
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number, bad: number }>>({});
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   const counties = useMemo(() => {
     const set = new Set<string>();
@@ -61,10 +62,9 @@ export default function ClinicsPage() {
     }).slice(0, 50);
   }, [selectedCounty, selectedSpecialty, searchTerm]);
 
-  // 當頁面載入或篩選結果改變時，去抓取這 50 家診所的評價
   useEffect(() => {
     filtered.forEach(async (c) => {
-      if (reviews[c.name]) return; // 已抓過就不重複抓
+      if (reviews[c.name]) return;
       try {
         const res = await fetch(`/api/reviews/${encodeURIComponent(c.name)}`);
         if (res.ok) {
@@ -75,7 +75,26 @@ export default function ClinicsPage() {
     });
   }, [filtered]);
 
-  // 生成簡單的瀏覽器指紋（用於防重複，非絕對安全，但足以擋住一般用戶）
+  // Turnstile 載入完成後初始化
+  useEffect(() => {
+    if (scriptLoaded && window.turnstile) {
+      window.turnstile.ready(() => {
+        window.turnstile.render("#turnstile-container", {
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
+          callback: (token: string) => {
+            (window as any).turnstileToken = token;
+          },
+          "error-callback": () => {
+            console.error("Turnstile 驗證失敗");
+          },
+          "expired-callback": () => {
+            (window as any).turnstileToken = null;
+          }
+        });
+      });
+    }
+  }, [scriptLoaded]);
+
   const getFingerprint = () => {
     let fp = localStorage.getItem("tw16-fp");
     if (!fp) {
@@ -86,68 +105,56 @@ export default function ClinicsPage() {
   };
 
   const handleVote = async (id: string, type: "good" | "bad") => {
-    // 檢查前端是否已投過
     const votedKey = `tw16-voted-${id}`;
     if (localStorage.getItem(votedKey)) {
       alert("您已經給這家機構投過票了！");
       return;
     }
 
-    // 觸發 Turnstile 驗證
-    if (!window.turnstile) {
-      alert("人機驗證載入中，請稍後再試。");
+    const token = (window as any).turnstileToken;
+    if (!token) {
+      alert("人機驗證準備中，請稍後再點擊一次。");
       return;
     }
 
-    window.turnstile.ready(async () => {
-      // 建立一個隱藏的容器來獲取 token
-      let container = document.getElementById("turnstile-container");
-      if (!container) {
-        container = document.createElement("div");
-        container.id = "turnstile-container";
-        document.body.appendChild(container);
-      }
+    const current = reviews[id] || { good: 0, bad: 0 };
+    setReviews(prev => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
-      const token = await new Promise<string>((resolve) => {
-        window.turnstile.render(container, {
-          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 👈 你的 Site Key
-          callback: (token: string) => resolve(token),
-        });
+    try {
+      const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, token, fingerprint: getFingerprint() })
       });
 
-      const current = reviews[id] || { good: 0, bad: 0 };
-      // 樂觀更新 UI
-      setReviews(prev => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
-
-      try {
-        const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type, token, fingerprint: getFingerprint() })
-        });
-
-        if (res.status === 409) {
-          alert("您已經投票過了！");
-          localStorage.setItem(votedKey, "true");
-          return;
-        }
-
-        if (res.ok) {
-          const data = await res.json();
-          setReviews(prev => ({ ...prev, [id]: data }));
-          localStorage.setItem(votedKey, "true"); // 標記已投票
-        } else {
-          const err = await res.json();
-          alert(err.error || "投票失敗");
-        }
-      } catch (e) {
-        alert("網路錯誤，請稍後再試。");
+      if (res.status === 409) {
+        alert("您已經投票過了！");
+        localStorage.setItem(votedKey, "true");
+        return;
       }
-    });
+
+      if (res.ok) {
+        const data = await res.json();
+        setReviews(prev => ({ ...prev, [id]: data }));
+        localStorage.setItem(votedKey, "true");
+      } else {
+        const err = await res.json();
+        alert(err.error || "投票失敗");
+      }
+    } catch (e) {
+      alert("網路錯誤，請稍後再試。");
+    }
   };
 
   return (
     <main className="min-h-screen flex flex-col">
+      {/* 使用 Next.js Script 確保載入順序 */}
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        strategy="beforeInteractive"
+        onLoad={() => setScriptLoaded(true)}
+      />
+
       <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
@@ -240,7 +247,6 @@ export default function ClinicsPage() {
                 <p className="text-xs font-medium text-blue-600 mt-3 bg-blue-50 inline-block px-2 py-1 rounded-md">科別：{c.specialty}</p>
               )}
 
-              {/* 評價區塊 */}
               <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-3 mt-auto">
                 <button 
                   className="flex items-center gap-1 text-sm font-medium text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-100 transition-colors"
@@ -260,9 +266,8 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      {/* Turnstile 隱藏容器與腳本 */}
+      {/* 隱藏的 Turnstile 容器 */}
       <div id="turnstile-container" className="hidden"></div>
-      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-slate-500">
