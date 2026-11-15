@@ -31,13 +31,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 👇 JSON-LD 結構化數據，告訴 Google 這是一個醫療資訊入口網站
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "台灣醫療入口",
     url: "https://tw16.net",
-    description: "由 AI 自動策展的台灣醫療資訊導航。整合全台醫院掛號、診所查詢、健康工具與兩岸權威醫療新聞。",
+    description:
+      "由 AI 自動策展的台灣醫療資訊導航。整合全台醫院掛號、診所查詢、健康工具與兩岸權威醫療新聞。",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://tw16.net/tools/symptoms?q={search_term_string}",
@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant" className={`${sans.variable} ${serif.variable}`}>
       <head>
-        {/* 👇 Google AdSense 全局自動廣告腳本 */}
+        {/* Google AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289252603428818"
@@ -56,8 +56,14 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-nscript={undefined}
         />
-        
-        {/* 👇 注入 JSON-LD 結構化數據 */}
+
+        {/* 👇 Turnstile 腳本：全域載入，確保在診所頁能拿到 window.turnstile */}
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+        />
+
+        {/* JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
