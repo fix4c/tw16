@@ -208,19 +208,7 @@ export default function AssistantPage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
-          </Link>
-          <nav className="flex items-center gap-4 md:gap-6 text-sm">
-            <Link href="/hospitals" className="text-neutral-500 hover:text-teal-700 transition-colors">醫院掛號</Link>
-            <Link href="/clinics" className="text-neutral-500 hover:text-teal-700 transition-colors">診所查找</Link>
-            <Link href="/tools/symptoms" className="text-neutral-500 hover:text-teal-700 transition-colors">症狀查科別</Link>
-            <Link href="/tools/assistant" className="font-medium text-teal-700">醫療小幫手</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <section className="max-w-3xl mx-auto px-6 pt-12 pb-8 w-full">
         <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">醫療小幫手</p>

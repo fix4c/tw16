@@ -64,17 +64,7 @@ export default function HealthTrackerPage() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
-          </Link>
-          <nav className="flex items-center gap-4 md:gap-6 text-sm font-medium">
-            <Link href="/tools/health-tracker" className="text-teal-700">三高記錄</Link>
-            <Link href="/tools/water" className="text-slate-600 hover:text-teal-700 transition-colors">飲水量計算</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-50/40 to-transparent pointer-events-none"></div>

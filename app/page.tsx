@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Header } from "./components/Header"; 
+import { HealthSummary } from "./components/HealthSummary";
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";
 
@@ -75,20 +76,7 @@ function EntryIcon({ type }: { type: "hospital" | "clinic" | "news" }) {
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
-          </Link>
-          <nav className="flex items-center gap-4 md:gap-6 text-sm font-medium">
-            <Link href="/hospitals" className="text-slate-600 hover:text-teal-700 transition-colors">醫院掛號</Link>
-            <Link href="/clinics" className="text-slate-600 hover:text-teal-700 transition-colors">院所查詢</Link>
-            <Link href="/tools/symptoms" className="text-teal-700">症狀查科別</Link>
-            <Link href="/tools/bmi" className="text-slate-600 hover:text-teal-700 transition-colors">BMI計算</Link>
-            <Link href="/guides" className="text-slate-600 hover:text-teal-700 transition-colors">就醫指南</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero */}
       <section className="relative overflow-hidden w-full">
@@ -153,6 +141,9 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* 我的健康摘要 (如果有紀錄才會顯示) */}
+      <HealthSummary />
 
       {/* 健康工具專區 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">

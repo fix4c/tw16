@@ -10,14 +10,7 @@ export const metadata: Metadata = {
 export default function RegistrationGuidePage() {
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link href="/guides" className="font-serif text-xl font-bold text-neutral-900 hover:text-teal-700 transition-colors">
-            ← 就醫指南
-          </Link>
-          <span className="text-xs text-neutral-500">就醫指南</span>
-        </div>
-      </header>
+      <Header />
 
       <article className="max-w-3xl mx-auto px-6 py-12 w-full flex-1">
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-6">
