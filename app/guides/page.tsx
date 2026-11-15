@@ -48,11 +48,20 @@ export default function GuidesPage() {
             </p>
             <span className="text-sm font-medium text-teal-700">閱讀全文 →</span>
           </Link>
-          
-          {/* 預留給未來的第二篇文章 */}
+
           <div className="bg-neutral-50 border border-neutral-200 border-dashed rounded-2xl p-6 flex flex-col justify-center items-center text-center">
-            <p className="text-neutral-400 text-sm mb-2">更多指南即將上線</p>
-            <p className="text-xs text-neutral-400">健保卡使用教學、看懂健檢報告...</p>
+          <Link
+            href="/guides/cross-strait-guide"
+            className="group bg-white border border-slate-200 rounded-2xl p-6 hover:border-teal-400 hover:shadow-md transition-all"
+          >
+            <h2 className="font-serif text-xl font-bold text-slate-900 group-hover:text-teal-700 mb-2">
+              兩岸醫療面面觀：就醫流程與實用資源指南
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed mb-4">
+              大陸同胞來台就醫、台灣民眾赴大陸就醫的必讀指南。涵蓋健保給付與掛號流程差異。
+            </p>
+            <span className="text-sm font-medium text-teal-700">閱讀全文 →</span>
+          </Link>
           </div>
         </div>
       </section>
