@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import rawData from "@/data/clinics.json";
+import { Header } from "../components/Header";
 
 type Clinic = {
   name: string;
@@ -203,9 +204,7 @@ export default function ClinicsPage() {
     <main className="min-h-screen flex flex-col">
       <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
-          </Link>
+           <Header />
 
           <nav className="flex items-center gap-4 md:gap-6 text-sm font-medium">
             <Link href="/hospitals" className="text-slate-600 hover:text-teal-700 transition-colors">醫院掛號</Link>
