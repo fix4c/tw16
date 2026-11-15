@@ -125,6 +125,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 院所評價引流 */}
+      <section className="max-w-5xl mx-auto px-6 pb-6 w-full">
+        <div className="bg-white/60 backdrop-blur-md border border-teal-100 rounded-2xl p-5 flex items-center justify-between flex-wrap gap-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">⭐</span>
+            <div>
+              <h3 className="font-serif text-lg font-bold text-slate-900">用戶真實評價</h3>
+              <p className="text-sm text-slate-500">已有用戶對院所留下「值得推薦」或「有待加強」的評價。</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Link
+              href="/clinics"
+              className="px-4 py-2 bg-teal-50 text-teal-700 text-sm font-medium rounded-full border border-teal-200 hover:bg-teal-100 transition-colors"
+            >
+              查看診所評價 →
+            </Link>
+            <Link
+              href="/hospitals"
+              className="px-4 py-2 bg-slate-50 text-slate-700 text-sm font-medium rounded-full border border-slate-200 hover:bg-slate-100 transition-colors"
+            >
+              查看醫院評價 →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 醫療小幫手直達 */}
       <section className="max-w-5xl mx-auto px-6 pb-6 w-full">
         <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-8 md:p-10 text-white shadow-xl flex items-center justify-between flex-wrap gap-6 border border-slate-700/50 relative overflow-hidden">
