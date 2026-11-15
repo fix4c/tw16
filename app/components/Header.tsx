@@ -16,10 +16,22 @@ export function Header() {
 
   return (
     <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
-          <img src="/logo.png" alt="台灣醫療網" className="h-10 md:h-12 w-auto object-contain" />
+      <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        {/* Logo 區塊：圖騰 + 文字 */}
+        <Link href="/" className="group flex items-center gap-3 transition-transform hover:scale-[1.02]">
+          <img 
+            src="/icon.png" 
+            alt="台灣醫療網" 
+            className="h-10 w-10 md:h-12 md:w-12 object-contain drop-shadow-sm" 
+          />
+          <div className="flex flex-col">
+            <span className="font-serif text-lg md:text-xl font-bold text-slate-900 tracking-wide group-hover:text-teal-700 transition-colors">
+              台灣醫療網
+            </span>
+            <span className="text-[10px] text-slate-500 tracking-widest font-medium hidden md:block">
+              WWW.TW16.NET
+            </span>
+          </div>
         </Link>
 
         {/* 桌面端導航 (md 以上顯示) */}
