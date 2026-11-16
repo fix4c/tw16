@@ -106,7 +106,6 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
   const countyName = normalizeCountyName(rawCounty);
   const specialtyName = rawSpecs.join("-");
 
-  // 取得全台縣市清單（供切換使用）
   const allCounties = Array.from(new Set(clinics.map((c) => getCountyFromAddress(c.address)))).filter(c => c !== "其他").sort();
 
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
@@ -128,7 +127,6 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
         <div className="absolute inset-0 bg-gradient-to-b from-teal-50/40 to-transparent pointer-events-none"></div>
         <div className="relative max-w-5xl mx-auto px-6 pt-8 pb-8">
           
-          {/* 👇 完整路徑導航（Breadcrumbs） */}
           <nav className="flex items-center text-sm font-medium text-slate-500 mb-6">
             <Link href="/" className="hover:text-teal-600 transition-colors">首頁</Link>
             <span className="mx-2 text-slate-300">/</span>
@@ -154,7 +152,6 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
             共收錄 {finalClinics.length} 家相關機構。資料來自健保署開放資料平台，每日更新。
           </p>
 
-          {/* 👇 切換縣市快速導覽列 */}
           <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-slate-200/60 shadow-sm">
             <p className="text-sm font-bold text-slate-500 mb-3">📍 切換其他縣市</p>
             <div className="flex flex-wrap gap-2">
@@ -182,6 +179,25 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
           <Link href="/clinics" className="inline-flex items-center gap-1 text-sm font-bold text-teal-600 hover:underline">
             ← 返回全台搜尋
           </Link>
+        </div>
+
+        {/* 👇 新增：動態 SEO 導語區塊 */}
+        <div className="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-100 rounded-2xl p-6 md:p-8 mb-8 shadow-sm">
+          <h2 className="font-serif text-xl md:text-2xl font-bold text-slate-900 mb-3">
+            在 {countyName} 尋找 {specialtyName || "合適的診所"} 嗎？
+          </h2>
+          <p className="text-slate-600 leading-relaxed mb-5">
+            本站整理了 {countyName} 共 {finalClinics.length} 家與「{specialtyName || "醫療服務"}」相關的健保特約機構，包含詳細的診所地址與聯絡電話。
+            如果您不確定自己的狀況該看哪一科，建議使用下方工具進行初步評估，以免跑錯科別。
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/tools/symptoms" className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-teal-700 text-sm font-medium rounded-full border border-teal-200 hover:bg-teal-50 transition-colors shadow-sm">
+              <span>🔍</span> 症狀查科別
+            </Link>
+            <Link href="/tools/assistant" className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-indigo-700 text-sm font-medium rounded-full border border-indigo-200 hover:bg-indigo-50 transition-colors shadow-sm">
+              <span>✨</span> AI 智能分診
+            </Link>
+          </div>
         </div>
 
         {!specialtyName && (
