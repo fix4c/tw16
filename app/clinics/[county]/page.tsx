@@ -19,7 +19,6 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 👇 關鍵修正：返回未編碼的中文縣市名
 export async function generateStaticParams() {
   const countySet = new Set<string>();
   clinics.forEach((c) => {
@@ -28,13 +27,12 @@ export async function generateStaticParams() {
   });
 
   return Array.from(countySet).map((county) => ({
-    county: county, // 不編碼，直接返回中文
+    county: county, // 未编码，保持中文
   }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ county: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  // 👇 安全解碼，兼容 Next.js 可能傳遞編碼值的情況
   const countyName = decodeURIComponent(resolvedParams.county);
   
   return {

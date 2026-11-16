@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
+  trailingSlash: true, // 👈 新增：改善静态导出的路径解析
   experimental: {
-    inlineCss: true, // 👈 核心：開啟 CSS 內聯，消除渲染阻塞
+    inlineCss: true,
   },
   turbopack: {
     root: process.cwd(),

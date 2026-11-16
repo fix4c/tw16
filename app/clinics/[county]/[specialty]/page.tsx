@@ -19,12 +19,10 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 👇 過濾無效科別，避免生成帶空格的長路徑
 function getAllSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
   const addIfValid = (value: string) => {
     const trimmed = value.trim();
-    // 長度 < 10 且不包含空格，才算有效科別
     if (trimmed && trimmed.length < 10 && !trimmed.includes(" ")) {
       specs.add(trimmed);
     }
@@ -39,7 +37,6 @@ function getAllSpecialties(c: Clinic): string[] {
   return Array.from(specs);
 }
 
-// 👇 關鍵修正：返回未編碼的中文參數
 export async function generateStaticParams() {
   const params: { county: string; specialty: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
@@ -55,8 +52,8 @@ export async function generateStaticParams() {
   countyMap.forEach((specs, county) => {
     specs.forEach((spec) => {
       params.push({
-        county: county, // 不編碼
-        specialty: spec, // 不編碼
+        county: county, // 未编码
+        specialty: spec, // 未编码
       });
     });
   });
@@ -96,7 +93,7 @@ export default async function SpecialtyClinicsPage({ params }: { params: Promise
           <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
             <Link href="/clinics" className="hover:text-teal-600">院所查詢</Link>
             <span>/</span>
-            <Link href={`/clinics/${encodeURIComponent(countyName)}`} className="hover:text-teal-600">{countyName}</Link>
+            <Link href={`/clinics/${countyName}`} className="hover:text-teal-600">{countyName}</Link>
             <span>/</span>
             <span className="text-teal-700 font-bold">{specialtyName}</span>
           </div>
