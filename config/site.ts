@@ -9,6 +9,7 @@ export const SITE_CONFIG = {
 export const NAV_LINKS = [
   { href: "/hospitals", label: "醫院掛號" },
   { href: "/clinics", label: "院所查詢" },
+  { href: "/rankings", label: "口碑排行" }, 
   { href: "/tools/symptoms", label: "症狀查科別" },
   { href: "/tools/bmi", label: "BMI計算" },
   { href: "/guides", label: "就醫指南" },
