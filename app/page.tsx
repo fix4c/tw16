@@ -203,6 +203,13 @@ export default function HomePage() {
           <p className="mb-4">
             本站不提供醫療診斷或治療建議。所有內容由 AI 從公開權威來源自動聚合，僅供資訊導覽參考。任何健康問題請諮詢醫師或撥打 1922 防疫專線、1995 安心專線。
           </p>
+          
+          {/* 👇 加入法務頁面連結 */}
+          <div className="flex gap-4 mb-4">
+            <Link href="/privacy" className="hover:text-teal-700 transition-colors">隱私權政策</Link>
+            <Link href="/disclaimer" className="hover:text-teal-700 transition-colors">醫療免責聲明</Link>
+          </div>
+
           <p className="text-slate-400">
             © {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站
           </p>
