@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link"; // 👈 確保這行存在，修復報錯
 import rawData from "@/data/clinics.json";
 import { Header } from "../components/Header";
 
@@ -20,20 +21,14 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 👇 終極防禦版：精準抓取行政區，無視任何空格或髒資料
+// 👇 新增：從地址抓取區/鄉/鎮
 function getDistrictFromAddress(address: string): string {
   if (!address) return "其他";
-  
   const countyMatch = address.match(/^(.{2,3}[市縣])/);
   if (!countyMatch) return "其他";
-  
   const county = countyMatch[1];
-  // 把縣市切掉，並清除開頭可能的空白
   const rest = address.slice(county.length).trim();
-  
-  // 非貪婪匹配，遇到第一個「區/鄉/鎮/市」就立刻停止
   const districtMatch = rest.match(/^(.{1,3}?[區鄉鎮市])/);
-  
   return districtMatch ? districtMatch[1] : "其他";
 }
 
@@ -254,7 +249,7 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
+      <section className="max-w-5xl mx-auto px-6 pt-6 pb-6 w-full space-y-4">
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">縣市：</span>
           {counties.map((c) => (

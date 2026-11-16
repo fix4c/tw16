@@ -32,7 +32,6 @@ function getAllSpecialties(c: Clinic): string[] {
   return Array.from(specs);
 }
 
-// 👇 這裡是唯一的 generateStaticParams
 export async function generateStaticParams() {
   const params: { county: string; specialty: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
