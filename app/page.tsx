@@ -1,14 +1,8 @@
 import Link from "next/link";
-import dynamic from "next/dynamic"; // 👈 新增這行
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";
 import { Header } from "./components/Header";
-
-// 👇 把 HealthDashboard 改為動態加載
-const HealthDashboard = dynamic(() => import("./components/HealthDashboard").then(mod => mod.HealthDashboard), {
-  ssr: false,
-  loading: () => <div className="h-24 max-w-5xl mx-auto px-6 w-full animate-pulse bg-slate-100 rounded-3xl mb-8"></div>
-});
+import { DynamicHealthDashboard } from "./components/DynamicHealthDashboard"; // 👈 引入新的包裝組件
 
 const data = rawData as HeadlineFeed;
 
