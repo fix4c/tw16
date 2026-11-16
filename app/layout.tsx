@@ -2,7 +2,7 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import { Noto_Sans_TC, Noto_Serif_TC } from "next/font/google";
 import "./globals.css";
-import { BackToTop } from "./components/BackToTop"; // 👈 新增引入
+import { BackToTop } from "./components/BackToTop"; 
 
 const sans = Noto_Sans_TC({
   subsets: ["latin"],
@@ -22,7 +22,8 @@ const serif = Noto_Serif_TC({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tw16.net"),
-  title: "台灣醫療入口 | 由 AI 自動策展的權威醫療資訊導航",
+  // 👇 已修改為你指定的標題
+  title: "台灣醫療網-健康醫療資訊平台", 
   description:
     "從衛福部、疾管署、健保署等權威來源自動聚合，每日更新的台灣醫療資訊入口網站。",
   icons: {
@@ -32,18 +33,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_TW",
     url: "https://tw16.net",
-    siteName: "台灣醫療入口",
+    siteName: "台灣醫療網", // 👈 同步修改社群分享的網站名稱
+    // 👇 同步修改社群分享時的標題
+    title: "台灣醫療網-健康醫療資訊平台", 
     images: [
       {
         url: "/og-default.png",
         width: 1200,
         height: 630,
-        alt: "台灣醫療入口 - AI 策展的權威醫療資訊導航",
+        alt: "台灣醫療網-健康醫療資訊平台",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    // 👇 同步修改 Twitter 的標題
+    title: "台灣醫療網-健康醫療資訊平台", 
     images: ["/og-default.png"],
   },
 };
@@ -56,7 +61,7 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "台灣醫療入口",
+    name: "台灣醫療網",
     url: "https://tw16.net",
     description:
       "由 AI 自動策展的台灣醫療資訊導航。整合全台醫院掛號、診所查詢、健康工具與兩岸權威醫療新聞。",
@@ -88,7 +93,7 @@ export default function RootLayout({
       </head>
       <body className="bg-neutral-50 text-neutral-900 antialiased">
         {children}
-        <BackToTop /> {/* 👈 新增掛載 */}
+        <BackToTop />
       </body>
     </html>
   );
