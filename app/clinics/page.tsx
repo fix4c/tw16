@@ -20,11 +20,22 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 👇 新增：從地址抓取區/鄉/鎮
+// 👇 全新修正的「精準抓取行政區」函數
 function getDistrictFromAddress(address: string): string {
   if (!address) return "其他";
-  const match = address.match(/[市縣](.{2,3}[區鄉鎮市])/);
-  return match ? match[1] : "其他";
+  
+  // 1. 先抓出縣市
+  const countyMatch = address.match(/^(.{2,3}[市縣])/);
+  if (!countyMatch) return "其他";
+  
+  const county = countyMatch[1];
+  // 2. 把縣市切掉，只留後面的區鎮鄉市與路名
+  const rest = address.slice(county.length);
+  
+  // 3. 使用非貪婪匹配 (`.{1,3}?`)，保證只抓到第一個「區/鄉/鎮/市」就停下來
+  const districtMatch = rest.match(/^(.{1,3}?[區鄉鎮市])/);
+  
+  return districtMatch ? districtMatch[1] : "其他";
 }
 
 declare global {
@@ -35,7 +46,7 @@ declare global {
 
 export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
-  const [selectedDistrict, setSelectedDistrict] = useState("全部"); // 👈 新增區的 State
+  const [selectedDistrict, setSelectedDistrict] = useState("全部");
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
@@ -48,7 +59,6 @@ export default function ClinicsPage() {
     return ["全部", ...Array.from(set).sort()];
   }, []);
 
-  // 👇 依據目前選中的縣市，動態生成底下的區列表
   const districts = useMemo(() => {
     if (selectedCounty === "全部") return [];
     const set = new Set<string>();
@@ -78,7 +88,7 @@ export default function ClinicsPage() {
     return clinics
       .filter((c) => {
         if (selectedCounty !== "全部" && getCountyFromAddress(c.address) !== selectedCounty) return false;
-        if (selectedDistrict !== "全部" && getDistrictFromAddress(c.address) !== selectedDistrict) return false; // 👈 加入區的篩選
+        if (selectedDistrict !== "全部" && getDistrictFromAddress(c.address) !== selectedDistrict) return false;
         if (selectedSpecialty !== "全部" && !c.specialty.includes(selectedSpecialty) && !c.type.includes(selectedSpecialty)) return false;
         if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm) && !c.specialty.includes(searchTerm)) return false;
         return true;
@@ -230,7 +240,6 @@ export default function ClinicsPage() {
       </section>
 
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
-        {/* 第一層：縣市 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">縣市：</span>
           {counties.map((c) => (
@@ -238,7 +247,7 @@ export default function ClinicsPage() {
               key={c}
               onClick={() => {
                 setSelectedCounty(c);
-                setSelectedDistrict("全部"); // 切換縣市時，重置區的選擇
+                setSelectedDistrict("全部");
               }}
               className={`px-4 py-1.5 text-sm font-medium rounded-full border transition-all ${
                 selectedCounty === c
@@ -251,7 +260,6 @@ export default function ClinicsPage() {
           ))}
         </div>
 
-        {/* 👇 第二層：區域（只有在選了縣市後才顯示） */}
         {selectedCounty !== "全部" && districts.length > 1 && (
           <div className="flex flex-wrap gap-2 items-center animate-in fade-in slide-in-from-top-1 duration-300">
             <span className="text-sm font-medium text-slate-500">區域：</span>
@@ -271,7 +279,6 @@ export default function ClinicsPage() {
           </div>
         )}
 
-        {/* 科別 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">科別：</span>
           {allSpecialties.slice(0, 30).map((s) => (
