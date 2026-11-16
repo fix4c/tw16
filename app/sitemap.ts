@@ -28,27 +28,49 @@ export default function sitemap(): MetadataRoute.Sitemap {
   
   const countyMap = new Map<string, Set<string>>();
 
+  // 使用與頁面完全相同的清洗邏輯
+  const getAllSpecialties = (c: Clinic): string[] => {
+    const specs = new Set<string>();
+    const addValid = (s: string) => {
+      const cleaned = s.trim();
+      if (cleaned && cleaned.length < 10) specs.add(cleaned);
+    };
+    const process = (value: string) => {
+      if (!value) return;
+      value.split(/[、,，；;\/]/).forEach(seg => {
+        const trimmed = seg.trim();
+        if (!trimmed) return;
+        const words = trimmed.split(/\s+/);
+        if (words.length > 1) {
+          const hasShortWord = words.some(w => w.length === 1);
+          if (hasShortWord) {
+            addValid(trimmed.replace(/\s+/g, ""));
+          } else {
+            words.forEach(w => addValid(w));
+            addValid(trimmed.replace(/\s+/g, ""));
+          }
+        } else {
+          addValid(trimmed);
+        }
+      });
+    };
+    process(c.specialty);
+    process(c.type);
+    return Array.from(specs);
+  };
+
   clinics.forEach((c) => {
     const match = c.address?.match(/^(.{2,3}[市縣])/);
     if (!match) return;
-    const county = match[1].replace(/台/g, "臺"); // 統一臺
+    const county = match[1].replace(/台/g, "臺"); 
     
     if (!countyMap.has(county)) countyMap.set(county, new Set());
-    
-    const addSpec = (val: string) => {
-      val.split(/[、,，/]/).forEach(s => {
-        const cleaned = s.replace(/\s+/g, "").trim();
-        if (cleaned && cleaned.length < 10) countyMap.get(county)!.add(cleaned);
-      });
-    };
-    if (c.specialty) addSpec(c.specialty);
-    if (c.type) addSpec(c.type);
+    getAllSpecialties(c).forEach(spec => countyMap.get(county)!.add(spec));
   });
 
   const dynamicUrls: MetadataRoute.Sitemap = [];
 
   countyMap.forEach((specs, county) => {
-    // 縣市頁面
     dynamicUrls.push({
       url: `${baseUrl}/clinics/${encodeURIComponent(county)}`,
       lastModified: new Date(),
@@ -56,7 +78,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     });
 
-    // 縣市-科別頁面
     specs.forEach((spec) => {
       dynamicUrls.push({
         url: `${baseUrl}/clinics/${encodeURIComponent(`${county}-${spec}`)}`,

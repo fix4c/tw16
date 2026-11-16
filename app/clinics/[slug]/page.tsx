@@ -13,47 +13,60 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-// 👇 关键：全角/半角统一 + NFC 正规化，消除编码差异
-function normalizeText(name: string): string {
-  return name
-    .replace(/台/g, "臺")
-    .normalize("NFC"); // 统一 Unicode 表示，避免 macOS/iOS 与 Windows 的编码差异
+function normalizeCountyName(name: string): string {
+  return name.replace(/台/g, "臺");
 }
 
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
   if (!match) return "其他";
-  return normalizeText(match[1]);
+  return normalizeCountyName(match[1]);
 }
 
-// 👇 核心：彻底清洗科别，按空格、逗号、顿号、斜杠、分号分割
-function cleanAndSplitSpecialty(value: string): string[] {
-  if (!value) return [];
-  // 把所有可能的分隔符统一替换为半角逗号，然后分割
-  const normalized = value
-    .replace(/[\s、，；;\/]/g, ",") // 空格、顿号、全角逗号、分号、斜杠 -> 半角逗号
-    .replace(/,+/g, ","); // 多个连续逗号合并为一个
-
-  return normalized
-    .split(",")
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0 && part.length < 10); // 过滤空值和过长的组合字符串
-}
-
+// 👇 終極無敵清洗函數：解決「眼 科」與「內科 外科」的混淆
 function getAllSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
-  if (c.specialty) {
-    cleanAndSplitSpecialty(c.specialty).forEach((s) => specs.add(s));
-  }
-  if (c.type) {
-    cleanAndSplitSpecialty(c.type).forEach((s) => specs.add(s));
-  }
+
+  const addValid = (s: string) => {
+    const cleaned = s.trim();
+    if (cleaned && cleaned.length < 10) {
+      specs.add(cleaned);
+    }
+  };
+
+  const process = (value: string) => {
+    if (!value) return;
+    
+    // 1. 先用逗號、頓號等標點分割
+    value.split(/[、,，；;\/]/).forEach(seg => {
+      const trimmed = seg.trim();
+      if (!trimmed) return;
+      
+      // 2. 嘗試按空格分割
+      const words = trimmed.split(/\s+/);
+      if (words.length > 1) {
+        // 如果有任何一個詞長度是 1（如「眼 科」），代表這是排版錯誤，直接合併
+        const hasShortWord = words.some(w => w.length === 1);
+        if (hasShortWord) {
+          addValid(trimmed.replace(/\s+/g, "")); // 合併成「眼科」
+        } else {
+          // 否則代表這是兩個不同的科別（如「內科 外科」），分別加入
+          words.forEach(w => addValid(w));
+          // 同時，為了保險，也把合併版加進去
+          addValid(trimmed.replace(/\s+/g, ""));
+        }
+      } else {
+        addValid(trimmed);
+      }
+    });
+  };
+
+  process(c.specialty);
+  process(c.type);
+
   return Array.from(specs);
 }
-
-// 👇 关键：禁止运行期动态渲染，未生成的路径直接404，避免Cloudflare Worker干扰
-export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const params: { slug: string }[] = [];
@@ -68,13 +81,13 @@ export async function generateStaticParams() {
   });
 
   countyMap.forEach((specs, county) => {
-    // 1. 县市页面（同时生成「臺」和「台」两个变体）
+    // 縣市頁面
     params.push({ slug: county });
     if (county.includes("臺")) {
       params.push({ slug: county.replace(/臺/g, "台") });
     }
 
-    // 2. 县市-科别页面（每个独立科别都生成，同样含两种变体）
+    // 縣市-科別頁面
     specs.forEach((spec) => {
       params.push({ slug: `${county}-${spec}` });
       if (county.includes("臺")) {
@@ -83,7 +96,6 @@ export async function generateStaticParams() {
     });
   });
 
-  // 去重，避免重复生成
   const uniqueSlugs = Array.from(new Set(params.map((p) => p.slug)));
   return uniqueSlugs.map((slug) => ({ slug }));
 }
@@ -92,7 +104,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedParams = await params;
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
   const [rawCounty, ...rawSpecs] = decodedSlug.split("-");
-  const countyName = normalizeText(rawCounty);
+  const countyName = normalizeCountyName(rawCounty);
   const specialtyName = rawSpecs.join("-");
 
   if (specialtyName) {
@@ -112,19 +124,16 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
   
   const [rawCounty, ...rawSpecs] = decodedSlug.split("-");
-  const countyName = normalizeText(rawCounty);
+  const countyName = normalizeCountyName(rawCounty);
   const specialtyName = rawSpecs.join("-");
 
-  // 1. 先过滤出该县市的所有诊所
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
 
-  // 2. 如果有指定科别，再进一步过滤
   let finalClinics = countyClinics;
   if (specialtyName) {
-    const targetSpec = specialtyName;
+    const targetSpec = specialtyName.replace(/\s+/g, ""); // 比對前也去空格
     finalClinics = countyClinics.filter((c) => {
       const specs = getAllSpecialties(c);
-      // 使用宽松匹配，确保「眼科」能抓到「眼科」和「眼科專科診所」
       return specs.some((s) => s.includes(targetSpec) || targetSpec.includes(s));
     });
   }
