@@ -13,33 +13,56 @@ type Option = {
   departments: string[];
 };
 
-type Symptom = {
-  id: string;
-  name: string;
-  question: string;
-  options: Option[];
-};
-
-type Category = {
-  id: string;
-  name: string;
-  icon: string;
-  symptoms: Symptom[];
-};
+type Symptom = { id: string; name: string; question: string; options: Option[] };
+type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
 
 const categories = (rawData as { categories: Category[] }).categories;
 
 export default function SymptomsFlowPage() {
-  const [step, setStep] = useState(0); // 0: 選大類, 1: 選症狀, 2: 回答問題, 3: 結果
+  const [mode, setMode] = useState<"select" | "ai">("select");
+  
+  // 多步問答狀態
+  const [step, setStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedSymptom, setSelectedSymptom] = useState<Symptom | null>(null);
   const [result, setResult] = useState<Option | null>(null);
+
+  // AI 狀態
+  const [aiInput, setAiInput] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<any>(null);
 
   const reset = () => {
     setStep(0);
     setSelectedCategory(null);
     setSelectedSymptom(null);
     setResult(null);
+    setAiInput("");
+    setAiResult(null);
+  };
+
+  const handleAiSubmit = async () => {
+    if (!aiInput.trim()) return;
+    setAiLoading(true);
+    setAiResult(null);
+    
+    try {
+      const res = await fetch("/api/ai-triage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symptoms: aiInput })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAiResult(data);
+      } else {
+        alert(data.error || "AI 分析失敗，請稍後再試。");
+      }
+    } catch (e) {
+      alert("網路錯誤，請稍後再試。");
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   return (
@@ -54,143 +77,175 @@ export default function SymptomsFlowPage() {
             身體不舒服，該看哪一科？
           </h1>
           <p className="text-slate-600 leading-relaxed mb-6">
-            透過簡單點選，互動式醫療小幫手幫您釐清症狀，給出建議。本工具無法取代醫師診斷。
+            你可以使用 AI 快速分析，或透過點選引導來找出適合的科別。本工具無法取代醫師診斷。
           </p>
           <ToolNav />
         </div>
       </section>
 
       <section className="max-w-3xl mx-auto px-6 py-8 w-full flex-1">
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-sm min-h-[450px] flex flex-col justify-center relative overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-sm min-h-[500px] flex flex-col relative overflow-hidden">
           
-          {/* 返回按鈕 */}
-          {step > 0 && step < 3 && (
-            <button 
-              onClick={() => {
-                if (step === 1) setStep(0);
-                if (step === 2) { setStep(1); setResult(null); }
-              }} 
-              className="absolute top-6 left-6 text-sm font-medium text-slate-400 hover:text-slate-700 flex items-center gap-1 z-10"
+          {/* 模式切換 Tab */}
+          <div className="flex bg-slate-100 p-1 rounded-xl mb-8">
+            <button
+              onClick={() => { setMode("select"); reset(); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${mode === "select" ? "bg-white text-teal-700 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
             >
-              ← 返回
+              👆 點選引導
             </button>
-          )}
+            <button
+              onClick={() => { setMode("ai"); reset(); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-1 ${mode === "ai" ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >
+              ✨ AI 智能分析
+            </button>
+          </div>
 
-          {/* Step 0: 選大類 */}
-          {step === 0 && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">請問您哪裡不舒服？</h2>
-                <p className="text-slate-500">請選擇最接近的症狀部位</p>
+          {/* ================= AI 模式 ================= */}
+          {mode === "ai" && (
+            <div className="animate-in fade-in zoom-in-95 duration-300">
+              <div className="text-center mb-6">
+                <h2 className="text-xl font-serif font-bold text-slate-900 mb-2">用一句話描述您的症狀</h2>
+                <p className="text-sm text-slate-500">例如：「我昨天開始右下腹一直痛，還有點發燒」</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {categories.map((c) => (
-                  <button
-                    key={c.id}
-                    onClick={() => { setSelectedCategory(c); setStep(1); }}
-                    className="flex flex-col items-center justify-center p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-teal-50 hover:border-teal-200 transition-all group"
-                  >
-                    <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{c.icon}</span>
-                    <span className="font-bold text-slate-700">{c.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+              <textarea
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                placeholder="請詳細描述您的不適..."
+                className="w-full h-32 p-4 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none mb-4 bg-slate-50"
+              />
+              <button
+                onClick={handleAiSubmit}
+                disabled={aiLoading || !aiInput.trim()}
+                className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
+              >
+                {aiLoading ? (
+                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> AI 分析中...</>
+                ) : "✨ 開始分析"}
+              </button>
 
-          {/* Step 1: 選症狀 */}
-          {step === 1 && selectedCategory && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">{selectedCategory.name}</h2>
-                <p className="text-slate-500">請選擇您的具體症狀</p>
-              </div>
-              <div className="space-y-3">
-                {selectedCategory.symptoms.map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => { setSelectedSymptom(s); setStep(2); }}
-                    className="w-full text-left px-6 py-4 rounded-xl border border-slate-200 hover:border-teal-400 hover:bg-teal-50 transition-all font-medium text-slate-700 flex justify-between items-center group"
-                  >
-                    <span>{s.name}</span>
-                    <span className="text-teal-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+              {aiResult && (
+                <div className="mt-8 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-bottom-4">
+                  <div className={`p-6 rounded-2xl border ${aiResult.is_emergency ? "bg-rose-50 border-rose-200" : "bg-teal-50 border-teal-200"}`}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl">{aiResult.is_emergency ? "🚨" : "✅"}</span>
+                      <h3 className={`text-xl font-bold ${aiResult.is_emergency ? "text-rose-700" : "text-teal-700"}`}>
+                        {aiResult.is_emergency ? "建議立即就醫" : "建議門診評估"}
+                      </h3>
+                    </div>
+                    
+                    <p className="text-slate-700 leading-relaxed mb-4">{aiResult.advice}</p>
+                    
+                    {aiResult.warning && (
+                      <p className="text-sm font-bold text-rose-600 bg-white/60 p-3 rounded-lg mb-4">
+                        ⚠️ {aiResult.warning}
+                      </p>
+                    )}
 
-          {/* Step 2: 回答問題 */}
-          {step === 2 && selectedSymptom && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="text-center mb-8">
-                <h2 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-2">
-                  {selectedSymptom.question}
-                </h2>
-                <p className="text-sm text-slate-500">請選擇最符合您現況的選項</p>
-              </div>
-              <div className="space-y-3">
-                {selectedSymptom.options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => { setResult(opt); setStep(3); }}
-                    className={`w-full text-left px-6 py-4 rounded-xl border transition-all font-medium text-slate-700 flex justify-between items-center group ${
-                      opt.type === "emergency" 
-                        ? "border-rose-100 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300" 
-                        : "border-slate-200 hover:border-teal-400 hover:bg-teal-50"
-                    }`}
-                  >
-                    <span>{opt.label}</span>
-                    {opt.type === "emergency" && <span className="text-rose-500 text-xs px-2 py-1 bg-rose-100 rounded">警示</span>}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+                    <div className="bg-white/60 p-4 rounded-xl border border-white">
+                      <p className="text-xs text-slate-500 mb-2">建議掛號科別：</p>
+                      <div className="flex flex-wrap gap-2">
+                        {aiResult.departments.map((d: string) => (
+                          <span key={d} className="px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">
+                            {d}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Step 3: 結果 */}
-          {step === 3 && result && (
-            <div className="animate-in fade-in zoom-in-95 duration-500 text-center">
-              {result.type === "emergency" ? (
-                <div className="w-20 h-20 mx-auto bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mb-6">⚠️</div>
-              ) : (
-                <div className="w-20 h-20 mx-auto bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-4xl mb-6">✅</div>
-              )}
-              
-              <h2 className={`text-2xl font-serif font-bold mb-4 ${result.type === "emergency" ? "text-rose-600" : "text-teal-700"}`}>
-                {result.type === "emergency" ? "建議立即就醫" : "建議門診評估"}
-              </h2>
-              
-              <p className="text-slate-600 leading-relaxed mb-8 max-w-md mx-auto">
-                {result.advice}
-              </p>
-
-              <div className="bg-slate-50 rounded-xl p-4 mb-8 inline-block text-left border border-slate-100">
-                <p className="text-sm text-slate-500 mb-2">建議掛號科別：</p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {result.departments.map((d) => (
-                    <span key={d} className="inline-block px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">
-                      {d}
-                    </span>
-                  ))}
+                  <div className="flex flex-col md:flex-row gap-3 justify-center mt-6">
+                    <Link href="/hospitals" className="px-6 py-3 bg-teal-600 text-white font-medium rounded-full hover:bg-teal-700 text-center">查詢醫院掛號</Link>
+                    <Link href="/clinics" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50 text-center">尋找附近診所</Link>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-3 justify-center mt-4">
-                <Link href="/hospitals" className="px-6 py-3 bg-teal-600 text-white font-medium rounded-full hover:bg-teal-700 transition-colors">
-                  查詢醫院掛號
-                </Link>
-                <Link href="/clinics" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50 transition-colors">
-                  尋找附近診所
-                </Link>
-              </div>
-              
-              <div className="mt-8 pt-6 border-t border-slate-100">
-                <button onClick={reset} className="text-sm text-slate-400 hover:text-slate-700 underline underline-offset-4">
-                  重新評估
-                </button>
-              </div>
+              )}
             </div>
+          )}
+
+          {/* ================= 原有點選模式 ================= */}
+          {mode === "select" && (
+            <>
+              {step > 0 && step < 3 && (
+                <button onClick={() => { if (step === 1) setStep(0); if (step === 2) { setStep(1); setResult(null); } }} className="absolute top-20 left-6 text-sm font-medium text-slate-400 hover:text-slate-700 flex items-center gap-1 z-10">
+                  ← 返回
+                </button>
+              )}
+
+              {step === 0 && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">請問您哪裡不舒服？</h2>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {categories.map((c) => (
+                      <button key={c.id} onClick={() => { setSelectedCategory(c); setStep(1); }} className="flex flex-col items-center justify-center p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-teal-50 hover:border-teal-200 transition-all group">
+                        <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{c.icon}</span>
+                        <span className="font-bold text-slate-700">{c.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {step === 1 && selectedCategory && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">{selectedCategory.name}</h2>
+                  </div>
+                  <div className="space-y-3">
+                    {selectedCategory.symptoms.map((s) => (
+                      <button key={s.id} onClick={() => { setSelectedSymptom(s); setStep(2); }} className="w-full text-left px-6 py-4 rounded-xl border border-slate-200 hover:border-teal-400 hover:bg-teal-50 transition-all font-medium text-slate-700 flex justify-between items-center group">
+                        <span>{s.name}</span>
+                        <span className="text-teal-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {step === 2 && selectedSymptom && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="text-center mb-8">
+                    <h2 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-2">{selectedSymptom.question}</h2>
+                  </div>
+                  <div className="space-y-3">
+                    {selectedSymptom.options.map((opt, i) => (
+                      <button key={i} onClick={() => { setResult(opt); setStep(3); }} className={`w-full text-left px-6 py-4 rounded-xl border transition-all font-medium text-slate-700 flex justify-between items-center group ${opt.type === "emergency" ? "border-rose-100 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300" : "border-slate-200 hover:border-teal-400 hover:bg-teal-50"}`}>
+                        <span>{opt.label}</span>
+                        {opt.type === "emergency" && <span className="text-rose-500 text-xs px-2 py-1 bg-rose-100 rounded">警示</span>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {step === 3 && result && (
+                <div className="animate-in fade-in zoom-in-95 duration-500 text-center">
+                  <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl mb-6 ${result.type === "emergency" ? "bg-rose-100 text-rose-600" : "bg-teal-100 text-teal-600"}`}>
+                    {result.type === "emergency" ? "⚠️" : "✅"}
+                  </div>
+                  <h2 className={`text-2xl font-serif font-bold mb-4 ${result.type === "emergency" ? "text-rose-600" : "text-teal-700"}`}>{result.type === "emergency" ? "建議立即就醫" : "建議門診評估"}</h2>
+                  <p className="text-slate-600 leading-relaxed mb-8 max-w-md mx-auto">{result.advice}</p>
+                  <div className="bg-slate-50 rounded-xl p-4 mb-8 inline-block text-left border border-slate-100">
+                    <p className="text-sm text-slate-500 mb-2">建議掛號科別：</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {result.departments.map((d) => (
+                        <span key={d} className="inline-block px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">{d}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-3 justify-center mt-4">
+                    <Link href="/hospitals" className="px-6 py-3 bg-teal-600 text-white font-medium rounded-full hover:bg-teal-700">查詢醫院掛號</Link>
+                    <Link href="/clinics" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50">尋找附近診所</Link>
+                  </div>
+                  <div className="mt-8 pt-6 border-t border-slate-100">
+                    <button onClick={reset} className="text-sm text-slate-400 hover:text-slate-700 underline underline-offset-4">重新評估</button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
         </div>
