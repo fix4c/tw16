@@ -93,8 +93,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 個人健康看板 */}
-      <HealthDashboard />
+      {/* 個人健康看板 (動態加載) */}
+      <DynamicHealthDashboard /> {/* 👈 這裡替換成了新的組件 */}
 
       {/* 三大入口 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
@@ -197,7 +197,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-6 py-8 text-xs text-slate-500 leading-relaxed">
           <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
             <span>🏆</span>
-            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
           </div>
           <p className="mb-2 font-semibold text-slate-700">重要聲明</p>
           <p className="mb-4">
