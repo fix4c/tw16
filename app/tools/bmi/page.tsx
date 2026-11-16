@@ -23,6 +23,9 @@ export default function BmiCalculatorPage() {
     const roundedResult = parseFloat(result.toFixed(1));
     setBmi(roundedResult);
 
+    // 👇 就是這行！把計算結果存進瀏覽器，讓首頁看板讀取
+    localStorage.setItem("tw16-bmi", roundedResult.toString());
+
     // 台灣衛福部標準：18.5 <= BMI < 24 為正常
     if (roundedResult < 18.5) {
       setStatus("體重過輕");
@@ -48,14 +51,14 @@ export default function BmiCalculatorPage() {
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-4">
           BMI 身體質量指數計算器
         </h1>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-neutral-600 leading-relaxed mb-6">
           輸入您的身高與體重，快速了解目前的體位狀態。本工具僅供參考，無法取代專業醫師的診斷與建議。
         </p>
         <ToolNav />
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-16 w-full">
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 md:p-8">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-6 md:p-8 shadow-sm">
           <form onSubmit={calculateBmi} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
@@ -90,7 +93,7 @@ export default function BmiCalculatorPage() {
           </form>
 
           {bmi !== null && (
-            <div className="mt-8 pt-8 border-t border-neutral-100">
+            <div className="mt-8 pt-8 border-t border-neutral-100 animate-in fade-in zoom-in duration-300">
               <h3 className="text-center text-sm text-neutral-500 mb-2">您的 BMI 數值</h3>
               <div className="text-center text-5xl font-bold text-neutral-900 mb-4">{bmi}</div>
               <div className={`mx-auto w-fit px-6 py-2 rounded-full border text-sm font-medium ${statusColor}`}>

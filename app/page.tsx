@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Header } from "./components/Header"; 
-import { HealthSummary } from "./components/HealthSummary";
 import rawData from "@/data/headlines.json";
 import type { Headline, HeadlineFeed } from "@/lib/types";
+import { Header } from "./components/Header";
+import { HealthDashboard } from "./components/HealthDashboard"; // 👈 补上这行引入
 
 const data = rawData as HeadlineFeed;
 
@@ -93,6 +93,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 個人健康看板 */}
+      <HealthDashboard />
+
       {/* 三大入口 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
         <div className="grid md:grid-cols-3 gap-5">
@@ -125,33 +128,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 院所評價引流 */}
-      <section className="max-w-5xl mx-auto px-6 pb-6 w-full">
-        <div className="bg-white/60 backdrop-blur-md border border-teal-100 rounded-2xl p-5 flex items-center justify-between flex-wrap gap-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">⭐</span>
-            <div>
-              <h3 className="font-serif text-lg font-bold text-slate-900">用戶真實評價</h3>
-              <p className="text-sm text-slate-500">已有用戶對院所留下「值得推薦」或「有待加強」的評價。</p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <Link
-              href="/clinics"
-              className="px-4 py-2 bg-teal-50 text-teal-700 text-sm font-medium rounded-full border border-teal-200 hover:bg-teal-100 transition-colors"
-            >
-              查看診所評價 →
-            </Link>
-            <Link
-              href="/hospitals"
-              className="px-4 py-2 bg-slate-50 text-slate-700 text-sm font-medium rounded-full border border-slate-200 hover:bg-slate-100 transition-colors"
-            >
-              查看醫院評價 →
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* 醫療小幫手直達 */}
       <section className="max-w-5xl mx-auto px-6 pb-6 w-full">
         <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-8 md:p-10 text-white shadow-xl flex items-center justify-between flex-wrap gap-6 border border-slate-700/50 relative overflow-hidden">
@@ -161,16 +137,13 @@ export default function HomePage() {
             <p className="text-slate-300 text-lg">透過簡單點選，互動式醫療小幫手幫您釐清症狀，給出建議。</p>
           </div>
           <Link
-            href="/tools/assistant"
+            href="/tools/symptoms"
             className="relative z-10 px-8 py-3.5 bg-teal-500 text-white font-bold rounded-full hover:bg-teal-400 hover:scale-105 transition-all whitespace-nowrap shadow-lg shadow-teal-500/30"
           >
             開始評估 →
           </Link>
         </div>
       </section>
-
-      {/* 我的健康摘要 (如果有紀錄才會顯示) */}
-      <HealthDashboard />
 
       {/* 健康工具專區 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
@@ -224,7 +197,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-6 py-8 text-xs text-slate-500 leading-relaxed">
           <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
             <span>🏆</span>
-            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
+            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
           </div>
           <p className="mb-2 font-semibold text-slate-700">重要聲明</p>
           <p className="mb-4">
