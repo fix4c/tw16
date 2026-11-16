@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
-  output: 'export',          // 👈 新增这一行，启用静态导出
+  output: 'export',
+  experimental: {
+    inlineCss: true, // 👈 核心：開啟 CSS 內聯，消除渲染阻塞
+  },
   turbopack: {
-    root: path.resolve(process.cwd()),
+    root: process.cwd(),
   },
 };
 

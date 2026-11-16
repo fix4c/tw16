@@ -7,14 +7,16 @@ const sans = Noto_Sans_TC({
   subsets: ["latin"],
   variable: "--font-noto-sans",
   weight: ["400", "500", "700"],
-  display: "optional", // 👈 改為 optional，避免字體下載拖慢渲染
+  display: "optional",
+  preload: true, // 👈 強制預加載
 });
 
 const serif = Noto_Serif_TC({
   subsets: ["latin"],
   variable: "--font-noto-serif",
   weight: ["600", "700"],
-  display: "optional", // 👈 改為 optional
+  display: "optional",
+  preload: true, // 👈 強制預加載
 });
 
 export const metadata: Metadata = {
