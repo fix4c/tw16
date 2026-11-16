@@ -5,6 +5,12 @@ import { Header } from "../../components/Header";
 export const metadata: Metadata = {
   title: "高血壓日常控制指南 | 台灣醫療入口",
   description: "高血壓是沈默的殺手。了解如何正確量血壓、飲食控制（得舒飲食），以及何時應該就醫。",
+  // 👇 新增這篇文章專屬的 OG 設定
+  openGraph: {
+    title: "高血壓日常控制指南：從量測到飲食的實戰守則",
+    description: "從量測到飲食的實戰守則，帶你遠離沉默的殺手。",
+    type: "article",
+  },
 };
 
 export default function HypertensionGuidePage() {

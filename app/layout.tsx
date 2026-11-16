@@ -18,11 +18,32 @@ const serif = Noto_Serif_TC({
 });
 
 export const metadata: Metadata = {
+  // 👇 核心：修復 OG 圖片路徑
+  metadataBase: new URL("https://tw16.net"),
   title: "台灣醫療入口 | 由 AI 自動策展的權威醫療資訊導航",
   description:
     "從衛福部、疾管署、健保署等權威來源自動聚合，每日更新的台灣醫療資訊入口網站。",
   icons: {
     icon: "/icon.png",
+  },
+  // 👇 新增全站預設的 Open Graph 與 Twitter 卡片設定
+  openGraph: {
+    type: "website",
+    locale: "zh_TW",
+    url: "https://tw16.net",
+    siteName: "台灣醫療入口",
+    images: [
+      {
+        url: "/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "台灣醫療入口 - AI 策展的權威醫療資訊導航",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-default.png"],
   },
 };
 
