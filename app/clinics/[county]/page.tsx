@@ -27,7 +27,7 @@ export async function generateStaticParams() {
   });
 
   return Array.from(countySet).map((county) => ({
-    county: county, // 未编码，保持中文
+    county: county, // ✅ 返回未編碼的中文
   }));
 }
 
