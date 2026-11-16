@@ -238,6 +238,22 @@ export default function ClinicsPage() {
         </div>
       </section>
 
+      {/* 👇 縣市快速導航 */}
+      <section className="max-w-5xl mx-auto px-6 pt-6 pb-2 w-full">
+        <p className="text-sm font-bold text-slate-500 mb-3">📍 依縣市瀏覽專屬頁面</p>
+        <div className="flex flex-wrap gap-2">
+          {counties.filter(c => c !== "全部").map((c) => (
+            <Link
+              key={c}
+              href={`/clinics/${encodeURIComponent(c)}`}
+              className="px-3 py-1.5 text-sm bg-white border border-slate-200 rounded-full text-slate-600 hover:border-teal-400 hover:text-teal-700 transition-colors"
+            >
+              {c}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">縣市：</span>

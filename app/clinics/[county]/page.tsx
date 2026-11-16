@@ -71,6 +71,29 @@ export default async function CountyClinicsPage({ params }: { params: Promise<{ 
           </Link>
         </div>
 
+        {/* 👇 該縣市的科別導航 */}
+        <div className="mb-8 p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
+          <p className="text-sm font-bold text-slate-500 mb-3">🩺 依科別瀏覽 {countyName} 診所</p>
+          <div className="flex flex-wrap gap-2">
+            {Array.from(new Set(
+              countyClinics.flatMap(c => {
+                const specs = new Set<string>();
+                if (c.specialty) c.specialty.split(/[、,，/]/).forEach(s => { const t = s.trim(); if (t && t.length < 10 && !t.includes(" ")) specs.add(t); });
+                if (c.type) { const t = c.type.trim(); if (t && t.length < 10 && !t.includes(" ")) specs.add(t); }
+                return Array.from(specs);
+              })
+            )).map((spec) => (
+              <Link
+                key={spec}
+                href={`/clinics/${encodeURIComponent(countyName)}/${encodeURIComponent(spec)}`}
+                className="px-3 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-400 hover:text-indigo-700 transition-colors"
+              >
+                {spec}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-4">
           {countyClinics.slice(0, 100).map((c, i) => (
             <article key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col">

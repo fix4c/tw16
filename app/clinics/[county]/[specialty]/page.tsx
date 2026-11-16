@@ -61,15 +61,28 @@ export async function generateStaticParams() {
   return params;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ county: string; specialty: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  const countyName = decodeURIComponent(resolvedParams.county);
-  const specialtyName = decodeURIComponent(resolvedParams.specialty);
-  
-  return {
-    title: `${countyName}${specialtyName}診所推薦 | 台灣醫療入口`,
-    description: `為您整理${countyName}所有${specialtyName}相關的健保特約診所與醫院。包含地址、電話與看診資訊，幫助您快速找到合適的醫療資源。`,
-  };
+export async function generateStaticParams() {
+  const params: { county: string; specialty: string }[] = [];
+  const countyMap = new Map<string, Set<string>>();
+
+  clinics.forEach((c) => {
+    const county = getCountyFromAddress(c.address);
+    if (county === "其他") return;
+
+    if (!countyMap.has(county)) countyMap.set(county, new Set());
+    getAllSpecialties(c).forEach((spec) => countyMap.get(county)!.add(spec));
+  });
+
+  countyMap.forEach((specs, county) => {
+    specs.forEach((spec) => {
+      params.push({
+        county: encodeURIComponent(county), // 👈 關鍵：手動編碼
+        specialty: encodeURIComponent(spec), // 👈 關鍵：手動編碼
+      });
+    });
+  });
+
+  return params;
 }
 
 export default async function SpecialtyClinicsPage({ params }: { params: Promise<{ county: string; specialty: string }> }) {
