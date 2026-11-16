@@ -1,0 +1,2 @@
+# 针对县市-科别页面（单层路径）的回退
+/clinics/:slug/*  /clinics/:slug.html  200
