@@ -13,14 +13,13 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-// 取得縣市名稱
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
   return match ? match[1] : "其他";
 }
 
-// 👇 讓 Next.js 在建置時，自動為這 22 個縣市生成靜態網頁
+// 👇 關鍵修正：返回未編碼的中文縣市名
 export async function generateStaticParams() {
   const countySet = new Set<string>();
   clinics.forEach((c) => {
@@ -29,13 +28,13 @@ export async function generateStaticParams() {
   });
 
   return Array.from(countySet).map((county) => ({
-    county: encodeURIComponent(county),
+    county: county, // 不編碼，直接返回中文
   }));
 }
 
-// 👇 動態生成每個縣市的 SEO 標題與描述
 export async function generateMetadata({ params }: { params: Promise<{ county: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
+  // 👇 安全解碼，兼容 Next.js 可能傳遞編碼值的情況
   const countyName = decodeURIComponent(resolvedParams.county);
   
   return {
@@ -48,7 +47,6 @@ export default async function CountyClinicsPage({ params }: { params: Promise<{ 
   const resolvedParams = await params;
   const countyName = decodeURIComponent(resolvedParams.county);
 
-  // 篩選出該縣市的診所
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
 
   return (

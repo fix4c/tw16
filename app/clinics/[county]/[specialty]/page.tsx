@@ -13,47 +13,50 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-// 取得縣市名稱
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
   return match ? match[1] : "其他";
 }
 
-// 取得所有科別（包含機構類型）
+// 👇 過濾無效科別，避免生成帶空格的長路徑
 function getAllSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
+  const addIfValid = (value: string) => {
+    const trimmed = value.trim();
+    // 長度 < 10 且不包含空格，才算有效科別
+    if (trimmed && trimmed.length < 10 && !trimmed.includes(" ")) {
+      specs.add(trimmed);
+    }
+  };
+
   if (c.specialty) {
-    c.specialty.split(/[、,，/]/).forEach((s) => {
-      const trimmed = s.trim();
-      if (trimmed && trimmed.length < 15) specs.add(trimmed);
-    });
+    c.specialty.split(/[、,，/]/).forEach(addIfValid);
   }
-  if (c.type) specs.add(c.type);
+  if (c.type) {
+    addIfValid(c.type);
+  }
   return Array.from(specs);
 }
 
-// 👇 讓 Next.js 在建置時，自動為全台各縣市的每個科別生成網頁
+// 👇 關鍵修正：返回未編碼的中文參數
 export async function generateStaticParams() {
   const params: { county: string; specialty: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
 
-  // 先統計每個縣市有哪些科別
   clinics.forEach((c) => {
     const county = getCountyFromAddress(c.address);
     if (county === "其他") return;
 
     if (!countyMap.has(county)) countyMap.set(county, new Set());
-    const specs = getAllSpecialties(c);
-    specs.forEach((spec) => countyMap.get(county)!.add(spec));
+    getAllSpecialties(c).forEach((spec) => countyMap.get(county)!.add(spec));
   });
 
-  // 組合出所有的 [county]/[specialty] 路徑
   countyMap.forEach((specs, county) => {
     specs.forEach((spec) => {
       params.push({
-        county: encodeURIComponent(county),
-        specialty: encodeURIComponent(spec),
+        county: county, // 不編碼
+        specialty: spec, // 不編碼
       });
     });
   });
@@ -61,7 +64,6 @@ export async function generateStaticParams() {
   return params;
 }
 
-// 👇 動態生成每一頁的 SEO 標題與描述
 export async function generateMetadata({ params }: { params: Promise<{ county: string; specialty: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const countyName = decodeURIComponent(resolvedParams.county);
@@ -78,7 +80,6 @@ export default async function SpecialtyClinicsPage({ params }: { params: Promise
   const countyName = decodeURIComponent(resolvedParams.county);
   const specialtyName = decodeURIComponent(resolvedParams.specialty);
 
-  // 雙重過濾：找出該縣市且符合該科別的診所
   const filteredClinics = clinics.filter((c) => {
     if (getCountyFromAddress(c.address) !== countyName) return false;
     const specs = getAllSpecialties(c);
@@ -95,7 +96,7 @@ export default async function SpecialtyClinicsPage({ params }: { params: Promise
           <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
             <Link href="/clinics" className="hover:text-teal-600">院所查詢</Link>
             <span>/</span>
-            <Link href={`/clinics/${resolvedParams.county}`} className="hover:text-teal-600">{countyName}</Link>
+            <Link href={`/clinics/${encodeURIComponent(countyName)}`} className="hover:text-teal-600">{countyName}</Link>
             <span>/</span>
             <span className="text-teal-700 font-bold">{specialtyName}</span>
           </div>
