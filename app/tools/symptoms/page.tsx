@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import rawData from "@/data/symptoms.json";
+import rawClinics from "@/data/clinics.json";
 import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
 
@@ -18,6 +19,16 @@ type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
 
 const categories = (rawData as { categories: Category[] }).categories;
 
+// 👇 取得全台縣市列表，供下拉選單使用
+const allCounties = Array.from(
+  new Set(
+    rawClinics.clinics.map((c: any) => {
+      const match = c.address?.match(/^(.{2,3}[市縣])/);
+      return match ? match[1].replace(/台/g, "臺") : "其他";
+    })
+  )
+).filter((c) => c !== "其他").sort();
+
 export default function SymptomsFlowPage() {
   const [mode, setMode] = useState<"select" | "ai">("select");
   
@@ -32,37 +43,8 @@ export default function SymptomsFlowPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
-  // 👇 FAQ 結構化數據
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "頭痛看哪一科？",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "輕微頭痛可先至家醫科或神經內科評估。若伴隨突發劇烈疼痛、發燒、頸部僵硬或手腳無力，請立即至急診就醫。",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "胸悶胸痛看哪一科？",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "胸悶胸痛可能與心臟或肺部有關，建議至心臟內科或胸腔內科檢查。若感覺像被重物壓住、冒冷汗或痛到左肩，請立即撥打 119。",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "腹痛看哪一科？",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "腹痛可先至胃腸肝膽科或家醫科評估。右下腹劇痛且按壓會痛需排除盲腸炎，請盡速至急診或一般外科。",
-        },
-      },
-    ],
-  };
+  // 縣市選擇狀態
+  const [selectedCounty, setSelectedCounty] = useState("");
 
   const reset = () => {
     setStep(0);
@@ -71,6 +53,7 @@ export default function SymptomsFlowPage() {
     setResult(null);
     setAiInput("");
     setAiResult(null);
+    setSelectedCounty("");
   };
 
   const handleAiSubmit = async () => {
@@ -100,12 +83,6 @@ export default function SymptomsFlowPage() {
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
-
-      {/* 👇 注入 FAQ JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-50/40 to-transparent pointer-events-none"></div>
@@ -193,9 +170,33 @@ export default function SymptomsFlowPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col md:flex-row gap-3 justify-center mt-6">
-                    <Link href="/hospitals" className="px-6 py-3 bg-teal-600 text-white font-medium rounded-full hover:bg-teal-700 text-center">查詢醫院掛號</Link>
-                    <Link href="/clinics" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50 text-center">尋找附近診所</Link>
+                  {/* 👇 AI 模式的閉環引導 */}
+                  <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {aiResult.departments[0]} 診所</h4>
+                    <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
+                      <select
+                        value={selectedCounty}
+                        onChange={(e) => setSelectedCounty(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium"
+                      >
+                        <option value="">請選擇縣市</option>
+                        {allCounties.map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                      <Link
+                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${aiResult.departments[0]}`)}` : "#"}
+                        className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${
+                          selectedCounty 
+                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" 
+                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                        }`}
+                        onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}
+                      >
+                        查看在地診所 →
+                      </Link>
+                    </div>
+                    <p className="text-xs text-center text-slate-400 mt-3">若無資料，亦可返回 <Link href="/hospitals" className="underline">醫院掛號</Link> 查詢</p>
                   </div>
                 </div>
               )}
@@ -274,11 +275,37 @@ export default function SymptomsFlowPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row gap-3 justify-center mt-4">
-                    <Link href="/hospitals" className="px-6 py-3 bg-teal-600 text-white font-medium rounded-full hover:bg-teal-700">查詢醫院掛號</Link>
-                    <Link href="/clinics" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50">尋找附近診所</Link>
+
+                  {/* 👇 點選模式的閉環引導 */}
+                  <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto">
+                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {result.departments[0]} 診所</h4>
+                    <div className="flex flex-col gap-3">
+                      <select
+                        value={selectedCounty}
+                        onChange={(e) => setSelectedCounty(e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium"
+                      >
+                        <option value="">請選擇縣市</option>
+                        {allCounties.map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                      <Link
+                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${result.departments[0]}`)}` : "#"}
+                        className={`w-full flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${
+                          selectedCounty 
+                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" 
+                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                        }`}
+                        onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}
+                      >
+                        查看在地診所 →
+                      </Link>
+                    </div>
                   </div>
-                  <div className="mt-8 pt-6 border-t border-slate-100">
+
+                  <div className="mt-8 pt-6 border-t border-slate-100 flex justify-center gap-4">
+                    <Link href="/hospitals" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-medium rounded-full hover:bg-slate-50">查詢醫院掛號</Link>
                     <button onClick={reset} className="text-sm text-slate-400 hover:text-slate-700 underline underline-offset-4">重新評估</button>
                   </div>
                 </div>
