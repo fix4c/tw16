@@ -197,7 +197,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-6 py-8 text-xs text-slate-500 leading-relaxed">
           <div className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
             <span>🏆</span>
-            <span>本站入圍衛福部 95 年度優良健康資訊網站（2006年）</span>
+            <span>本站入圍衛福部 2006年 年度優良健康資訊網站</span>
           </div>
           <p className="mb-2 font-semibold text-slate-700">重要聲明</p>
           <p className="mb-4">
