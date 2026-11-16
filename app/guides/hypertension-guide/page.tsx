@@ -5,7 +5,6 @@ import { Header } from "../../components/Header";
 export const metadata: Metadata = {
   title: "高血壓日常控制指南 | 台灣醫療入口",
   description: "高血壓是沈默的殺手。了解如何正確量血壓、飲食控制（得舒飲食），以及何時應該就醫。",
-  // 👇 新增這篇文章專屬的 OG 設定
   openGraph: {
     title: "高血壓日常控制指南：從量測到飲食的實戰守則",
     description: "從量測到飲食的實戰守則，帶你遠離沉默的殺手。",
@@ -14,9 +13,42 @@ export const metadata: Metadata = {
 };
 
 export default function HypertensionGuidePage() {
+  // 👇 醫療結構化數據
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: "高血壓日常控制指南",
+    description: "高血壓是沈默的殺手。了解如何正確量血壓、飲食控制（得舒飲食），以及何時應該就醫。",
+    url: "https://tw16.net/guides/hypertension-guide",
+    about: {
+      "@type": "MedicalCondition",
+      name: "高血壓",
+    },
+    author: {
+      "@type": "Organization",
+      name: "台灣醫療入口",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "台灣醫療入口",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://tw16.net/icon.png",
+      },
+    },
+    datePublished: "2026-11-16",
+    dateModified: "2026-11-16",
+  };
+
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
       <Header />
+
+      {/* 👇 注入 JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <article className="max-w-3xl mx-auto px-6 py-12 w-full flex-1">
         <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100">
