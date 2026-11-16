@@ -20,19 +20,18 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
-// 👇 全新修正的「精準抓取行政區」函數
+// 👇 終極防禦版：精準抓取行政區，無視任何空格或髒資料
 function getDistrictFromAddress(address: string): string {
   if (!address) return "其他";
   
-  // 1. 先抓出縣市
   const countyMatch = address.match(/^(.{2,3}[市縣])/);
   if (!countyMatch) return "其他";
   
   const county = countyMatch[1];
-  // 2. 把縣市切掉，只留後面的區鎮鄉市與路名
-  const rest = address.slice(county.length);
+  // 把縣市切掉，並清除開頭可能的空白
+  const rest = address.slice(county.length).trim();
   
-  // 3. 使用非貪婪匹配 (`.{1,3}?`)，保證只抓到第一個「區/鄉/鎮/市」就停下來
+  // 非貪婪匹配，遇到第一個「區/鄉/鎮/市」就立刻停止
   const districtMatch = rest.match(/^(.{1,3}?[區鄉鎮市])/);
   
   return districtMatch ? districtMatch[1] : "其他";
