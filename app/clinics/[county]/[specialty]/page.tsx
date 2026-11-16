@@ -27,16 +27,12 @@ function getAllSpecialties(c: Clinic): string[] {
       specs.add(trimmed);
     }
   };
-
-  if (c.specialty) {
-    c.specialty.split(/[、,，/]/).forEach(addIfValid);
-  }
-  if (c.type) {
-    addIfValid(c.type);
-  }
+  if (c.specialty) c.specialty.split(/[、,，/]/).forEach(addIfValid);
+  if (c.type) addIfValid(c.type);
   return Array.from(specs);
 }
 
+// 👇 這裡是唯一的 generateStaticParams
 export async function generateStaticParams() {
   const params: { county: string; specialty: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
@@ -52,8 +48,8 @@ export async function generateStaticParams() {
   countyMap.forEach((specs, county) => {
     specs.forEach((spec) => {
       params.push({
-        county: county, // 未编码
-        specialty: spec, // 未编码
+        county: encodeURIComponent(county),
+        specialty: encodeURIComponent(spec),
       });
     });
   });
@@ -61,28 +57,15 @@ export async function generateStaticParams() {
   return params;
 }
 
-export async function generateStaticParams() {
-  const params: { county: string; specialty: string }[] = [];
-  const countyMap = new Map<string, Set<string>>();
-
-  clinics.forEach((c) => {
-    const county = getCountyFromAddress(c.address);
-    if (county === "其他") return;
-
-    if (!countyMap.has(county)) countyMap.set(county, new Set());
-    getAllSpecialties(c).forEach((spec) => countyMap.get(county)!.add(spec));
-  });
-
-  countyMap.forEach((specs, county) => {
-    specs.forEach((spec) => {
-      params.push({
-        county: encodeURIComponent(county), // 👈 關鍵：手動編碼
-        specialty: encodeURIComponent(spec), // 👈 關鍵：手動編碼
-      });
-    });
-  });
-
-  return params;
+export async function generateMetadata({ params }: { params: Promise<{ county: string; specialty: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const countyName = decodeURIComponent(resolvedParams.county);
+  const specialtyName = decodeURIComponent(resolvedParams.specialty);
+  
+  return {
+    title: `${countyName}${specialtyName}診所推薦 | 台灣醫療入口`,
+    description: `為您整理${countyName}所有${specialtyName}相關的健保特約診所與醫院。包含地址、電話與看診資訊，幫助您快速找到合適的醫療資源。`,
+  };
 }
 
 export default async function SpecialtyClinicsPage({ params }: { params: Promise<{ county: string; specialty: string }> }) {
@@ -106,7 +89,7 @@ export default async function SpecialtyClinicsPage({ params }: { params: Promise
           <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
             <Link href="/clinics" className="hover:text-teal-600">院所查詢</Link>
             <span>/</span>
-            <Link href={`/clinics/${countyName}`} className="hover:text-teal-600">{countyName}</Link>
+            <Link href={`/clinics/${encodeURIComponent(countyName)}`} className="hover:text-teal-600">{countyName}</Link>
             <span>/</span>
             <span className="text-teal-700 font-bold">{specialtyName}</span>
           </div>
