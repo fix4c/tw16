@@ -13,10 +13,16 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
+// 👇 將「台」統一為「臺」，確保異體字匹配
+function normalizeCountyName(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
-  return match ? match[1] : "其他";
+  if (!match) return "其他";
+  return normalizeCountyName(match[1]);
 }
 
 export async function generateStaticParams() {
@@ -26,14 +32,23 @@ export async function generateStaticParams() {
     if (county !== "其他") countySet.add(county);
   });
 
-  return Array.from(countySet).map((county) => ({
-    county: encodeURIComponent(county), // ✅ 統一編碼
-  }));
+  const params: { county: string }[] = [];
+  countySet.forEach((county) => {
+    // 生成標準「臺」版
+    params.push({ county: encodeURIComponent(county) });
+    // 若含「臺」，同時生成「台」的變體路徑
+    if (county.includes("臺")) {
+      params.push({ county: encodeURIComponent(county.replace(/臺/g, "台")) });
+    }
+  });
+
+  return params;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ county: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const countyName = decodeURIComponent(resolvedParams.county);
+  const rawName = decodeURIComponent(resolvedParams.county);
+  const countyName = normalizeCountyName(rawName);
   
   return {
     title: `${countyName}診所與醫院推薦 | 台灣醫療入口`,
@@ -43,7 +58,8 @@ export async function generateMetadata({ params }: { params: Promise<{ county: s
 
 export default async function CountyClinicsPage({ params }: { params: Promise<{ county: string }> }) {
   const resolvedParams = await params;
-  const countyName = decodeURIComponent(resolvedParams.county);
+  const rawName = decodeURIComponent(resolvedParams.county);
+  const countyName = normalizeCountyName(rawName); // 正規化後再比對
 
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
 
@@ -71,15 +87,21 @@ export default async function CountyClinicsPage({ params }: { params: Promise<{ 
           </Link>
         </div>
 
-        {/* 👇 該縣市的科別導航 */}
+        {/* 科別導航：只保留真正存在的科別 */}
         <div className="mb-8 p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
           <p className="text-sm font-bold text-slate-500 mb-3">🩺 依科別瀏覽 {countyName} 診所</p>
           <div className="flex flex-wrap gap-2">
             {Array.from(new Set(
-              countyClinics.flatMap(c => {
+              countyClinics.flatMap((c) => {
                 const specs = new Set<string>();
-                if (c.specialty) c.specialty.split(/[、,，/]/).forEach(s => { const t = s.trim(); if (t && t.length < 10 && !t.includes(" ")) specs.add(t); });
-                if (c.type) { const t = c.type.trim(); if (t && t.length < 10 && !t.includes(" ")) specs.add(t); }
+                const addSpec = (value: string) => {
+                  value.split(/[、,，/]/).forEach((part) => {
+                    const cleaned = part.trim().replace(/\s+/g, "");
+                    if (cleaned && cleaned.length < 10) specs.add(cleaned);
+                  });
+                };
+                if (c.specialty) addSpec(c.specialty);
+                if (c.type) addSpec(c.type);
                 return Array.from(specs);
               })
             )).map((spec) => (

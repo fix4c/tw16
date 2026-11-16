@@ -13,21 +13,33 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
+function normalizeCountyName(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
+function normalizeSpecialtyName(name: string): string {
+  return name.replace(/\s+/g, "").replace(/台/g, "臺");
+}
+
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
-  return match ? match[1] : "其他";
+  if (!match) return "其他";
+  return normalizeCountyName(match[1]);
 }
 
+// 👇 科別清理：正確分割、移除空格，不再誤殺「眼 科」
 function getAllSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
   const addIfValid = (value: string) => {
-    const trimmed = value.trim();
-    if (trimmed && trimmed.length < 10 && !trimmed.includes(" ")) {
-      specs.add(trimmed);
-    }
+    value.split(/[、,，/]/).forEach((part) => {
+      const cleaned = normalizeSpecialtyName(part.trim());
+      if (cleaned && cleaned.length < 10) {
+        specs.add(cleaned);
+      }
+    });
   };
-  if (c.specialty) c.specialty.split(/[、,，/]/).forEach(addIfValid);
+  if (c.specialty) addIfValid(c.specialty);
   if (c.type) addIfValid(c.type);
   return Array.from(specs);
 }
@@ -46,10 +58,18 @@ export async function generateStaticParams() {
 
   countyMap.forEach((specs, county) => {
     specs.forEach((spec) => {
+      // 生成標準「臺」版
       params.push({
-        county: encodeURIComponent(county), // ✅ 統一編碼
-        specialty: encodeURIComponent(spec), // ✅ 統一編碼
+        county: encodeURIComponent(county),
+        specialty: encodeURIComponent(spec),
       });
+      // 若縣市含「臺」，同時生成「台」的變體
+      if (county.includes("臺")) {
+        params.push({
+          county: encodeURIComponent(county.replace(/臺/g, "台")),
+          specialty: encodeURIComponent(spec),
+        });
+      }
     });
   });
 
@@ -58,8 +78,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ county: string; specialty: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const countyName = decodeURIComponent(resolvedParams.county);
-  const specialtyName = decodeURIComponent(resolvedParams.specialty);
+  const countyName = normalizeCountyName(decodeURIComponent(resolvedParams.county));
+  const specialtyName = normalizeSpecialtyName(decodeURIComponent(resolvedParams.specialty));
   
   return {
     title: `${countyName}${specialtyName}診所推薦 | 台灣醫療入口`,
@@ -69,8 +89,9 @@ export async function generateMetadata({ params }: { params: Promise<{ county: s
 
 export default async function SpecialtyClinicsPage({ params }: { params: Promise<{ county: string; specialty: string }> }) {
   const resolvedParams = await params;
-  const countyName = decodeURIComponent(resolvedParams.county);
-  const specialtyName = decodeURIComponent(resolvedParams.specialty);
+  const countyName = normalizeCountyName(decodeURIComponent(resolvedParams.county));
+  const rawSpecialty = decodeURIComponent(resolvedParams.specialty);
+  const specialtyName = normalizeSpecialtyName(rawSpecialty);
 
   const filteredClinics = clinics.filter((c) => {
     if (getCountyFromAddress(c.address) !== countyName) return false;
