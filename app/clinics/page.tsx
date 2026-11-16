@@ -20,6 +20,13 @@ function getCountyFromAddress(address: string): string {
   return match ? match[1] : "其他";
 }
 
+// 👇 新增：從地址抓取區/鄉/鎮
+function getDistrictFromAddress(address: string): string {
+  if (!address) return "其他";
+  const match = address.match(/[市縣](.{2,3}[區鄉鎮市])/);
+  return match ? match[1] : "其他";
+}
+
 declare global {
   interface Window {
     turnstile: any;
@@ -28,6 +35,7 @@ declare global {
 
 export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
+  const [selectedDistrict, setSelectedDistrict] = useState("全部"); // 👈 新增區的 State
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
@@ -39,6 +47,19 @@ export default function ClinicsPage() {
     clinics.forEach((c) => set.add(getCountyFromAddress(c.address)));
     return ["全部", ...Array.from(set).sort()];
   }, []);
+
+  // 👇 依據目前選中的縣市，動態生成底下的區列表
+  const districts = useMemo(() => {
+    if (selectedCounty === "全部") return [];
+    const set = new Set<string>();
+    clinics
+      .filter((c) => getCountyFromAddress(c.address) === selectedCounty)
+      .forEach((c) => {
+        const d = getDistrictFromAddress(c.address);
+        if (d && d !== "其他") set.add(d);
+      });
+    return ["全部", ...Array.from(set).sort()];
+  }, [selectedCounty]);
 
   const allSpecialties = useMemo(() => {
     const set = new Set<string>();
@@ -57,13 +78,13 @@ export default function ClinicsPage() {
     return clinics
       .filter((c) => {
         if (selectedCounty !== "全部" && getCountyFromAddress(c.address) !== selectedCounty) return false;
-        // 搜索時同時匹配科別、機構類型
+        if (selectedDistrict !== "全部" && getDistrictFromAddress(c.address) !== selectedDistrict) return false; // 👈 加入區的篩選
         if (selectedSpecialty !== "全部" && !c.specialty.includes(selectedSpecialty) && !c.type.includes(selectedSpecialty)) return false;
         if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm) && !c.specialty.includes(searchTerm)) return false;
         return true;
       })
-      .slice(0, 200); // 放寬到 200 筆
-  }, [selectedCounty, selectedSpecialty, searchTerm]);
+      .slice(0, 200); 
+  }, [selectedCounty, selectedDistrict, selectedSpecialty, searchTerm]);
 
   useEffect(() => {
     filtered.forEach(async (c) => {
@@ -209,12 +230,16 @@ export default function ClinicsPage() {
       </section>
 
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
+        {/* 第一層：縣市 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">縣市：</span>
           {counties.map((c) => (
             <button
               key={c}
-              onClick={() => setSelectedCounty(c)}
+              onClick={() => {
+                setSelectedCounty(c);
+                setSelectedDistrict("全部"); // 切換縣市時，重置區的選擇
+              }}
               className={`px-4 py-1.5 text-sm font-medium rounded-full border transition-all ${
                 selectedCounty === c
                   ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
@@ -226,9 +251,29 @@ export default function ClinicsPage() {
           ))}
         </div>
 
+        {/* 👇 第二層：區域（只有在選了縣市後才顯示） */}
+        {selectedCounty !== "全部" && districts.length > 1 && (
+          <div className="flex flex-wrap gap-2 items-center animate-in fade-in slide-in-from-top-1 duration-300">
+            <span className="text-sm font-medium text-slate-500">區域：</span>
+            {districts.map((d) => (
+              <button
+                key={d}
+                onClick={() => setSelectedDistrict(d)}
+                className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition-all ${
+                  selectedDistrict === d
+                    ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-400 hover:text-indigo-700"
+                }`}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* 科別 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">科別：</span>
-          {/* 補回了缺失的 .map 開頭 */}
           {allSpecialties.slice(0, 30).map((s) => (
             <button
               key={s}

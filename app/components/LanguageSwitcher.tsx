@@ -2,18 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    google: any;
-    googleTranslateElementInit: any;
-  }
-}
-
 export function LanguageSwitcher() {
   const [selectedLang, setSelectedLang] = useState("zh-TW");
 
   useEffect(() => {
-    // 動態載入 Google 翻譯腳本
+    // 載入 Google 翻譯腳本
     const script = document.createElement("script");
     script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     script.async = true;
@@ -31,6 +24,15 @@ export function LanguageSwitcher() {
       );
     };
 
+    // 初始化時檢查是否有翻譯 Cookie，同步下拉選單的狀態
+    const match = document.cookie.match(/(?:^|;)\s*googtrans=([^;]*)/);
+    if (match) {
+      const parts = match[1].split("/");
+      if (parts.length === 3) {
+        setSelectedLang(parts[2]);
+      }
+    }
+
     return () => {
       if (document.body.contains(script)) document.body.removeChild(script);
     };
@@ -40,18 +42,34 @@ export function LanguageSwitcher() {
     const lang = e.target.value;
     setSelectedLang(lang);
     
-    // 觸發 Google 翻譯的隱藏下拉選單
-    const selectEl = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-    if (selectEl) {
-      selectEl.value = lang;
-      selectEl.dispatchEvent(new Event("change"));
+    // 使用 Cookie 強制 Google 翻譯，這是 Next.js 中最穩定的做法
+    if (lang === "zh-TW") {
+      // 清除 Cookie 恢復原文
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
+    } else {
+      // 設定新語言 Cookie
+      document.cookie = `googtrans=/zh-TW/${lang}; path=/;`;
+      document.cookie = `googtrans=/zh-TW/${lang}; path=/; domain=.${window.location.hostname}`;
     }
+    
+    // 刷新頁面以套用翻譯
+    window.location.reload();
   };
 
   return (
     <div className="relative inline-block">
-      {/* 隱藏 Google 預設的醜陋下拉選單 */}
-      <div id="google_translate_element" className="hidden"></div>
+      {/* 隱藏 Google 預設的選單 */}
+      <div 
+        id="google_translate_element" 
+        style={{ 
+          position: "absolute", 
+          top: "-9999px", 
+          left: "-9999px", 
+          opacity: 0, 
+          pointerEvents: "none" 
+        }}
+      ></div>
       
       <select
         value={selectedLang}
@@ -71,7 +89,6 @@ export function LanguageSwitcher() {
         <option value="km">🇰🇭 ខ្មែរ</option>
       </select>
       
-      {/* 自訂下拉箭頭圖標 */}
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
