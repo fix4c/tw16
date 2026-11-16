@@ -26,7 +26,7 @@ async function main() {
       type: r["HOSP_CODE_CNAME"] || "",
       address: r["ADDRESS"] || "",
       phone: r["TEL"] || "",
-      specialty: r["FUNCTYPE_CNAME"] || "",
+      specialty: (r["FUNCTYPE_CNAME"] || "") + " " + (r["HOSP_CODE_CNAME"] || ""), // 👈 把機構類型也加進科別裡
     }));
 
     all.push(...mapped);

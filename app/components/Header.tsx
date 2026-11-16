@@ -1,5 +1,6 @@
 "use client";
 
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -43,22 +44,26 @@ export function Header() {
           ))}
         </nav>
 
-        {/* 手機端漢堡按鈕 (md 以下顯示) */}
-        <button
-          className="md:hidden p-2 text-slate-600 hover:text-teal-700 focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="開啟選單"
-        >
-          {isOpen ? (
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+        {/* 右側操作區：翻譯功能 + 手機端漢堡按鈕 */}
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
+          
+          <button
+            className="md:hidden p-2 text-slate-600 hover:text-teal-700 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="開啟選單"
+          >
+            {isOpen ? (
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* 手機端展開選單 */}

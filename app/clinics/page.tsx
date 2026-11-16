@@ -57,11 +57,12 @@ export default function ClinicsPage() {
     return clinics
       .filter((c) => {
         if (selectedCounty !== "全部" && getCountyFromAddress(c.address) !== selectedCounty) return false;
-        if (selectedSpecialty !== "全部" && !c.specialty.includes(selectedSpecialty)) return false;
-        if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm)) return false;
+        // 搜索時同時匹配科別、機構類型
+        if (selectedSpecialty !== "全部" && !c.specialty.includes(selectedSpecialty) && !c.type.includes(selectedSpecialty)) return false;
+        if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm) && !c.specialty.includes(searchTerm)) return false;
         return true;
       })
-      .slice(0, 50);
+      .slice(0, 200); // 放寬到 200 筆
   }, [selectedCounty, selectedSpecialty, searchTerm]);
 
   useEffect(() => {
@@ -192,7 +193,6 @@ export default function ClinicsPage() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      {/* 👇 只保留這一個 Header，原本的 <header> 已完全刪除 */}
       <Header />
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
@@ -225,9 +225,11 @@ export default function ClinicsPage() {
             </button>
           ))}
         </div>
+
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">科別：</span>
-          {allSpecialties.slice(0, 20).map((s) => (
+          {/* 補回了缺失的 .map 開頭 */}
+          {allSpecialties.slice(0, 30).map((s) => (
             <button
               key={s}
               onClick={() => setSelectedSpecialty(s)}
@@ -252,7 +254,7 @@ export default function ClinicsPage() {
 
       <section className="max-w-5xl mx-auto px-6 pb-16 w-full">
         <p className="text-xs text-slate-400 font-medium mb-4">
-          顯示 {filtered.length} 家（最多 50 家，請善用篩選）
+          顯示 {filtered.length} 家（最多 200 家，請善用篩選）
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           {filtered.map((c, i) => (
