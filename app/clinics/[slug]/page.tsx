@@ -13,7 +13,6 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-// 👇 核心：將「台」統一正規化為「臺」
 function normalizeCountyName(name: string): string {
   return name.replace(/台/g, "臺");
 }
@@ -25,9 +24,8 @@ function getCountyFromAddress(address: string): string {
   return normalizeCountyName(match[1]);
 }
 
-// 👇 核心：精準清理科別，避免誤殺「眼 科」或混入奇怪字串
 function cleanSpecialty(value: string): string {
-  return value.replace(/\s+/g, "").trim(); // 移除所有空白
+  return value.replace(/\s+/g, "").trim();
 }
 
 function getAllSpecialties(c: Clinic): string[] {
@@ -35,7 +33,6 @@ function getAllSpecialties(c: Clinic): string[] {
   const addIfValid = (value: string) => {
     value.split(/[、,，/]/).forEach((part) => {
       const cleaned = cleanSpecialty(part);
-      // 保留合理的長度，過濾掉無意義的組合
       if (cleaned && cleaned.length < 10) {
         specs.add(cleaned);
       }
@@ -46,7 +43,7 @@ function getAllSpecialties(c: Clinic): string[] {
   return Array.from(specs);
 }
 
-// 👇 產生所有單層靜態路徑（縣市 與 縣市-科別）
+// 👇 核心：生成未編碼的中文路徑，確保精準生成 .html
 export async function generateStaticParams() {
   const params: { slug: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
@@ -60,25 +57,26 @@ export async function generateStaticParams() {
   });
 
   countyMap.forEach((specs, county) => {
-    // 1. 加入單純縣市的路徑
-    params.push({ slug: encodeURIComponent(county) });
+    // 縣市頁面
+    params.push({ slug: county });
     if (county.includes("臺")) {
-      params.push({ slug: encodeURIComponent(county.replace(/臺/g, "台")) });
+      params.push({ slug: county.replace(/臺/g, "台") });
     }
 
-    // 2. 加入縣市-科別的路徑
+    // 縣市-科別頁面
     specs.forEach((spec) => {
-      params.push({ slug: encodeURIComponent(`${county}-${spec}`) });
+      params.push({ slug: `${county}-${spec}` });
       if (county.includes("臺")) {
-        params.push({ slug: encodeURIComponent(`${county.replace(/臺/g, "台")}-${spec}`) });
+        params.push({ slug: `${county.replace(/臺/g, "台")}-${spec}` });
       }
     });
   });
 
-  return params;
+  // 去重
+  const uniqueSlugs = Array.from(new Set(params.map((p) => p.slug)));
+  return uniqueSlugs.map((slug) => ({ slug }));
 }
 
-// 👇 動態 SEO 標題
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
@@ -102,21 +100,17 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
   const resolvedParams = await params;
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
   
-  // 解析路徑：例如「臺中市-牙科」
   const [rawCounty, ...rawSpecs] = decodedSlug.split("-");
   const countyName = normalizeCountyName(rawCounty);
   const specialtyName = rawSpecs.join("-");
 
-  // 1. 先過濾出該縣市的所有診所
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
 
-  // 2. 如果有指定科別，再進一步過濾
   let finalClinics = countyClinics;
   if (specialtyName) {
     const targetSpec = cleanSpecialty(specialtyName);
     finalClinics = countyClinics.filter((c) => {
       const specs = getAllSpecialties(c);
-      // 包含或被包含，確保「眼科」能抓到「眼科專科診所」等變體
       return specs.some((s) => s.includes(targetSpec) || targetSpec.includes(s));
     });
   }
@@ -149,7 +143,6 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
       </section>
 
       <section className="max-w-5xl mx-auto px-6 py-8 w-full flex-1">
-        {/* 如果沒有指定科別，顯示該縣市的科別導航 */}
         {!specialtyName && (
           <div className="mb-8 p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
             <p className="text-sm font-bold text-slate-500 mb-3">🩺 依科別瀏覽 {countyName} 診所</p>
@@ -157,6 +150,7 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
               {Array.from(new Set(countyClinics.flatMap((c) => getAllSpecialties(c)))).map((spec) => (
                 <Link
                   key={spec}
+                  // 👈 內部連結使用正確的編碼格式
                   href={`/clinics/${encodeURIComponent(`${countyName}-${spec}`)}`}
                   className="px-3 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-400 hover:text-indigo-700 transition-colors"
                 >

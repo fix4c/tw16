@@ -1,5 +1,0 @@
-# 針對縣市頁面
-/clinics/:county/*  /clinics/:county/index.html  200
-
-# 針對縣市+科別頁面
-/clinics/:county/:specialty/*  /clinics/:county/:specialty/index.html  200
