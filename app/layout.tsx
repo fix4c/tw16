@@ -7,18 +7,17 @@ const sans = Noto_Sans_TC({
   subsets: ["latin"],
   variable: "--font-noto-sans",
   weight: ["400", "500", "700"],
-  display: "swap",
+  display: "optional", // 👈 改為 optional，避免字體下載拖慢渲染
 });
 
 const serif = Noto_Serif_TC({
   subsets: ["latin"],
   variable: "--font-noto-serif",
   weight: ["600", "700"],
-  display: "swap",
+  display: "optional", // 👈 改為 optional
 });
 
 export const metadata: Metadata = {
-  // 👇 核心：修復 OG 圖片路徑
   metadataBase: new URL("https://tw16.net"),
   title: "台灣醫療入口 | 由 AI 自動策展的權威醫療資訊導航",
   description:
@@ -26,7 +25,6 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.png",
   },
-  // 👇 新增全站預設的 Open Graph 與 Twitter 卡片設定
   openGraph: {
     type: "website",
     locale: "zh_TW",
@@ -69,7 +67,6 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant" className={`${sans.variable} ${serif.variable}`}>
       <head>
-        {/* Google AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7289252603428818"
@@ -77,14 +74,10 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-nscript={undefined}
         />
-
-        {/* 👇 Turnstile 腳本：全域載入，確保在診所頁能拿到 window.turnstile */}
         <Script
           src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
           strategy="afterInteractive"
         />
-
-        {/* JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -1,2 +1,7 @@
+# 針對 Cloudflare Pages 的預覽網址 (如 xxx.pages.dev) 設定 noindex
 https://:project.pages.dev/*
   X-Robots-Tag: noindex, nofollow
+
+# 靜態資源長緩存，提升 LCP 速度
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
