@@ -19,7 +19,7 @@ type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
 
 const categories = (rawData as { categories: Category[] }).categories;
 
-// 👇 取得全台縣市列表，供下拉選單使用
+// 取得全台縣市列表
 const allCounties = Array.from(
   new Set(
     rawClinics.clinics.map((c: any) => {
@@ -43,7 +43,7 @@ export default function SymptomsFlowPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
-  // 縣市選擇狀態
+  // 縣市選擇
   const [selectedCounty, setSelectedCounty] = useState("");
 
   const reset = () => {
@@ -101,7 +101,6 @@ export default function SymptomsFlowPage() {
       <section className="max-w-3xl mx-auto px-6 py-8 w-full flex-1">
         <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-sm min-h-[500px] flex flex-col relative overflow-hidden">
           
-          {/* 模式切換 Tab */}
           <div className="flex bg-slate-100 p-1 rounded-xl mb-8">
             <button
               onClick={() => { setMode("select"); reset(); }}
@@ -170,7 +169,6 @@ export default function SymptomsFlowPage() {
                     </div>
                   </div>
 
-                  {/* 👇 AI 模式的閉環引導 */}
                   <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
                     <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {aiResult.departments[0]} 診所</h4>
                     <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
@@ -196,7 +194,6 @@ export default function SymptomsFlowPage() {
                         查看在地診所 →
                       </Link>
                     </div>
-                    <p className="text-xs text-center text-slate-400 mt-3">若無資料，亦可返回 <Link href="/hospitals" className="underline">醫院掛號</Link> 查詢</p>
                   </div>
                 </div>
               )}
@@ -217,11 +214,12 @@ export default function SymptomsFlowPage() {
                   <div className="text-center mb-8">
                     <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">請問您哪裡不舒服？</h2>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* 👇 改為 grid-cols-2 md:grid-cols-3 以容納 9 大分類 */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {categories.map((c) => (
-                      <button key={c.id} onClick={() => { setSelectedCategory(c); setStep(1); }} className="flex flex-col items-center justify-center p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-teal-50 hover:border-teal-200 transition-all group">
-                        <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{c.icon}</span>
-                        <span className="font-bold text-slate-700">{c.name}</span>
+                      <button key={c.id} onClick={() => { setSelectedCategory(c); setStep(1); }} className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-teal-50 hover:border-teal-200 transition-all group">
+                        <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">{c.icon}</span>
+                        <span className="font-bold text-slate-700 text-sm">{c.name}</span>
                       </button>
                     ))}
                   </div>
@@ -276,7 +274,6 @@ export default function SymptomsFlowPage() {
                     </div>
                   </div>
 
-                  {/* 👇 點選模式的閉環引導 */}
                   <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto">
                     <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {result.departments[0]} 診所</h4>
                     <div className="flex flex-col gap-3">

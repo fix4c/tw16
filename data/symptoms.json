@@ -27,6 +27,72 @@
       ]
     },
     {
+      "id": "eye",
+      "name": "眼睛與視力",
+      "icon": "👁️",
+      "symptoms": [
+        {
+          "id": "eye_pain",
+          "name": "眼睛紅腫 / 疼痛",
+          "question": "您的眼睛狀況是？",
+          "options": [
+            { "label": "突發視力模糊、視野缺損或劇烈疼痛", "type": "emergency", "advice": "可能是急性青光眼或視網膜剝離，請立即就醫。", "departments": ["急診", "眼科"] },
+            { "label": "眼睛紅癢、分泌物多，但視力正常", "type": "normal", "advice": "可能是結膜炎或過敏，建議至眼科診所就醫。", "departments": ["眼科"] }
+          ]
+        },
+        {
+          "id": "blurred_vision",
+          "name": "視力模糊",
+          "question": "視力模糊的狀況是？",
+          "options": [
+            { "label": "突然發生，且只有單眼受影響", "type": "emergency", "advice": "突發性單眼視力喪失可能是眼中風，請立即就醫。", "departments": ["急診", "眼科"] },
+            { "label": "慢慢發生，看近看遠都不清楚", "type": "normal", "advice": "可能是老花、近視或白內障，建議至眼科驗光檢查。", "departments": ["眼科"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ent",
+      "name": "耳鼻喉與口腔",
+      "icon": "👂",
+      "symptoms": [
+        {
+          "id": "ear_pain",
+          "name": "耳朵痛 / 耳鳴",
+          "question": "您的耳朵狀況是？",
+          "options": [
+            { "label": "伴隨突發性聽力喪失", "type": "emergency", "advice": "突發性耳聾有黃金治療期，請盡速至耳鼻喉科或急診就醫。", "departments": ["耳鼻喉科", "急診"] },
+            { "label": "耳朵痛、流膿，可能是中耳炎", "type": "normal", "advice": "建議至耳鼻喉科由醫師清理並開立藥物。", "departments": ["耳鼻喉科"] }
+          ]
+        },
+        {
+          "id": "sore_throat",
+          "name": "喉嚨痛 / 吞嚥困難",
+          "question": "您的喉嚨狀況是？",
+          "options": [
+            { "label": "伴隨呼吸困難、無法吞口水或高燒", "type": "emergency", "advice": "可能是扁桃腺周圍膿瘍或會厭炎，請立即至急診。", "departments": ["急診", "耳鼻喉科"] },
+            { "label": "喉嚨痛、有痰，但沒有呼吸困難", "type": "normal", "advice": "多為一般感冒或咽喉炎，可至耳鼻喉科或家醫科診所就醫。", "departments": ["耳鼻喉科", "家醫科"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dental",
+      "name": "牙齒與口腔",
+      "icon": "🦷",
+      "symptoms": [
+        {
+          "id": "toothache",
+          "name": "牙痛 / 牙齦腫痛",
+          "question": "您的牙齒狀況是？",
+          "options": [
+            { "label": "臉部嚴重腫脹、發燒，甚至影響呼吸", "type": "emergency", "advice": "可能是蜂窩性組織炎，請立即至急診或口腔顎面外科就醫。", "departments": ["急診", "牙科"] },
+            { "label": "吃東西會痛、牙齦流血或長膿包", "type": "normal", "advice": "可能是蛀牙或牙周病，建議至牙科診所檢查。", "departments": ["牙科"] }
+          ]
+        }
+      ]
+    },
+    {
       "id": "chest",
       "name": "胸腔與心血管",
       "icon": "🫀",
@@ -36,8 +102,8 @@
           "name": "胸痛 / 胸悶",
           "question": "您的胸悶或胸痛感覺是？",
           "options": [
-            { "label": "像被重物壓住、冒冷汗、痛到左肩", "type": "emergency", "advice": "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車，絕對不要自己開車。", "departments": ["急診", "心臟內科"] },
-            { "label": "運動或爬樓梯時才會喘", "type": "normal", "advice": "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或X光檢查。", "departments": ["心臟內科", "胸腔內科"] }
+            { "label": "像被重物壓住、冒冷汗、痛到左肩", "type": "emergency", "advice": "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車。", "departments": ["急診", "心臟內科"] },
+            { "label": "運動或爬樓梯時才會喘", "type": "normal", "advice": "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或 X 光檢查。", "departments": ["心臟內科", "胸腔內科"] }
           ]
         },
         {
@@ -62,33 +128,83 @@
           "question": "您的肚子痛位置在哪裡？",
           "options": [
             { "label": "右下腹（肚臍右下方）劇痛且按壓會痛", "type": "emergency", "advice": "需排除盲腸炎可能，請盡速至急診或一般外科評估。", "departments": ["急診", "一般外科"] },
-            { "label": "右上腹（右肋骨下方）", "type": "normal", "advice": "右上腹痛可能與肝膽系統有關，若伴隨發燒或黃疸請盡速就醫。", "departments": ["胃腸肝膽科"] },
+            { "label": "右上腹（右肋骨下方）", "type": "normal", "advice": "右上腹痛可能與肝膽系統有關，建議至胃腸肝膽科檢查。", "departments": ["胃腸肝膽科"] },
             { "label": "上腹部（胃部）", "type": "normal", "advice": "上腹痛多為胃部發炎或消化不良。若解黑便、吐血或劇痛，請立即至急診。", "departments": ["胃腸肝膽科", "家醫科"] }
+          ]
+        },
+        {
+          "id": "diarrhea",
+          "name": "腹瀉 / 腸胃不適",
+          "question": "您的腹瀉狀況是？",
+          "options": [
+            { "label": "伴隨嚴重脫水、高燒或血便", "type": "emergency", "advice": "請盡速就醫，可能是細菌感染或嚴重腸胃炎。", "departments": ["急診", "胃腸肝膽科"] },
+            { "label": "輕微腹瀉，但還能正常喝水", "type": "normal", "advice": "請多補充水分與電解質，若症狀持續可至胃腸肝膽科或家醫科。", "departments": ["胃腸肝膽科", "家醫科"] }
           ]
         }
       ]
     },
     {
-      "id": "respiratory",
-      "name": "呼吸道與全身",
-      "icon": "🫁",
+      "id": "skin",
+      "name": "皮膚與毛髮",
+      "icon": "🧴",
       "symptoms": [
         {
-          "id": "fever",
-          "name": "發燒",
-          "question": "您的發燒狀況是？",
+          "id": "rash",
+          "name": "皮膚紅疹 / 發癢",
+          "question": "您的皮膚狀況是？",
           "options": [
-            { "label": "持續高燒超過3天，或伴隨呼吸困難、意識不清", "type": "emergency", "advice": "持續高燒或伴隨呼吸急促，可能為較嚴重的感染，請盡快到醫院急診或感染科、胸腔內科就診。", "departments": ["急診", "感染科"] },
-            { "label": "剛開始發燒，只有輕微痠痛", "type": "normal", "advice": "多數輕微發燒為一般感冒或病毒感染，可先至附近診所或家醫科由醫師評估。", "departments": ["家醫科", "一般內科", "小兒科(兒童)"] }
+            { "label": "伴隨發燒、呼吸困難或黏膜潰爛", "type": "emergency", "advice": "可能是嚴重藥物過敏或感染，請立即就醫。", "departments": ["急診", "皮膚科"] },
+            { "label": "局部紅癢、起疹子，無其他不適", "type": "normal", "advice": "可能是濕疹、過敏或黴菌感染，建議至皮膚科就醫。", "departments": ["皮膚科", "家醫科"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bone",
+      "name": "骨骼與肌肉",
+      "icon": "🦴",
+      "symptoms": [
+        {
+          "id": "back_pain",
+          "name": "背痛 / 腰痛",
+          "question": "您的背痛或腰痛狀況是？",
+          "options": [
+            { "label": "伴隨下肢無力、麻木或大小便失禁", "type": "emergency", "advice": "可能是脊椎壓迫或馬尾症候群，請立即至急診或神經外科。", "departments": ["急診", "神經外科"] },
+            { "label": "彎腰或搬重物後開始痛，無下肢無力", "type": "normal", "advice": "多為肌肉拉傷或脊椎退化，建議至骨科或復健科。", "departments": ["骨科", "復健科"] }
           ]
         },
         {
-          "id": "cough",
-          "name": "咳嗽",
-          "question": "您的咳嗽狀況是？",
+          "id": "joint_pain",
+          "name": "關節痛 / 關節腫脹",
+          "question": "您的關節狀況是？",
           "options": [
-            { "label": "咳嗽超過兩週，或伴隨咳血", "type": "normal", "advice": "慢性咳嗽或咳血需要進一步影像檢查，建議至胸腔內科或耳鼻喉科詳細評估。", "departments": ["胸腔內科", "耳鼻喉科"] },
-            { "label": "剛開始，有痰或流鼻水", "type": "normal", "advice": "急性呼吸道症狀通常為感冒，可至附近耳鼻喉科或家醫科診所拿藥休息。", "departments": ["耳鼻喉科", "家醫科"] }
+            { "label": "多處關節同時腫痛，伴隨晨間僵硬", "type": "normal", "advice": "建議至風濕免疫科檢查，排除類風濕性關節炎。", "departments": ["風濕免疫科", "骨科"] },
+            { "label": "單一關節紅腫熱痛，可能是痛風", "type": "normal", "advice": "痛風發作請盡速至風濕免疫科或家醫科就醫。", "departments": ["風濕免疫科", "家醫科"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pediatric",
+      "name": "婦幼與小兒",
+      "icon": "👶",
+      "symptoms": [
+        {
+          "id": "child_fever",
+          "name": "兒童發燒",
+          "question": "您的孩子發燒狀況是？",
+          "options": [
+            { "label": "三個月以下嬰兒發燒、活動力極差或抽搐", "type": "emergency", "advice": "請立即至急診或小兒科就醫，嬰兒發燒可能代表嚴重感染。", "departments": ["急診", "小兒科"] },
+            { "label": "輕微發燒，但活動力與食慾正常", "type": "normal", "advice": "可先觀察並多補充水分，若持續發燒可至小兒科診所就醫。", "departments": ["小兒科", "家醫科"] }
+          ]
+        },
+        {
+          "id": "vaginal_bleeding",
+          "name": "異常陰道出血 / 經痛",
+          "question": "您的婦科狀況是？",
+          "options": [
+            { "label": "懷孕期間出血或劇烈腹痛", "type": "emergency", "advice": "可能是流產或子宮外孕前兆，請立即至急診或婦產科。", "departments": ["急診", "婦產科"] },
+            { "label": "經痛嚴重到影響生活，或經期不規則", "type": "normal", "advice": "建議至婦產科檢查，排除子宮內膜異位等問題。", "departments": ["婦產科"] }
           ]
         }
       ]
