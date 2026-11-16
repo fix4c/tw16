@@ -22,12 +22,21 @@ const COUNTY_ORDER = [
   "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "金門縣", "連江縣"
 ];
 
-// 2. 強制正規化縣市名稱
+// 2. 絕對防禦：強制對應表，把舊的、錯的、重複的縣市名稱暴力轉換
 function normalizeCounty(name: string): string {
   if (!name) return "其他";
-  let n = name.replace(/台/g, "臺");
-  if (n === "桃園縣") return "桃園市";
-  if (n === "臺南縣") return "臺南市";
+  // 先將所有「台」轉為「臺」
+  let n = name.replace(/台/g, "臺").trim();
+  
+  // 強制對應（處理歷史舊資料）
+  const mapping: Record<string, string> = {
+    "桃園縣": "桃園市",
+    "臺南縣": "臺南市",
+    "臺北縣": "新北市",
+    "高雄縣": "高雄市",
+  };
+  
+  if (mapping[n]) return mapping[n];
   return n;
 }
 
@@ -48,18 +57,18 @@ function getDistrictFromAddress(address: string): string {
   return districtMatch ? districtMatch[1] : "其他";
 }
 
-// 3. 無敵科別清洗函數：徹底拆解所有混在一起的科別與機構類型
+// 3. 絕對防禦：科別清洗函數（處理全形、半形空白與分隔符）
 function getAllCleanSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
   
   const process = (value: string) => {
     if (!value) return;
-    // 把所有分隔符（空白、頓號、逗號、斜線）都變成半形逗號
-    const normalized = value.replace(/[\s、，；;\/]/g, ",");
+    // 將所有可能的分隔符（包含全形空白 \u3000）替換為半形逗號
+    const normalized = value.replace(/[\s\u3000、，；;\/]/g, ",");
     
     normalized.split(",").forEach(part => {
       const trimmed = part.trim();
-      // 只保留長度合理（<10）且非空的字串
+      // 保留合理長度的字串（過濾掉無意義的長句）
       if (trimmed && trimmed.length < 10) {
         specs.add(trimmed);
       }
@@ -87,7 +96,7 @@ export default function ClinicsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
-  // 4. 取得縣市並依照地理順序排序
+  // 👇 渲染前二次除重：先轉換為正規化名稱，再用 Set 去除
   const counties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach((c) => set.add(getCountyFromAddress(c.address)));
@@ -97,6 +106,7 @@ export default function ClinicsPage() {
       .sort((a, b) => {
         const idxA = COUNTY_ORDER.indexOf(a);
         const idxB = COUNTY_ORDER.indexOf(b);
+        // 如果在排序表中，依照排序表；如果不在，排到最後
         if (idxA !== -1 && idxB !== -1) return idxA - idxB;
         if (idxA !== -1) return -1;
         if (idxB !== -1) return 1;
@@ -106,7 +116,6 @@ export default function ClinicsPage() {
     return ["全部", ...sorted];
   }, []);
 
-  // 區域聯動
   const districts = useMemo(() => {
     if (selectedCounty === "全部") return [];
     const set = new Set<string>();
@@ -119,7 +128,7 @@ export default function ClinicsPage() {
     return ["全部", ...Array.from(set).sort()];
   }, [selectedCounty]);
 
-  // 5. 取得全台獨立科別（已清洗）
+  // 👇 渲染前二次除重：收集所有診所的科別，放入 Set 中確保唯一
   const allSpecialties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach((c) => {
@@ -288,7 +297,6 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      {/* 篩選區塊：移除了上方重複的縣市導覽，只保留這組 */}
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
         
         {/* 縣市篩選 */}
@@ -332,7 +340,7 @@ export default function ClinicsPage() {
           </div>
         )}
 
-        {/* 科別篩選（已清洗為獨立科別） */}
+        {/* 科別篩選 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-bold text-slate-500 mr-2">科別：</span>
           {allSpecialties.map((s) => (
