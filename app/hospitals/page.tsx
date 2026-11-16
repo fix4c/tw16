@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import rawData from "@/data/hospitals.json";
 import { Header } from "../components/Header";
 
@@ -22,6 +23,11 @@ declare global {
   }
 }
 
+// 👇 新增：將「台」統一正規化為「臺」
+function normalizeCounty(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
 export default function HospitalsPage() {
   const [selectedRegion, setSelectedRegion] = useState("全部");
   const [selectedLevel, setSelectedLevel] = useState("全部");
@@ -30,9 +36,10 @@ export default function HospitalsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
+  // 👇 這裡加入正規化，避免選單出現重複縣市
   const regions = useMemo(() => {
     const set = new Set<string>();
-    hospitals.forEach((h) => set.add(h.region));
+    hospitals.forEach((h) => set.add(normalizeCounty(h.region)));
     return ["全部", ...Array.from(set).sort()];
   }, []);
 
@@ -44,7 +51,8 @@ export default function HospitalsPage() {
 
   const filtered = useMemo(() => {
     return hospitals.filter((h) => {
-      if (selectedRegion !== "全部" && h.region !== selectedRegion) return false;
+      const normalizedRegion = normalizeCounty(h.region);
+      if (selectedRegion !== "全部" && normalizedRegion !== selectedRegion) return false;
       if (selectedLevel !== "全部" && h.level !== selectedLevel) return false;
       if (searchTerm && !h.name.includes(searchTerm) && !h.address.includes(searchTerm)) return false;
       return true;
@@ -179,7 +187,6 @@ export default function HospitalsPage() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      {/* 👇 只保留這一個 Header */}
       <Header />
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
@@ -246,7 +253,7 @@ export default function HospitalsPage() {
                 <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">
                   {h.level}
                 </span>
-                <span className="text-xs font-medium text-slate-500">{h.region}</span>
+                <span className="text-xs font-medium text-slate-500">{normalizeCounty(h.region)}</span>
               </div>
               <h3 className="font-serif text-xl font-bold text-slate-900 mb-2">{h.name}</h3>
               <p className="text-sm text-slate-600 mb-1">{h.address}</p>

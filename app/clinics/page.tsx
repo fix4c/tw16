@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Link from "next/link"; // 👈 確保這行存在，修復報錯
+import Link from "next/link";
 import rawData from "@/data/clinics.json";
 import { Header } from "../components/Header";
 
@@ -15,13 +15,18 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
+// 👇 1. 新增：將「台」統一為「臺」，徹底解決縣市重複問題
+function normalizeCounty(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
 function getCountyFromAddress(address: string): string {
   if (!address) return "其他";
   const match = address.match(/^(.{2,3}[市縣])/);
-  return match ? match[1] : "其他";
+  if (!match) return "其他";
+  return normalizeCounty(match[1]);
 }
 
-// 👇 新增：從地址抓取區/鄉/鎮
 function getDistrictFromAddress(address: string): string {
   if (!address) return "其他";
   const countyMatch = address.match(/^(.{2,3}[市縣])/);
@@ -47,12 +52,14 @@ export default function ClinicsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
+  // 縣市清單（已去除重複與正規化）
   const counties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach((c) => set.add(getCountyFromAddress(c.address)));
-    return ["全部", ...Array.from(set).sort()];
+    return ["全部", ...Array.from(set).filter(c => c !== "其他").sort()];
   }, []);
 
+  // 區域清單（根據選定縣市聯動）
   const districts = useMemo(() => {
     if (selectedCounty === "全部") return [];
     const set = new Set<string>();
@@ -87,7 +94,7 @@ export default function ClinicsPage() {
         if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm) && !c.specialty.includes(searchTerm)) return false;
         return true;
       })
-      .slice(0, 200); 
+      .slice(0, 200);
   }, [selectedCounty, selectedDistrict, selectedSpecialty, searchTerm]);
 
   useEffect(() => {
@@ -233,24 +240,35 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      {/* 👇 縣市快速導航 */}
-      <section className="max-w-5xl mx-auto px-6 pt-6 pb-2 w-full">
-        <p className="text-sm font-bold text-slate-500 mb-3">📍 依縣市瀏覽專屬頁面</p>
-        <div className="flex flex-wrap gap-2">
-          {counties.filter(c => c !== "全部").map((c) => (
-            <Link
-              key={c}
-              href={`/clinics/${encodeURIComponent(c)}`}
-              className="px-3 py-1.5 text-sm bg-white border border-slate-200 rounded-full text-slate-600 hover:border-teal-400 hover:text-teal-700 transition-colors"
-            >
-              {c}
-            </Link>
-          ))}
+      <section className="max-w-5xl mx-auto px-6 pt-6 pb-2 w-full space-y-4">
+        
+        {/* 👇 上方快速導覽列：與下方的篩選器完美聯動 */}
+        <div>
+          <p className="text-sm font-bold text-slate-500 mb-3">📍 快速切換縣市</p>
+          <div className="flex flex-wrap gap-2">
+            {counties.filter(c => c !== "全部").map((c) => (
+              <button
+                key={c}
+                onClick={() => {
+                  setSelectedCounty(c);
+                  setSelectedDistrict("全部");
+                  // 平滑滾動讓使用者看到下方的區域列表
+                  window.scrollTo({ top: 450, behavior: "smooth" });
+                }}
+                className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
+                  selectedCounty === c
+                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                    : "bg-white border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-700"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
-      </section>
 
-      <section className="max-w-5xl mx-auto px-6 pt-6 pb-6 w-full space-y-4">
-        <div className="flex flex-wrap gap-2 items-center">
+        {/* 👇 下方縣市篩選列（已同步連動） */}
+        <div className="flex flex-wrap gap-2 items-center pt-2 border-t border-slate-100">
           <span className="text-sm font-medium text-slate-500">縣市：</span>
           {counties.map((c) => (
             <button
@@ -270,9 +288,10 @@ export default function ClinicsPage() {
           ))}
         </div>
 
+        {/* 👇 區域一覽表（選定縣市後才會出現） */}
         {selectedCounty !== "全部" && districts.length > 1 && (
-          <div className="flex flex-wrap gap-2 items-center animate-in fade-in slide-in-from-top-1 duration-300">
-            <span className="text-sm font-medium text-slate-500">區域：</span>
+          <div className="flex flex-wrap gap-2 items-center bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 animate-in fade-in slide-in-from-top-1">
+            <span className="text-sm font-bold text-indigo-700">區域：</span>
             {districts.map((d) => (
               <button
                 key={d}
@@ -289,6 +308,7 @@ export default function ClinicsPage() {
           </div>
         )}
 
+        {/* 科別篩選 */}
         <div className="flex flex-wrap gap-2 items-center">
           <span className="text-sm font-medium text-slate-500">科別：</span>
           {allSpecialties.slice(0, 30).map((s) => (
@@ -305,6 +325,7 @@ export default function ClinicsPage() {
             </button>
           ))}
         </div>
+
         <input
           type="text"
           placeholder="搜尋機構名稱或地址..."

@@ -7,7 +7,6 @@ import rawClinics from "@/data/clinics.json";
 import rawHospitals from "@/data/hospitals.json";
 import rawSymptoms from "@/data/symptoms.json";
 
-// 手動建立指南文章索引
 const guides = [
   { title: "全台醫院掛號指南", desc: "網路掛號、現場號、各大醫院系統差異", url: "/guides/registration-guide" },
   { title: "兩岸醫療面面觀", desc: "台灣與大陸就醫流程差異與注意事項", url: "/guides/cross-strait-guide" },
@@ -25,6 +24,10 @@ type SearchItem = {
   type: "醫院" | "診所" | "指南" | "症狀";
 };
 
+function normalizeName(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
 export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -33,34 +36,33 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const inputRef = useRef<HTMLInputElement>(null);
   const [fuse, setFuse] = useState<Fuse<SearchItem> | null>(null);
 
-  // 懶加載：第一次開啟時才建立搜尋索引，避免拖慢首頁
   useEffect(() => {
     if (isOpen && !fuse) {
       const allItems: SearchItem[] = [];
 
-      // 1. 加入醫院
+      // 醫院 (正規化名稱)
       rawHospitals.hospitals.forEach((h) => {
         allItems.push({
-          title: h.name,
-          subtitle: `${h.region} | ${h.level}`,
-          url: "/hospitals", // 醫院目前沒有獨立頁面，導向列表
+          title: normalizeName(h.name),
+          subtitle: `${normalizeName(h.region)} | ${h.level}`,
+          url: "/hospitals",
           type: "醫院",
         });
       });
 
-      // 2. 加入診所（為避免卡頓，只取前 2000 家，若需全部可解開註解）
+      // 診所 (正規化名稱與科別)
       rawClinics.clinics.slice(0, 2000).forEach((c) => {
         const countyMatch = c.address.match(/^(.{2,3}[市縣])/);
-        const county = countyMatch ? countyMatch[1].replace(/台/g, "臺") : "其他";
+        const county = countyMatch ? normalizeName(countyMatch[1]) : "其他";
         allItems.push({
-          title: c.name,
+          title: normalizeName(c.name),
           subtitle: `${county} | ${c.specialty || c.type}`,
           url: `/clinics/${encodeURIComponent(county)}`,
           type: "診所",
         });
       });
 
-      // 3. 加入指南
+      // 指南
       guides.forEach((g) => {
         allItems.push({
           title: g.title,
@@ -70,7 +72,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         });
       });
 
-      // 4. 加入症狀
+      // 症狀
       rawSymptoms.categories.forEach((cat) => {
         cat.symptoms.forEach((sym) => {
           allItems.push({
@@ -92,19 +94,19 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     }
   }, [isOpen, fuse]);
 
-  // 處理搜尋
   useEffect(() => {
     if (!fuse || !query.trim()) {
       setResults([]);
       setSelectedIndex(0);
       return;
     }
-    const searchResults = fuse.search(query).slice(0, 8).map((r) => r.item);
+    // 👇 搜尋前將輸入正規化，讓輸入「台大」也能找到「臺大」
+    const normalizedQuery = query.replace(/台/g, "臺");
+    const searchResults = fuse.search(normalizedQuery).slice(0, 8).map((r) => r.item);
     setResults(searchResults);
     setSelectedIndex(0);
   }, [query, fuse]);
 
-  // 監聽鍵盤事件
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -127,7 +129,6 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, results, selectedIndex, router, onClose]);
 
-  // 開啟時自動 focus 輸入框
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -140,7 +141,6 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 md:pt-32 bg-slate-900/40 backdrop-blur-sm px-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
-        {/* 搜尋輸入區 */}
         <div className="relative border-b border-slate-100">
           <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -158,7 +158,6 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           </button>
         </div>
 
-        {/* 搜尋結果 */}
         <div className="max-h-[60vh] overflow-y-auto p-2">
           {query.trim() === "" ? (
             <div className="text-center py-12 text-slate-400 text-sm">
@@ -201,7 +200,6 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           )}
         </div>
 
-        {/* 底部提示 */}
         <div className="bg-slate-50 px-5 py-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center gap-4">
             <span><kbd className="bg-white border border-slate-200 rounded px-1.5 py-0.5">↑</kbd> <kbd className="bg-white border border-slate-200 rounded px-1.5 py-0.5">↓</kbd> 選擇</span>

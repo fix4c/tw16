@@ -6,6 +6,11 @@ import { Header } from "../components/Header";
 
 type RankItem = { id: string; good_count: number; bad_count: number };
 
+// 👇 新增正規化
+function normalizeName(name: string): string {
+  return name.replace(/台/g, "臺");
+}
+
 export default function RankingsPage() {
   const [items, setItems] = useState<RankItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +74,8 @@ export default function RankingsPage() {
                       {getMedal(index)}
                     </div>
                     <div>
-                      <h3 className="font-serif text-lg font-bold text-slate-900">{decodeURIComponent(item.id)}</h3>
+                      {/* 👇 顯示時進行正規化 */}
+                      <h3 className="font-serif text-lg font-bold text-slate-900">{normalizeName(decodeURIComponent(item.id))}</h3>
                       <p className="text-xs text-slate-500 mt-1">獲得 {item.good_count} 人推薦</p>
                     </div>
                   </div>
@@ -91,7 +97,7 @@ export default function RankingsPage() {
       <footer className="border-t border-slate-200 bg-white mt-auto">
         <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-slate-500 text-center">
           <p>排行榜數據即時更新，僅供參考，不構成醫療機構評鑑之依據。</p>
-          <p className="mt-2">© {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站</p>
+          <p className="mt-2">© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
         </div>
       </footer>
     </main>
