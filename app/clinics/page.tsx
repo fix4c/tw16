@@ -15,9 +15,20 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-// 👇 1. 新增：將「台」統一為「臺」，徹底解決縣市重複問題
+// 1. 台灣 22 縣市的正確排序
+const COUNTY_ORDER = [
+  "基隆市", "臺北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣",
+  "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "臺南市",
+  "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "金門縣", "連江縣"
+];
+
+// 2. 強制正規化縣市名稱
 function normalizeCounty(name: string): string {
-  return name.replace(/台/g, "臺");
+  if (!name) return "其他";
+  let n = name.replace(/台/g, "臺");
+  if (n === "桃園縣") return "桃園市";
+  if (n === "臺南縣") return "臺南市";
+  return n;
 }
 
 function getCountyFromAddress(address: string): string {
@@ -37,6 +48,30 @@ function getDistrictFromAddress(address: string): string {
   return districtMatch ? districtMatch[1] : "其他";
 }
 
+// 3. 無敵科別清洗函數：徹底拆解所有混在一起的科別與機構類型
+function getAllCleanSpecialties(c: Clinic): string[] {
+  const specs = new Set<string>();
+  
+  const process = (value: string) => {
+    if (!value) return;
+    // 把所有分隔符（空白、頓號、逗號、斜線）都變成半形逗號
+    const normalized = value.replace(/[\s、，；;\/]/g, ",");
+    
+    normalized.split(",").forEach(part => {
+      const trimmed = part.trim();
+      // 只保留長度合理（<10）且非空的字串
+      if (trimmed && trimmed.length < 10) {
+        specs.add(trimmed);
+      }
+    });
+  };
+
+  process(c.specialty);
+  process(c.type);
+  
+  return Array.from(specs);
+}
+
 declare global {
   interface Window {
     turnstile: any;
@@ -52,14 +87,26 @@ export default function ClinicsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
-  // 縣市清單（已去除重複與正規化）
+  // 4. 取得縣市並依照地理順序排序
   const counties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach((c) => set.add(getCountyFromAddress(c.address)));
-    return ["全部", ...Array.from(set).filter(c => c !== "其他").sort()];
+    
+    const sorted = Array.from(set)
+      .filter(c => c !== "其他")
+      .sort((a, b) => {
+        const idxA = COUNTY_ORDER.indexOf(a);
+        const idxB = COUNTY_ORDER.indexOf(b);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return a.localeCompare(b);
+      });
+
+    return ["全部", ...sorted];
   }, []);
 
-  // 區域清單（根據選定縣市聯動）
+  // 區域聯動
   const districts = useMemo(() => {
     if (selectedCounty === "全部") return [];
     const set = new Set<string>();
@@ -72,15 +119,11 @@ export default function ClinicsPage() {
     return ["全部", ...Array.from(set).sort()];
   }, [selectedCounty]);
 
+  // 5. 取得全台獨立科別（已清洗）
   const allSpecialties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach((c) => {
-      if (c.specialty) {
-        c.specialty.split(/[、,，/]/).forEach((s) => {
-          const trimmed = s.trim();
-          if (trimmed && trimmed.length < 15) set.add(trimmed);
-        });
-      }
+      getAllCleanSpecialties(c).forEach((s) => set.add(s));
     });
     return ["全部", ...Array.from(set).sort()];
   }, []);
@@ -90,7 +133,12 @@ export default function ClinicsPage() {
       .filter((c) => {
         if (selectedCounty !== "全部" && getCountyFromAddress(c.address) !== selectedCounty) return false;
         if (selectedDistrict !== "全部" && getDistrictFromAddress(c.address) !== selectedDistrict) return false;
-        if (selectedSpecialty !== "全部" && !c.specialty.includes(selectedSpecialty) && !c.type.includes(selectedSpecialty)) return false;
+        
+        if (selectedSpecialty !== "全部") {
+          const specs = getAllCleanSpecialties(c);
+          if (!specs.includes(selectedSpecialty)) return false;
+        }
+
         if (searchTerm && !c.name.includes(searchTerm) && !c.address.includes(searchTerm) && !c.specialty.includes(searchTerm)) return false;
         return true;
       })
@@ -240,36 +288,12 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-6 pt-6 pb-2 w-full space-y-4">
+      {/* 篩選區塊：移除了上方重複的縣市導覽，只保留這組 */}
+      <section className="max-w-5xl mx-auto px-6 pt-8 pb-6 w-full space-y-4">
         
-        {/* 👇 上方快速導覽列：與下方的篩選器完美聯動 */}
-        <div>
-          <p className="text-sm font-bold text-slate-500 mb-3">📍 快速切換縣市</p>
-          <div className="flex flex-wrap gap-2">
-            {counties.filter(c => c !== "全部").map((c) => (
-              <button
-                key={c}
-                onClick={() => {
-                  setSelectedCounty(c);
-                  setSelectedDistrict("全部");
-                  // 平滑滾動讓使用者看到下方的區域列表
-                  window.scrollTo({ top: 450, behavior: "smooth" });
-                }}
-                className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
-                  selectedCounty === c
-                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-700"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 👇 下方縣市篩選列（已同步連動） */}
-        <div className="flex flex-wrap gap-2 items-center pt-2 border-t border-slate-100">
-          <span className="text-sm font-medium text-slate-500">縣市：</span>
+        {/* 縣市篩選 */}
+        <div className="flex flex-wrap gap-2 items-center">
+          <span className="text-sm font-bold text-slate-500 mr-2">縣市：</span>
           {counties.map((c) => (
             <button
               key={c}
@@ -288,10 +312,10 @@ export default function ClinicsPage() {
           ))}
         </div>
 
-        {/* 👇 區域一覽表（選定縣市後才會出現） */}
+        {/* 區域篩選 */}
         {selectedCounty !== "全部" && districts.length > 1 && (
           <div className="flex flex-wrap gap-2 items-center bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 animate-in fade-in slide-in-from-top-1">
-            <span className="text-sm font-bold text-indigo-700">區域：</span>
+            <span className="text-sm font-bold text-indigo-700 mr-2">區域：</span>
             {districts.map((d) => (
               <button
                 key={d}
@@ -308,10 +332,10 @@ export default function ClinicsPage() {
           </div>
         )}
 
-        {/* 科別篩選 */}
+        {/* 科別篩選（已清洗為獨立科別） */}
         <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-sm font-medium text-slate-500">科別：</span>
-          {allSpecialties.slice(0, 30).map((s) => (
+          <span className="text-sm font-bold text-slate-500 mr-2">科別：</span>
+          {allSpecialties.map((s) => (
             <button
               key={s}
               onClick={() => setSelectedSpecialty(s)}
