@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header } from "../../components/Header"; 
+import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
 
 type Step = {
@@ -29,145 +29,113 @@ const flowData: Record<string, Step> = {
       { label: "頭痛 / 頭暈", nextStep: "head" },
       { label: "胸悶 / 心悸 / 喘", nextStep: "chest" },
       { label: "皮膚起疹子 / 癢", nextStep: "skin" },
+      { label: "關節痛 / 背痛", nextStep: "bone" },
+      { label: "眼睛紅腫 / 視力模糊", nextStep: "eye" },
+      { label: "耳朵痛 / 耳鳴", nextStep: "ent" },
+      { label: "牙痛 / 牙齦腫", nextStep: "dental" },
+      { label: "頻尿 / 排尿痛", nextStep: "urinary" },
+      { label: "經痛 / 異常出血", nextStep: "gyn" },
+      { label: "焦慮 / 失眠", nextStep: "mental" },
+      { label: "兒童發燒 / 哭鬧", nextStep: "child_fever" },
     ],
   },
   fever: {
     question: "您的發燒狀況是？",
     options: [
-      { 
-        label: "發燒超過 3 天，或伴隨呼吸困難", 
-        result: { 
-          title: "建議盡速就醫", 
-          advice: "持續高燒或伴隨呼吸急促，可能為較嚴重的感染，請盡快到醫院急診或感染科、胸腔內科就診。", 
-          departments: ["感染科", "胸腔內科", "急診"],
-          isEmergency: true
-        } 
-      },
-      { 
-        label: "剛開始發燒，只有輕微痠痛", 
-        result: { 
-          title: "建議至診所或家醫科", 
-          advice: "多數輕微發燒為一般感冒或病毒感染，可先至附近診所或家醫科由醫師評估。", 
-          departments: ["家醫科", "一般內科", "小兒科(兒童)"]
-        } 
-      },
+      { label: "發燒超過 3 天，或伴隨呼吸困難", result: { title: "建議盡速就醫", advice: "持續高燒或伴隨呼吸急促，可能為較嚴重的感染，請盡快到醫院急診或感染科、胸腔內科就診。", departments: ["感染科", "胸腔內科", "急診"], isEmergency: true } },
+      { label: "剛開始發燒，只有輕微痠痛", result: { title: "建議至診所或家醫科", advice: "多數輕微發燒為一般感冒或病毒感染，可先至附近診所或家醫科由醫師評估。", departments: ["家醫科", "一般內科", "小兒科(兒童)"] } },
     ],
   },
   respiratory: {
     question: "您的症狀持續多久了？",
     options: [
-      { 
-        label: "咳嗽超過兩週，或伴隨咳血", 
-        result: { 
-          title: "建議至醫院檢查", 
-          advice: "慢性咳嗽或咳血需要進一步影像檢查，建議至胸腔內科或耳鼻喉科詳細評估。", 
-          departments: ["胸腔內科", "耳鼻喉科"]
-        } 
-      },
-      { 
-        label: "剛開始，有痰或流鼻水", 
-        result: { 
-          title: "建議至診所就醫", 
-          advice: "急性呼吸道症狀通常為感冒，可至附近耳鼻喉科或家醫科診所拿藥休息。", 
-          departments: ["耳鼻喉科", "家醫科", "小兒科(兒童)"]
-        } 
-      },
+      { label: "咳嗽超過兩週，或伴隨咳血", result: { title: "建議至醫院檢查", advice: "慢性咳嗽或咳血需要進一步影像檢查，建議至胸腔內科或耳鼻喉科詳細評估。", departments: ["胸腔內科", "耳鼻喉科"] } },
+      { label: "剛開始，有痰或流鼻水", result: { title: "建議至診所就醫", advice: "急性呼吸道症狀通常為感冒，可至附近耳鼻喉科或家醫科診所拿藥休息。", departments: ["耳鼻喉科", "家醫科", "小兒科(兒童)"] } },
     ],
   },
   stomach: {
     question: "肚子痛的位置在哪裡？",
     options: [
-      { 
-        label: "右上腹（右肋骨下方）", 
-        result: { 
-          title: "建議至胃腸肝膽科", 
-          advice: "右上腹痛可能與肝膽系統有關，若伴隨發燒或黃疸，請盡速就醫。", 
-          departments: ["胃腸肝膽科", "一般外科"]
-        } 
-      },
-      { 
-        label: "上腹部（胃部）", 
-        result: { 
-          title: "建議至胃腸科或家醫科", 
-          advice: "上腹痛多為胃部發炎或消化不良。若解黑便、吐血或劇痛，請立即至急診。", 
-          departments: ["胃腸肝膽科", "家醫科"]
-        } 
-      },
-      { 
-        label: "右下腹（肚臍右下方）", 
-        result: { 
-          title: "建議盡速就醫", 
-          advice: "右下腹劇痛且按壓會痛，需排除盲腸炎可能，請盡速至急診或一般外科評估。", 
-          departments: ["急診", "一般外科"],
-          isEmergency: true
-        } 
-      },
+      { label: "右上腹（右肋骨下方）", result: { title: "建議至胃腸肝膽科", advice: "右上腹痛可能與肝膽系統有關，若伴隨發燒或黃疸，請盡速就醫。", departments: ["胃腸肝膽科", "一般外科"] } },
+      { label: "上腹部（胃部）", result: { title: "建議至胃腸科或家醫科", advice: "上腹痛多為胃部發炎或消化不良。若解黑便、吐血或劇痛，請立即至急診。", departments: ["胃腸肝膽科", "家醫科"] } },
+      { label: "右下腹（肚臍右下方）", result: { title: "建議盡速就醫", advice: "右下腹劇痛且按壓會痛，需排除盲腸炎可能，請盡速至急診或一般外科評估。", departments: ["急診", "一般外科"], isEmergency: true } },
     ],
   },
   head: {
     question: "頭痛/頭暈的狀況是？",
     options: [
-      { 
-        label: "突發劇烈頭痛（像被雷打到），或伴隨手腳無力", 
-        result: { 
-          title: "⚠️ 緊急狀況，請立即就醫", 
-          advice: "突發性劇烈頭痛或單側無力可能是腦中風或腦出血前兆，請立即撥打 119 或直奔急診。", 
-          departments: ["急診", "神經內科", "神經外科"],
-          isEmergency: true
-        } 
-      },
-      { 
-        label: "長期反覆頭痛、偏頭痛", 
-        result: { 
-          title: "建議至神經內科", 
-          advice: "慢性頭痛建議由神經內科醫師評估，找出誘發原因並開立合適的止痛或預防藥物。", 
-          departments: ["神經內科", "家醫科"]
-        } 
-      },
+      { label: "突發劇烈頭痛（像被雷打到），或伴隨手腳無力", result: { title: "⚠️ 緊急狀況，請立即就醫", advice: "突發性劇烈頭痛或單側無力可能是腦中風或腦出血前兆，請立即撥打 119 或直奔急診。", departments: ["急診", "神經內科", "神經外科"], isEmergency: true } },
+      { label: "長期反覆頭痛、偏頭痛", result: { title: "建議至神經內科", advice: "慢性頭痛建議由神經內科醫師評估，找出誘發原因並開立合適的止痛或預防藥物。", departments: ["神經內科", "家醫科"] } },
     ],
   },
   chest: {
     question: "胸悶或喘的狀況是？",
     options: [
-      { 
-        label: "像被重物壓住、冒冷汗、痛到左肩", 
-        result: { 
-          title: "🚨 極度危險，請立即撥打 119", 
-          advice: "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車，絕對不要自己開車。", 
-          departments: ["急診", "心臟內科"],
-          isEmergency: true
-        } 
-      },
-      { 
-        label: "運動或爬樓梯時才會喘", 
-        result: { 
-          title: "建議至心臟內科或胸腔內科", 
-          advice: "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或X光檢查。", 
-          departments: ["心臟內科", "胸腔內科"]
-        } 
-      },
+      { label: "像被重物壓住、冒冷汗、痛到左肩", result: { title: "🚨 極度危險，請立即撥打 119", advice: "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車，絕對不要自己開車。", departments: ["急診", "心臟內科"], isEmergency: true } },
+      { label: "運動或爬樓梯時才會喘", result: { title: "建議至心臟內科或胸腔內科", advice: "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或X光檢查。", departments: ["心臟內科", "胸腔內科"] } },
     ],
   },
   skin: {
     question: "皮膚的狀況是？",
     options: [
-      { 
-        label: "起紅疹、發癢，但沒有發燒", 
-        result: { 
-          title: "建議至皮膚科", 
-          advice: "單純的紅疹發癢多為過敏、濕疹或黴菌感染，可至皮膚科診所由醫師開立藥膏。", 
-          departments: ["皮膚科", "家醫科"]
-        } 
-      },
-      { 
-        label: "起紅疹且伴隨高燒、呼吸困難", 
-        result: { 
-          title: "⚠️ 請立即就醫", 
-          advice: "伴隨發燒與呼吸困難的皮疹，可能是嚴重藥物過敏（如史蒂芬強森症候群）或嚴重感染，請直奔急診。", 
-          departments: ["急診", "皮膚科", "感染科"],
-          isEmergency: true
-        } 
-      },
+      { label: "起紅疹且伴隨高燒、呼吸困難", result: { title: "⚠️ 請立即就醫", advice: "伴隨發燒與呼吸困難的皮疹，可能是嚴重藥物過敏（如史蒂芬強森症候群）或嚴重感染，請直奔急診。", departments: ["急診", "皮膚科", "感染科"], isEmergency: true } },
+      { label: "起紅疹、發癢，但沒有發燒", result: { title: "建議至皮膚科", advice: "單純的紅疹發癢多為過敏、濕疹或黴菌感染，可至皮膚科診所由醫師開立藥膏。", departments: ["皮膚科", "家醫科"] } },
+    ],
+  },
+  bone: {
+    question: "骨骼肌肉的狀況是？",
+    options: [
+      { label: "伴隨下肢無力、麻木或大小便失禁", result: { title: "⚠️ 緊急狀況，請立即就醫", advice: "可能是脊椎壓迫或馬尾症候群，請立即至急診或神經外科評估。", departments: ["急診", "神經外科"], isEmergency: true } },
+      { label: "單純下背痛、肌肉痠痛，無其他神經症狀", result: { title: "建議至骨科或復健科", advice: "多為肌肉拉傷或脊椎退化，建議至骨科或復健科進行檢查與物理治療。", departments: ["骨科", "復健科"] } },
+    ],
+  },
+  eye: {
+    question: "眼睛的狀況是？",
+    options: [
+      { label: "突發視力模糊、視野缺損或劇烈疼痛", result: { title: "🚨 緊急狀況，請立即就醫", advice: "可能是急性青光眼或視網膜剝離，請立即至急診或眼科就醫。", departments: ["急診", "眼科"], isEmergency: true } },
+      { label: "眼睛紅癢、分泌物多，但視力正常", result: { title: "建議至眼科診所", advice: "可能是結膜炎或過敏，建議至眼科診所由醫師開立眼藥水。", departments: ["眼科", "家醫科"] } },
+    ],
+  },
+  ent: {
+    question: "耳朵或喉嚨的狀況是？",
+    options: [
+      { label: "突發性聽力喪失，或伴隨呼吸困難", result: { title: "🚨 請盡速就醫", advice: "突發性耳聾有黃金治療期；呼吸困難可能是會厭炎，請盡速至急診或耳鼻喉科。", departments: ["急診", "耳鼻喉科"], isEmergency: true } },
+      { label: "喉嚨痛、耳朵痛，但無呼吸困難", result: { title: "建議至耳鼻喉科", advice: "多為一般感冒、中耳炎或咽喉炎，可至耳鼻喉科診所拿藥休息。", departments: ["耳鼻喉科", "家醫科"] } },
+    ],
+  },
+  dental: {
+    question: "牙齒的狀況是？",
+    options: [
+      { label: "臉部嚴重腫脹、發燒，影響呼吸", result: { title: "⚠️ 請立即就醫", advice: "可能是蜂窩性組織炎，請立即至急診或口腔顎面外科就醫。", departments: ["急診", "牙科"], isEmergency: true } },
+      { label: "牙痛、牙齦流血或長膿包", result: { title: "建議至牙科診所", advice: "可能是蛀牙或牙周病，建議至牙科診所進行檢查與治療。", departments: ["牙科"] } },
+    ],
+  },
+  urinary: {
+    question: "排尿的狀況是？",
+    options: [
+      { label: "伴隨發燒、腰痛（疑似腎盂腎炎）", result: { title: "🚨 請盡速就醫", advice: "發燒與腰痛合併排尿痛，可能是腎臟感染，請盡速至急診或泌尿科。", departments: ["急診", "泌尿科"], isEmergency: true } },
+      { label: "只有頻尿、排尿痛，無發燒", result: { title: "建議至泌尿科或婦產科", advice: "多為膀胱炎或尿道炎，女性可先至婦產科，男性至泌尿科就醫。", departments: ["泌尿科", "婦產科(女性)", "家醫科"] } },
+    ],
+  },
+  gyn: {
+    question: "婦科的狀況是？",
+    options: [
+      { label: "懷孕期間出血或劇烈腹痛", result: { title: "🚨 請立即就醫", advice: "可能是流產或子宮外孕前兆，請立即至急診或婦產科就醫。", departments: ["急診", "婦產科"], isEmergency: true } },
+      { label: "經痛嚴重影響生活，或經期不規則", result: { title: "建議至婦產科", advice: "建議至婦產科檢查，排除子宮內膜異位等問題。", departments: ["婦產科"] } },
+    ],
+  },
+  mental: {
+    question: "心理與睡眠的狀況是？",
+    options: [
+      { label: "出現輕生念頭或嚴重影響日常生活", result: { title: "🚨 請立即尋求專業協助", advice: "請立即撥打 1925 安心專線，或至急診、身心科就醫。", departments: ["身心科", "急診"], isEmergency: true } },
+      { label: "長期焦慮、失眠，但無輕生念頭", result: { title: "建議至身心科", advice: "長期焦慮與失眠可透過身心科醫師評估，安排心理治療或藥物輔助。", departments: ["身心科", "精神科", "家醫科"] } },
+    ],
+  },
+  child_fever: {
+    question: "兒童發燒的狀況是？",
+    options: [
+      { label: "三個月以下嬰兒發燒，或伴隨抽搐、活動力極差", result: { title: "🚨 請立即就醫", advice: "嬰兒發燒可能代表嚴重感染，請立即至急診或小兒科就醫。", departments: ["急診", "小兒科"], isEmergency: true } },
+      { label: "輕微發燒，活動力與食慾正常", result: { title: "建議至小兒科診所", advice: "可先多補充水分並觀察，若持續發燒可至小兒科診所由醫師評估。", departments: ["小兒科", "家醫科"] } },
     ],
   },
 };
@@ -183,7 +151,6 @@ export default function AssistantPage() {
     } else if (option.result) {
       setHistory([...history, currentStep!]);
       setCurrentStep("result");
-      // 暫存結果以供顯示
       sessionStorage.setItem("assistantResult", JSON.stringify(option.result));
     }
   };
@@ -211,15 +178,18 @@ export default function AssistantPage() {
     <main className="min-h-screen flex flex-col bg-neutral-50">
       <Header />
 
-      <section className="max-w-3xl mx-auto px-6 pt-12 pb-8 w-full">
-        <p className="text-xs font-medium tracking-widest text-teal-700 mb-3">醫療小幫手</p>
-        <h1 className="font-serif text-3xl md:text-4xl font-bold text-neutral-900 leading-tight mb-4">
-          互動式就醫指引
-        </h1>
-        <p className="text-neutral-600 leading-relaxed">
-          透過簡單的點選，幫助您釐清症狀，並提供建議的就醫科別。本工具無法取代醫師診斷，若有不適請盡速就醫。
-        </p>
-        <ToolNav />
+      <section className="relative overflow-hidden w-full border-b border-slate-100/50">
+        <div className="absolute inset-0 bg-gradient-to-b from-teal-50/40 to-transparent pointer-events-none"></div>
+        <div className="relative max-w-3xl mx-auto px-6 pt-12 pb-8">
+          <p className="text-xs font-bold tracking-widest text-teal-700 mb-3 uppercase">醫療小幫手</p>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-4">
+            互動式就醫指引
+          </h1>
+          <p className="text-slate-600 leading-relaxed mb-6">
+            透過簡單的點選，幫助您釐清症狀，並提供建議的就醫科別。本工具無法取代醫師診斷，若有不適請盡速就醫。
+          </p>
+          <ToolNav />
+        </div>
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-16 w-full flex-1">
@@ -242,7 +212,8 @@ export default function AssistantPage() {
               <h2 className="text-xl md:text-2xl font-serif font-bold text-neutral-900 mb-6">
                 {currentData.question}
               </h2>
-              <div className="space-y-3">
+              {/* 👇 使用 grid-cols-1 md:grid-cols-2 讓 14 個選項排列更整齊 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {currentData.options.map((opt, i) => (
                   <button
                     key={i}
@@ -304,10 +275,6 @@ export default function AssistantPage() {
 
       <footer className="border-t border-neutral-200 bg-white mt-auto">
         <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-neutral-500 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
-            <span>🏆</span>
-            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
-          </div>
           <p className="mb-2">本工具僅供初步導航參考，無法取代專業醫師的診斷與治療。若症狀緊急，請立即撥打 119。</p>
           <p>© {new Date().getFullYear()} tw16.net · 非營利資訊導航站</p>
         </div>
