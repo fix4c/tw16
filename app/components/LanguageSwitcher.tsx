@@ -2,6 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+// 👇 補上這段 Window 的型別定義，解決 TypeScript 報錯
+declare global {
+  interface Window {
+    google: any;
+    googleTranslateElementInit: any;
+  }
+}
+
 export function LanguageSwitcher() {
   const [selectedLang, setSelectedLang] = useState("zh-TW");
 
@@ -42,13 +50,11 @@ export function LanguageSwitcher() {
     const lang = e.target.value;
     setSelectedLang(lang);
     
-    // 使用 Cookie 強制 Google 翻譯，這是 Next.js 中最穩定的做法
+    // 使用 Cookie 強制 Google 翻譯
     if (lang === "zh-TW") {
-      // 清除 Cookie 恢復原文
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
     } else {
-      // 設定新語言 Cookie
       document.cookie = `googtrans=/zh-TW/${lang}; path=/;`;
       document.cookie = `googtrans=/zh-TW/${lang}; path=/; domain=.${window.location.hostname}`;
     }
