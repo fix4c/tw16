@@ -23,7 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1.0 : 0.8,
   }))
 
-  // 處理診所資料
   type Clinic = { address: string; specialty: string; type: string };
   const clinics = (rawData as { clinics: Clinic[] }).clinics;
   
@@ -32,37 +31,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
   clinics.forEach((c) => {
     const match = c.address?.match(/^(.{2,3}[市縣])/);
     if (!match) return;
-    const county = match[1];
+    const county = match[1].replace(/台/g, "臺"); // 統一臺
     
     if (!countyMap.has(county)) countyMap.set(county, new Set());
     
-    // 收集科別
-    if (c.specialty) {
-      c.specialty.split(/[、,，/]/).forEach((s) => {
-        const trimmed = s.trim();
-        if (trimmed && trimmed.length < 15) countyMap.get(county)!.add(trimmed);
+    const addSpec = (val: string) => {
+      val.split(/[、,，/]/).forEach(s => {
+        const cleaned = s.replace(/\s+/g, "").trim();
+        if (cleaned && cleaned.length < 10) countyMap.get(county)!.add(cleaned);
       });
-    }
-    // 收集機構類型
-    if (c.type) countyMap.get(county)!.add(c.type);
+    };
+    if (c.specialty) addSpec(c.specialty);
+    if (c.type) addSpec(c.type);
   });
 
-  const countyUrls: MetadataRoute.Sitemap = [];
-  const specialtyUrls: MetadataRoute.Sitemap = [];
+  const dynamicUrls: MetadataRoute.Sitemap = [];
 
   countyMap.forEach((specs, county) => {
-    // 加入縣市頁面
-    countyUrls.push({
+    // 縣市頁面
+    dynamicUrls.push({
       url: `${baseUrl}/clinics/${encodeURIComponent(county)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7,
     });
 
-    // 加入縣市+科別頁面
+    // 縣市-科別頁面
     specs.forEach((spec) => {
-      specialtyUrls.push({
-        url: `${baseUrl}/clinics/${encodeURIComponent(county)}/${encodeURIComponent(spec)}`,
+      dynamicUrls.push({
+        url: `${baseUrl}/clinics/${encodeURIComponent(`${county}-${spec}`)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.6,
@@ -70,5 +67,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  return [...staticUrls, ...countyUrls, ...specialtyUrls]
+  return [...staticUrls, ...dynamicUrls]
 }
