@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header } from "../../components/Header"; 
+import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
 
 export default function WaterCalculatorPage() {
@@ -17,12 +17,15 @@ export default function WaterCalculatorPage() {
 
     if (!w || w <= 0) return;
 
-    // 基礎飲水量：體重(kg) x 30ml；若有運動，每半小時額外增加 300ml
     const baseWater = w * 30;
     const extraWater = (ex / 0.5) * 300;
     const totalMl = baseWater + extraWater;
+    const roundedMl = Math.round(totalMl);
     
-    setResult(Math.round(totalMl));
+    setResult(roundedMl);
+    
+    // 👇 存入 localStorage，供首頁健康看板讀取
+    localStorage.setItem("tw16-water", roundedMl.toString());
   };
 
   return (
@@ -36,7 +39,7 @@ export default function WaterCalculatorPage() {
           <h1 className="font-serif text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-4">
             每日飲水量計算器
           </h1>
-          <p className="text-slate-600 leading-relaxed">
+          <p className="text-slate-600 leading-relaxed mb-6">
             輸入您的體重與運動時間，快速算出今天該喝多少水。此數值僅供參考，實際需求依個人體質、氣候與健康狀況而異。
           </p>
           <ToolNav />
@@ -79,7 +82,7 @@ export default function WaterCalculatorPage() {
           </form>
 
           {result !== null && (
-            <div className="mt-8 pt-8 border-t border-slate-100 text-center">
+            <div className="mt-8 pt-8 border-t border-slate-100 text-center animate-in fade-in zoom-in duration-300">
               <h3 className="text-sm text-slate-500 mb-2">建議每日總飲水量</h3>
               <div className="text-5xl font-bold text-blue-700 mb-2">
                 {result} <span className="text-2xl text-slate-400">ml</span>
@@ -93,11 +96,7 @@ export default function WaterCalculatorPage() {
       </section>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
-        <div className="max-w-3xl mx-auto px-6 py-8 text-xs text-slate-500 text-center leading-relaxed">
-          <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium">
-            <span>🏆</span>
-            <span>本站入圍衛福部 2006 年度優良健康資訊網站</span>
-          </div>
+        <div className="max-w-3xl mx-auto px-6 py-6 text-xs text-slate-500 text-center">
           <p>© {new Date().getFullYear()} tw16.net · 本站為非營利資訊導航站</p>
         </div>
       </footer>

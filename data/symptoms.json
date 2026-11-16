@@ -1,144 +1,97 @@
 {
-  "symptoms": [
+  "categories": [
     {
-      "id": "headache",
-      "name": "頭痛",
-      "category": "神經與感官",
-      "departments": ["神經內科", "家醫科"],
-      "note": "伴隨突發劇烈疼痛、發燒或頸部僵硬，請立即至急診。"
+      "id": "head",
+      "name": "頭部與神經",
+      "icon": "🧠",
+      "symptoms": [
+        {
+          "id": "headache",
+          "name": "頭痛 / 頭暈",
+          "question": "您的頭痛或頭暈是否有以下特徵？",
+          "options": [
+            { "label": "突發劇烈頭痛（像被雷打到），或伴隨手腳無力", "type": "emergency", "advice": "突發性劇烈頭痛或單側無力可能是腦中風或腦出血前兆，請立即撥打 119 或直奔急診。", "departments": ["急診", "神經內科"] },
+            { "label": "伴隨發燒、頸部僵硬或意識不清", "type": "emergency", "advice": "這可能是腦膜炎等嚴重感染，請盡速至急診就醫。", "departments": ["急診", "感染科"] },
+            { "label": "長期反覆頭痛、偏頭痛，無其他危險症狀", "type": "normal", "advice": "慢性頭痛建議由神經內科醫師評估，找出誘發原因並開立合適的藥物。", "departments": ["神經內科", "家醫科"] }
+          ]
+        },
+        {
+          "id": "dizziness",
+          "name": "天旋地轉 / 眩暈",
+          "question": "您的眩暈狀況是？",
+          "options": [
+            { "label": "伴隨複視、口齒不清或單側無力", "type": "emergency", "advice": "可能是中風前兆，請立即就醫。", "departments": ["急診", "神經內科"] },
+            { "label": "改變姿勢時特別暈，伴隨耳鳴或聽力下降", "type": "normal", "advice": "可能與內耳前庭系統有關，建議至耳鼻喉科檢查。", "departments": ["耳鼻喉科", "神經內科"] }
+          ]
+        }
+      ]
     },
     {
-      "id": "dizziness",
-      "name": "頭暈/眩暈",
-      "category": "神經與感官",
-      "departments": ["耳鼻喉科", "神經內科", "家醫科"],
-      "note": "若伴隨複視、口齒不清或單側無力，可能是中風前兆，請速就醫。"
+      "id": "chest",
+      "name": "胸腔與心血管",
+      "icon": "🫀",
+      "symptoms": [
+        {
+          "id": "chest_pain",
+          "name": "胸痛 / 胸悶",
+          "question": "您的胸悶或胸痛感覺是？",
+          "options": [
+            { "label": "像被重物壓住、冒冷汗、痛到左肩", "type": "emergency", "advice": "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車，絕對不要自己開車。", "departments": ["急診", "心臟內科"] },
+            { "label": "運動或爬樓梯時才會喘", "type": "normal", "advice": "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或X光檢查。", "departments": ["心臟內科", "胸腔內科"] }
+          ]
+        },
+        {
+          "id": "palpitations",
+          "name": "心悸",
+          "question": "您的心悸狀況是？",
+          "options": [
+            { "label": "伴隨暈厥、呼吸困難或胸痛", "type": "emergency", "advice": "請盡速就醫，可能為嚴重心律不整。", "departments": ["急診", "心臟內科"] },
+            { "label": "只是偶爾覺得心跳很快，無其他不適", "type": "normal", "advice": "建議至心臟內科安排心電圖檢查，排除心律不整。", "departments": ["心臟內科", "家醫科"] }
+          ]
+        }
+      ]
     },
     {
-      "id": "fever",
-      "name": "發燒",
-      "category": "全身性",
-      "departments": ["家醫科", "感染科", "小兒科(兒童)"],
-      "note": "持續高燒超過3天、伴隨呼吸困難或意識不清，請盡速就醫。"
+      "id": "abdomen",
+      "name": "消化與腹部",
+      "icon": "🫄",
+      "symptoms": [
+        {
+          "id": "stomachache",
+          "name": "腹痛 / 胃痛",
+          "question": "您的肚子痛位置在哪裡？",
+          "options": [
+            { "label": "右下腹（肚臍右下方）劇痛且按壓會痛", "type": "emergency", "advice": "需排除盲腸炎可能，請盡速至急診或一般外科評估。", "departments": ["急診", "一般外科"] },
+            { "label": "右上腹（右肋骨下方）", "type": "normal", "advice": "右上腹痛可能與肝膽系統有關，若伴隨發燒或黃疸請盡速就醫。", "departments": ["胃腸肝膽科"] },
+            { "label": "上腹部（胃部）", "type": "normal", "advice": "上腹痛多為胃部發炎或消化不良。若解黑便、吐血或劇痛，請立即至急診。", "departments": ["胃腸肝膽科", "家醫科"] }
+          ]
+        }
+      ]
     },
     {
-      "id": "cough",
-      "name": "咳嗽",
-      "category": "呼吸道",
-      "departments": ["胸腔內科", "家醫科", "耳鼻喉科"],
-      "note": "咳嗽超過兩週、伴隨咳血或體重減輕，請盡速檢查。"
-    },
-    {
-      "id": "stomachache",
-      "name": "腹痛/胃痛",
-      "category": "消化系統",
-      "departments": ["胃腸肝膽科", "一般外科", "家醫科"],
-      "note": "右上腹劇痛、吐血或解黑便，請立即至急診。"
-    },
-    {
-      "id": "diarrhea",
-      "name": "腹瀉",
-      "category": "消化系統",
-      "departments": ["胃腸肝膽科", "家醫科"],
-      "note": "伴隨嚴重脫水、高燒或血便，請盡速就醫。"
-    },
-    {
-      "id": "chest_pain",
-      "name": "胸痛/胸悶",
-      "category": "心血管",
-      "departments": ["心臟內科", "急診(嚴重時)"],
-      "note": "若感覺像被重物壓住、冒冷汗或延伸至左肩，請立即撥打119。"
-    },
-    {
-      "id": "palpitations",
-      "name": "心悸",
-      "category": "心血管",
-      "departments": ["心臟內科", "家醫科"],
-      "note": "伴隨暈厥、呼吸困難或胸痛，請盡速就醫。"
-    },
-    {
-      "id": "back_pain",
-      "name": "背痛/腰痛",
-      "category": "骨骼肌肉",
-      "departments": ["骨科", "復健科", "神經外科"],
-      "note": "伴隨下肢無力、麻木或大小便失禁，請盡速就醫。"
-    },
-    {
-      "id": "joint_pain",
-      "name": "關節痛",
-      "category": "骨骼肌肉",
-      "departments": ["風濕免疫科", "骨科", "復健科"],
-      "note": "多處關節同時腫痛、伴隨晨間僵硬，建議至風濕免疫科檢查。"
-    },
-    {
-      "id": "rash",
-      "name": "皮膚紅疹/癢",
-      "category": "皮膚",
-      "departments": ["皮膚科", "家醫科"],
-      "note": "伴隨發燒、呼吸困難或黏膜潰爛，可能是嚴重過敏或感染，請速就醫。"
-    },
-    {
-      "id": "eye_pain",
-      "name": "眼睛紅腫/痛",
-      "category": "神經與感官",
-      "departments": ["眼科"],
-      "note": "突發視力模糊、視野缺損或劇痛，請立即就醫。"
-    },
-    {
-      "id": "ear_pain",
-      "name": "耳朵痛/耳鳴",
-      "category": "神經與感官",
-      "departments": ["耳鼻喉科"],
-      "note": "伴隨突發性聽力喪失，請盡速就醫（黃金治療期短）。"
-    },
-    {
-      "id": "urinary_pain",
-      "name": "頻尿/排尿痛",
-      "category": "泌尿系統",
-      "departments": ["泌尿科", "婦產科(女性)"],
-      "note": "伴隨發燒、腰痛（疑似腎盂腎炎），請盡速就醫。"
-    },
-    {
-      "id": "menstrual_pain",
-      "name": "經痛/生理痛",
-      "category": "婦科",
-      "departments": ["婦產科"],
-      "note": "痛到無法下床、吃止痛藥無效，建議檢查是否有子宮內膜異位等問題。"
-    },
-    {
-      "id": "anxiety",
-      "name": "焦慮/失眠",
-      "category": "精神心理",
-      "departments": ["精神科", "身心科", "家醫科"],
-      "note": "嚴重影響日常生活、出現輕生念頭，請立即尋求專業協助（1925安心專線）。"
-    },
-    {
-      "id": "fatigue",
-      "name": "疲勞/嗜睡",
-      "category": "全身性",
-      "departments": ["家醫科", "內分泌科"],
-      "note": "持續超過數週、伴隨體重減輕或發燒，建議抽血檢查。"
-    },
-    {
-      "id": "numbness",
-      "name": "手腳麻木",
-      "category": "神經與感官",
-      "departments": ["神經內科", "復健科"],
-      "note": "單側突然麻木無力，請立即至急診（疑似中風）。"
-    },
-    {
-      "id": "shortness_breath",
-      "name": "呼吸困難/喘",
-      "category": "呼吸道",
-      "departments": ["胸腔內科", "心臟內科", "急診(嚴重時)"],
-      "note": "突發嚴重呼吸困難、嘴唇發紫，請立即撥打119。"
-    },
-    {
-      "id": "child_fever",
-      "name": "兒童發燒/哭鬧",
-      "category": "小兒科",
-      "departments": ["小兒科", "急診(三個月以下嬰兒)"],
-      "note": "三個月以下嬰兒發燒、活動力極差或抽搐，請立即就醫。"
+      "id": "respiratory",
+      "name": "呼吸道與全身",
+      "icon": "🫁",
+      "symptoms": [
+        {
+          "id": "fever",
+          "name": "發燒",
+          "question": "您的發燒狀況是？",
+          "options": [
+            { "label": "持續高燒超過3天，或伴隨呼吸困難、意識不清", "type": "emergency", "advice": "持續高燒或伴隨呼吸急促，可能為較嚴重的感染，請盡快到醫院急診或感染科、胸腔內科就診。", "departments": ["急診", "感染科"] },
+            { "label": "剛開始發燒，只有輕微痠痛", "type": "normal", "advice": "多數輕微發燒為一般感冒或病毒感染，可先至附近診所或家醫科由醫師評估。", "departments": ["家醫科", "一般內科", "小兒科(兒童)"] }
+          ]
+        },
+        {
+          "id": "cough",
+          "name": "咳嗽",
+          "question": "您的咳嗽狀況是？",
+          "options": [
+            { "label": "咳嗽超過兩週，或伴隨咳血", "type": "normal", "advice": "慢性咳嗽或咳血需要進一步影像檢查，建議至胸腔內科或耳鼻喉科詳細評估。", "departments": ["胸腔內科", "耳鼻喉科"] },
+            { "label": "剛開始，有痰或流鼻水", "type": "normal", "advice": "急性呼吸道症狀通常為感冒，可至附近耳鼻喉科或家醫科診所拿藥休息。", "departments": ["耳鼻喉科", "家醫科"] }
+          ]
+        }
+      ]
     }
   ]
 }

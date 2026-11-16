@@ -170,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* 我的健康摘要 (如果有紀錄才會顯示) */}
-      <HealthSummary />
+      <HealthDashboard />
 
       {/* 健康工具專區 */}
       <section className="max-w-5xl mx-auto px-6 pb-12 w-full">
