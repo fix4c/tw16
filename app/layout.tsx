@@ -2,13 +2,14 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import { Noto_Sans_TC, Noto_Serif_TC } from "next/font/google";
 import "./globals.css";
+import { BackToTop } from "./components/BackToTop"; // 👈 新增引入
 
 const sans = Noto_Sans_TC({
   subsets: ["latin"],
   variable: "--font-noto-sans",
   weight: ["400", "500", "700"],
   display: "optional",
-  preload: true, // 👈 強制預加載
+  preload: true,
 });
 
 const serif = Noto_Serif_TC({
@@ -16,7 +17,7 @@ const serif = Noto_Serif_TC({
   variable: "--font-noto-serif",
   weight: ["600", "700"],
   display: "optional",
-  preload: true, // 👈 強制預加載
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -87,6 +88,7 @@ export default function RootLayout({
       </head>
       <body className="bg-neutral-50 text-neutral-900 antialiased">
         {children}
+        <BackToTop /> {/* 👈 新增掛載 */}
       </body>
     </html>
   );
