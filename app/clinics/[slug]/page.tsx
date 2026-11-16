@@ -24,36 +24,24 @@ function getCountyFromAddress(address: string): string {
   return normalizeCountyName(match[1]);
 }
 
-// 👇 終極無敵清洗函數：解決「眼 科」與「內科 外科」的混淆
 function getAllSpecialties(c: Clinic): string[] {
   const specs = new Set<string>();
-
   const addValid = (s: string) => {
     const cleaned = s.trim();
-    if (cleaned && cleaned.length < 10) {
-      specs.add(cleaned);
-    }
+    if (cleaned && cleaned.length < 10) specs.add(cleaned);
   };
-
   const process = (value: string) => {
     if (!value) return;
-    
-    // 1. 先用逗號、頓號等標點分割
-    value.split(/[、,，；;\/]/).forEach(seg => {
+    value.split(/[、,，；;\/]/).forEach((seg) => {
       const trimmed = seg.trim();
       if (!trimmed) return;
-      
-      // 2. 嘗試按空格分割
       const words = trimmed.split(/\s+/);
       if (words.length > 1) {
-        // 如果有任何一個詞長度是 1（如「眼 科」），代表這是排版錯誤，直接合併
-        const hasShortWord = words.some(w => w.length === 1);
+        const hasShortWord = words.some((w) => w.length === 1);
         if (hasShortWord) {
-          addValid(trimmed.replace(/\s+/g, "")); // 合併成「眼科」
+          addValid(trimmed.replace(/\s+/g, ""));
         } else {
-          // 否則代表這是兩個不同的科別（如「內科 外科」），分別加入
-          words.forEach(w => addValid(w));
-          // 同時，為了保險，也把合併版加進去
+          words.forEach((w) => addValid(w));
           addValid(trimmed.replace(/\s+/g, ""));
         }
       } else {
@@ -61,10 +49,8 @@ function getAllSpecialties(c: Clinic): string[] {
       }
     });
   };
-
   process(c.specialty);
   process(c.type);
-
   return Array.from(specs);
 }
 
@@ -75,24 +61,17 @@ export async function generateStaticParams() {
   clinics.forEach((c) => {
     const county = getCountyFromAddress(c.address);
     if (county === "其他") return;
-
     if (!countyMap.has(county)) countyMap.set(county, new Set());
     getAllSpecialties(c).forEach((spec) => countyMap.get(county)!.add(spec));
   });
 
   countyMap.forEach((specs, county) => {
-    // 縣市頁面
     params.push({ slug: county });
-    if (county.includes("臺")) {
-      params.push({ slug: county.replace(/臺/g, "台") });
-    }
+    if (county.includes("臺")) params.push({ slug: county.replace(/臺/g, "台") });
 
-    // 縣市-科別頁面
     specs.forEach((spec) => {
       params.push({ slug: `${county}-${spec}` });
-      if (county.includes("臺")) {
-        params.push({ slug: `${county.replace(/臺/g, "台")}-${spec}` });
-      }
+      if (county.includes("臺")) params.push({ slug: `${county.replace(/臺/g, "台")}-${spec}` });
     });
   });
 
@@ -122,16 +101,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ClinicLocationPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
-  
+
   const [rawCounty, ...rawSpecs] = decodedSlug.split("-");
   const countyName = normalizeCountyName(rawCounty);
   const specialtyName = rawSpecs.join("-");
+
+  // 取得全台縣市清單（供切換使用）
+  const allCounties = Array.from(new Set(clinics.map((c) => getCountyFromAddress(c.address)))).filter(c => c !== "其他").sort();
 
   const countyClinics = clinics.filter((c) => getCountyFromAddress(c.address) === countyName);
 
   let finalClinics = countyClinics;
   if (specialtyName) {
-    const targetSpec = specialtyName.replace(/\s+/g, ""); // 比對前也去空格
+    const targetSpec = specialtyName.replace(/\s+/g, "");
     finalClinics = countyClinics.filter((c) => {
       const specs = getAllSpecialties(c);
       return specs.some((s) => s.includes(targetSpec) || targetSpec.includes(s));
@@ -144,28 +126,64 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
 
       <section className="relative overflow-hidden w-full border-b border-slate-100/50">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-50/40 to-transparent pointer-events-none"></div>
-        <div className="relative max-w-5xl mx-auto px-6 pt-12 pb-8">
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
-            <Link href="/clinics" className="hover:text-teal-600">院所查詢</Link>
-            <span>/</span>
-            <Link href={`/clinics/${encodeURIComponent(countyName)}`} className="hover:text-teal-600">{countyName}</Link>
-            {specialtyName && (
+        <div className="relative max-w-5xl mx-auto px-6 pt-8 pb-8">
+          
+          {/* 👇 完整路徑導航（Breadcrumbs） */}
+          <nav className="flex items-center text-sm font-medium text-slate-500 mb-6">
+            <Link href="/" className="hover:text-teal-600 transition-colors">首頁</Link>
+            <span className="mx-2 text-slate-300">/</span>
+            <Link href="/clinics" className="hover:text-teal-600 transition-colors">院所查詢</Link>
+            <span className="mx-2 text-slate-300">/</span>
+            {specialtyName ? (
               <>
-                <span>/</span>
-                <span className="text-teal-700 font-bold">{specialtyName}</span>
+                <Link href={`/clinics/${encodeURIComponent(countyName)}`} className="hover:text-teal-600 transition-colors">
+                  {countyName}
+                </Link>
+                <span className="mx-2 text-slate-300">/</span>
+                <span className="text-teal-700">{specialtyName}</span>
               </>
+            ) : (
+              <span className="text-teal-700">{countyName}</span>
             )}
-          </div>
+          </nav>
+
           <h1 className="font-serif text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-4">
             {countyName} {specialtyName || "診所與醫院"}
           </h1>
-          <p className="text-slate-600 leading-relaxed max-w-2xl">
+          <p className="text-slate-600 leading-relaxed max-w-2xl mb-8">
             共收錄 {finalClinics.length} 家相關機構。資料來自健保署開放資料平台，每日更新。
           </p>
+
+          {/* 👇 切換縣市快速導覽列 */}
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-slate-200/60 shadow-sm">
+            <p className="text-sm font-bold text-slate-500 mb-3">📍 切換其他縣市</p>
+            <div className="flex flex-wrap gap-2">
+              {allCounties.map((c) => (
+                <Link
+                  key={c}
+                  href={`/clinics/${encodeURIComponent(c)}`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+                    c === countyName
+                      ? "bg-teal-50 border-teal-200 text-teal-700 font-bold"
+                      : "bg-white border-slate-200 text-slate-600 hover:border-teal-400 hover:text-teal-700"
+                  }`}
+                >
+                  {c}
+                </Link>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
       <section className="max-w-5xl mx-auto px-6 py-8 w-full flex-1">
+        <div className="mb-6 flex items-center justify-between">
+          <Link href="/clinics" className="inline-flex items-center gap-1 text-sm font-bold text-teal-600 hover:underline">
+            ← 返回全台搜尋
+          </Link>
+        </div>
+
         {!specialtyName && (
           <div className="mb-8 p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
             <p className="text-sm font-bold text-slate-500 mb-3">🩺 依科別瀏覽 {countyName} 診所</p>
@@ -204,7 +222,7 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
             </article>
           ))}
         </div>
-        
+
         {finalClinics.length > 100 && (
           <p className="text-center text-sm text-slate-400 mt-8">
             僅顯示前 100 筆，請使用上方「返回全台搜尋」進行更精準的篩選。
