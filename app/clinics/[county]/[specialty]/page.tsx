@@ -47,8 +47,8 @@ export async function generateStaticParams() {
   countyMap.forEach((specs, county) => {
     specs.forEach((spec) => {
       params.push({
-        county: county, // ✅ 返回未編碼的中文
-        specialty: spec, // ✅ 返回未編碼的中文
+        county: encodeURIComponent(county), // ✅ 統一編碼
+        specialty: encodeURIComponent(spec), // ✅ 統一編碼
       });
     });
   });
