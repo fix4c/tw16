@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header";
+import { ShareButtons } from "../../components/ShareButtons"; 
 
 export const metadata: Metadata = {
   title: "看懂常規抽血報告 | 台灣醫療入口",
@@ -86,6 +87,10 @@ export default function BloodTestGuidePage() {
               ← 返回就醫指南列表
             </Link>
           </div>
+
+          {/* 👇 分享按鈕移入白色卡片內，並修正正確的標題 */}
+          <ShareButtons title="看懂常規抽血報告：常見紅字指標大解析" />
+          
         </div>
       </article>
 

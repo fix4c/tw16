@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header";
+import { ShareButtons } from "../../components/ShareButtons"; 
 
 export const metadata: Metadata = {
   title: "看懂健康檢查報告 | 台灣醫療入口",
@@ -57,6 +58,10 @@ export default function HealthCheckupGuidePage() {
             ← 返回就醫指南列表
           </Link>
         </div>
+
+        {/* 👇 已修正標題 */}
+        <ShareButtons title="看懂健康檢查報告：常見紅字指標解析" />
+
       </article>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">

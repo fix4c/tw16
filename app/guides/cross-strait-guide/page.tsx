@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header"; 
+import { ShareButtons } from "../../components/ShareButtons"; 
 
 export const metadata: Metadata = {
   title: "兩岸醫療面面觀 | 台灣醫療入口",
@@ -74,6 +75,10 @@ export default function CrossStraitGuidePage() {
             ← 返回就醫指南列表
           </Link>
         </div>
+
+        {/* 👇 已修正這篇文章專屬的分享標題 */}
+        <ShareButtons title="兩岸醫療面面觀：就醫流程與實用資源指南" />
+
       </article>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">

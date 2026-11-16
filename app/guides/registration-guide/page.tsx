@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header";
+import { ShareButtons } from "../../components/ShareButtons"; 
 
 export const metadata: Metadata = {
   title: "全台醫院掛號指南 | 台灣醫療入口",
@@ -78,6 +79,10 @@ export default function RegistrationGuidePage() {
             </div>
           </div>
         </div>
+
+        {/* 👇 將分享按鈕移出 prose 容器，視覺更乾淨 */}
+        <ShareButtons title="全台醫院掛號指南：看懂門診表、避開掛號雷區" />
+
       </article>
 
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">

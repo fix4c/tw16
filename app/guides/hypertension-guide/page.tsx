@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header";
+import { ShareButtons } from "../../components/ShareButtons"; 
 
 export const metadata: Metadata = {
   title: "高血壓日常控制指南 | 台灣醫療入口",
@@ -136,6 +137,10 @@ export default function HypertensionGuidePage() {
               ← 返回就醫指南列表
             </Link>
           </div>
+
+          {/* 👇 分享按鈕移入白色卡片內，並修正正確的標題 */}
+          <ShareButtons title="高血壓日常控制指南：從量測到飲食的實戰守則" />
+
         </div>
       </article>
 
