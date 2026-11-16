@@ -1,21 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { TOOL_LINKS } from "../../config/site"; // 👈 引入配置
 
 export function ToolNav() {
   const pathname = usePathname();
-  const tools = [
-    { href: "/tools/bmi", label: "⚖️ BMI 計算" },
-    { href: "/tools/water", label: "💧 飲水量計算" },
-    { href: "/tools/health-tracker", label: "🩺 三高記錄" },
-    { href: "/tools/symptoms", label: "🔍 症狀查科別" },
-    { href: "/tools/assistant", label: "🧭 醫療小幫手" },
-  ];
 
   return (
     <div className="w-full overflow-x-auto pb-4 mb-2 scrollbar-hide">
       <div className="flex gap-2 min-w-max">
-        {tools.map((tool) => {
+        {TOOL_LINKS.map((tool) => { // 👈 使用配置
           const isActive = pathname === tool.href;
           return (
             <Link
