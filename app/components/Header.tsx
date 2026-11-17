@@ -13,67 +13,63 @@ export function Header() {
   return (
     <>
       <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-2">
+        {/* 👇 修改為 flex-col，在手機上分成上下兩層 */}
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-2 md:py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
           
-          {/* 👇 Logo 區塊：加上 min-w-0 防止被壓縮，文字強制不換行 */}
-          <Link href="/" className="group flex items-center gap-2 md:gap-3 transition-transform hover:scale-[1.02] min-w-0">
-            <img 
-              src="/icon.png" 
-              alt="台灣醫療網" 
-              className="h-8 w-8 md:h-12 md:w-12 object-contain drop-shadow-sm shrink-0" 
-            />
-            <div className="flex flex-col min-w-0">
-              <span className="font-serif text-base md:text-xl font-bold text-slate-900 tracking-wide group-hover:text-teal-700 transition-colors whitespace-nowrap truncate">
+          {/* 第一層：Logo + 右側按鈕 */}
+          <div className="flex items-center justify-between w-full md:w-auto">
+            {/* Logo */}
+            <Link href="/" className="group flex items-center gap-2 md:gap-3 transition-transform hover:scale-[1.02] min-w-0">
+              <img 
+                src="/icon.png" 
+                alt="台灣醫療網" 
+                className="h-8 w-8 md:h-12 md:w-12 object-contain drop-shadow-sm shrink-0" 
+              />
+              <span className="font-serif text-lg md:text-xl font-bold text-slate-900 tracking-wide group-hover:text-teal-700 transition-colors whitespace-nowrap">
                 台灣醫療網
               </span>
-              <span className="text-[10px] text-slate-500 tracking-widest font-medium hidden md:block">
-                WWW.TW16.NET
-              </span>
+            </Link>
+
+            {/* 手機版右側按鈕區 (只保留 搜尋 + 漢堡) */}
+            <div className="flex items-center gap-1 md:hidden shrink-0">
+              <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-500 bg-slate-100 rounded-full">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              </button>
+              <button className="p-2 text-slate-600 focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                )}
+              </button>
             </div>
-          </Link>
 
-          {/* 桌面端導航 (md 以上顯示) */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className="text-slate-600 hover:text-teal-700 transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* 右側操作區 */}
-          <div className="flex items-center gap-1 md:gap-3 shrink-0">
-            {/* 搜尋按鈕 */}
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-slate-500 hover:text-teal-700 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center gap-2"
-              aria-label="搜尋"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <span className="hidden lg:inline text-sm font-medium pr-1">搜尋</span>
-            </button>
-
-            {/* 👇 語言切換：在電腦版顯示，手機版隱藏 (移入選單) */}
-            <div className="hidden md:block">
-              <LanguageSwitcher />
+            {/* 桌面版導航與操作區 */}
+            <div className="hidden md:flex items-center gap-6">
+              <nav className="flex items-center gap-6 text-sm font-medium">
+                {NAV_LINKS.map((link) => (
+                  <Link key={link.href} href={link.href} className="text-slate-600 hover:text-teal-700 transition-colors">
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="flex items-center gap-3 shrink-0">
+                <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-500 bg-slate-100 rounded-full">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </button>
+                <LanguageSwitcher />
+              </div>
             </div>
-            
-            {/* 手機版漢堡按鈕 */}
-            <button 
-              className="md:hidden p-2 text-slate-600 hover:text-teal-700 focus:outline-none" 
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="開啟選單"
-            >
-              {isOpen ? (
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-              )}
-            </button>
           </div>
+
+          {/* 👇 第二層：手機版專屬翻譯列 */}
+          <div className="w-full md:hidden pt-1 pb-1 flex justify-end">
+            <LanguageSwitcher />
+          </div>
+
         </div>
 
-        {/* 手機端選單 */}
+        {/* 手機端漢堡選單 */}
         {isOpen && (
           <div className="md:hidden border-t border-slate-100 bg-white shadow-lg absolute w-full left-0 max-h-[80vh] overflow-y-auto">
             <nav className="flex flex-col px-4 py-2 space-y-1">
@@ -88,17 +84,10 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-
-            {/* 👇 在手機選單底部加入語言切換功能 */}
-            <div className="border-t border-slate-100 p-4 bg-slate-50">
-              <p className="text-xs font-bold text-slate-500 mb-2">語言 / Language</p>
-              <LanguageSwitcher />
-            </div>
           </div>
         )}
       </header>
 
-      {/* 搜尋彈窗 */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );

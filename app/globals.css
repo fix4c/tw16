@@ -23,3 +23,17 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* 👇 強制抹除 Google 翻譯在頁面頂部注入的白色橫幅 */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
