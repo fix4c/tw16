@@ -55,19 +55,31 @@ function getCountyFromAddress(address: string): string {
   return m ? normalizeCounty(m[1]) : "其他";
 }
 
-// 👇 核心修正：用縣市專屬的行政區清單做暴力匹配，不再依賴正則
+// 👇 核心修正：用縣市專屬的行政區清單做暴力匹配，並自動修正舊名稱
 function getDistrictFromAddress(address: string, county: string): string {
   if (!address || !county) return "其他";
   const districts = COUNTY_DISTRICTS[county];
   if (!districts) return "其他";
+  
   // 移除縣市前綴，只留後面的區/鄉/鎮/市與路名
   const rest = address.replace(/^(.{2,3}[市縣])/, "").trim();
-  // 從清單中找第一個出現在地址裡的行政區
+  
+  // 1. 優先精準匹配：如果地址剛好從某個標準區域名稱開始
   for (const d of districts) {
-    if (rest.startsWith(d) || rest.includes(d)) {
+    if (rest.startsWith(d)) {
       return d;
     }
   }
+  
+  // 2. 兼容舊名稱（例如地址寫「中壢市」，但標準清單是「中壢區」）
+  for (const d of districts) {
+    // 去掉結尾的「區/鄉/鎮/市」，只取前面兩個字（如「中壢」）
+    const baseName = d.slice(0, -1); 
+    if (rest.startsWith(baseName)) {
+      return d; // 返回標準名稱「中壢區」
+    }
+  }
+  
   return "其他";
 }
 
