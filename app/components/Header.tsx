@@ -4,26 +4,35 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useState } from "react";
 import Link from "next/link";
 import { NAV_LINKS } from "../../config/site";
-import { SearchModal } from "./SearchModal"; // 👈 引入搜尋彈窗
+import { SearchModal } from "./SearchModal";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // 👈 搜尋狀態
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <>
       <header className="border-b border-slate-200/60 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
-          {/* Logo 區塊 */}
-          <Link href="/" className="group flex items-center gap-3 transition-transform hover:scale-[1.02]">
-            <img src="/icon.png" alt="台灣醫療網" className="h-10 w-10 md:h-12 md:w-12 object-contain drop-shadow-sm" />
-            <div className="flex flex-col">
-              <span className="font-serif text-lg md:text-xl font-bold text-slate-900 tracking-wide group-hover:text-teal-700 transition-colors">台灣醫療網</span>
-              <span className="text-[10px] text-slate-500 tracking-widest font-medium hidden md:block">WWW.TW16.NET</span>
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-2">
+          
+          {/* 👇 Logo 區塊：加上 min-w-0 防止被壓縮，文字強制不換行 */}
+          <Link href="/" className="group flex items-center gap-2 md:gap-3 transition-transform hover:scale-[1.02] min-w-0">
+            <img 
+              src="/icon.png" 
+              alt="台灣醫療網" 
+              className="h-8 w-8 md:h-12 md:w-12 object-contain drop-shadow-sm shrink-0" 
+            />
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif text-base md:text-xl font-bold text-slate-900 tracking-wide group-hover:text-teal-700 transition-colors whitespace-nowrap truncate">
+                台灣醫療網
+              </span>
+              <span className="text-[10px] text-slate-500 tracking-widest font-medium hidden md:block">
+                WWW.TW16.NET
+              </span>
             </div>
           </Link>
 
-          {/* 桌面端導航 */}
+          {/* 桌面端導航 (md 以上顯示) */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             {NAV_LINKS.map((link) => (
               <Link key={link.href} href={link.href} className="text-slate-600 hover:text-teal-700 transition-colors">
@@ -33,8 +42,8 @@ export function Header() {
           </nav>
 
           {/* 右側操作區 */}
-          <div className="flex items-center gap-2 md:gap-3">
-            {/* 👇 搜尋按鈕 */}
+          <div className="flex items-center gap-1 md:gap-3 shrink-0">
+            {/* 搜尋按鈕 */}
             <button
               onClick={() => setIsSearchOpen(true)}
               className="p-2 text-slate-500 hover:text-teal-700 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center gap-2"
@@ -44,9 +53,17 @@ export function Header() {
               <span className="hidden lg:inline text-sm font-medium pr-1">搜尋</span>
             </button>
 
-            <LanguageSwitcher />
+            {/* 👇 語言切換：在電腦版顯示，手機版隱藏 (移入選單) */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
             
-            <button className="md:hidden p-2 text-slate-600 hover:text-teal-700 focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
+            {/* 手機版漢堡按鈕 */}
+            <button 
+              className="md:hidden p-2 text-slate-600 hover:text-teal-700 focus:outline-none" 
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="開啟選單"
+            >
               {isOpen ? (
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               ) : (
@@ -58,19 +75,30 @@ export function Header() {
 
         {/* 手機端選單 */}
         {isOpen && (
-          <div className="md:hidden border-t border-slate-100 bg-white shadow-lg absolute w-full left-0">
-            <nav className="flex flex-col px-6 py-4 space-y-1">
+          <div className="md:hidden border-t border-slate-100 bg-white shadow-lg absolute w-full left-0 max-h-[80vh] overflow-y-auto">
+            <nav className="flex flex-col px-4 py-2 space-y-1">
               {NAV_LINKS.map((link) => (
-                <Link key={link.href} href={link.href} className="block py-3 text-base font-medium text-slate-700 hover:text-teal-700 hover:bg-slate-50 rounded-lg px-2" onClick={() => setIsOpen(false)}>
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="block py-3 text-base font-medium text-slate-700 hover:text-teal-700 hover:bg-slate-50 rounded-lg px-3" 
+                  onClick={() => setIsOpen(false)}
+                >
                   {link.label}
                 </Link>
               ))}
             </nav>
+
+            {/* 👇 在手機選單底部加入語言切換功能 */}
+            <div className="border-t border-slate-100 p-4 bg-slate-50">
+              <p className="text-xs font-bold text-slate-500 mb-2">語言 / Language</p>
+              <LanguageSwitcher />
+            </div>
           </div>
         )}
       </header>
 
-      {/* 👇 掛載搜尋彈窗 */}
+      {/* 搜尋彈窗 */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
