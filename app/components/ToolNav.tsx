@@ -1,15 +1,17 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TOOL_LINKS } from "../../config/site"; // 👈 引入配置
+import { TOOL_LINKS } from "../../config/site";
 
 export function ToolNav() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full overflow-x-auto pb-4 mb-2 scrollbar-hide">
-      <div className="flex gap-2 min-w-max">
-        {TOOL_LINKS.map((tool) => { // 👈 使用配置
+    <div className="w-full pb-4 mb-2">
+      {/* 👇 移除 overflow-x-auto 與 min-w-max，改用 flex-wrap 讓按鈕自動換行 */}
+      <div className="flex flex-wrap gap-2">
+        {TOOL_LINKS.map((tool) => {
           const isActive = pathname === tool.href;
           return (
             <Link
