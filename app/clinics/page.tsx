@@ -9,35 +9,59 @@ type Clinic = { name: string; type: string; address: string; phone: string; spec
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
 /* ============================================================
- * 科別白名單與清洗（核心修正）
+ * 科別白名單（依健保署 A21030000I-D2100F-001.csv 分類）
  * ------------------------------------------------------------
- * 健保署 17 個主科別。任何非白名單科別（如「放射線科」、
- * 「病理科」、「中醫診所」、「牙醫專科診所」等）都會被丟棄，
- * 避免空科別與重複科別。
+ * 只保留「診所適用」科別，已排除醫院專屬：
+ *   07 神經外科、22 急診醫學科、25 重症醫學科、26 感染科、2A 結核科
+ *   81 麻醉科、82 放射線科、83 病理科、84 核子醫學科、85 放射腫瘤科
+ *   86 放射診斷科、87 解剖病理科、88 臨床病理科
+ * 牙科（40）含 11 個細分科（41~51），統一映射到「牙科」。
  * ============================================================ */
 const DEPT_ORDER = [
   "不分科", "家醫科", "內科", "外科", "兒科", "婦產科", "骨科", "泌尿科",
-  "耳鼻喉科", "眼科", "皮膚科", "神經科", "精神科", "復健科", "牙科",
-  "中醫一般科", "急診醫學科",
+  "耳鼻喉科", "眼科", "皮膚科", "神經科", "精神科", "復健科",
+  "整形外科", "職業醫學科", "洗腎科", "牙科", "中醫一般科",
 ];
 const STANDARD_DEPTS = new Set(DEPT_ORDER);
 
-// 關鍵詞 → 主科別（順序重要：長詞 / 專科詞放前面）
+// 醫院專屬科別：命中任一即丟棄（避免「神經外科」誤匹配「神經」）
+const DEPT_EXCLUDE = [
+  "神經外科", "急診", "重症", "麻醉", "放射線", "放射診斷", "放射腫瘤",
+  "病理", "核子醫學", "結核",
+];
+
+// 關鍵詞 → 主科（長詞放在前面避免誤匹配）
 const DEPT_KEYWORDS: [string, string][] = [
+  // 中醫
   ["中醫", "中醫一般科"],
-  ["牙醫", "牙科"], ["牙科", "牙科"], ["牙", "牙科"],
+  // 牙科細分（長詞在前，避免「口腔病理科」被「口腔」搶走）
+  ["特殊需求者口腔", "牙科"], ["家庭牙醫", "牙科"], ["兒童牙", "牙科"],
+  ["牙體復形", "牙科"], ["齒顎矯正", "牙科"], ["贋復補綴", "牙科"],
+  ["牙周病", "牙科"], ["牙髓病", "牙科"], ["口腔顎面", "牙科"],
+  ["口腔診斷", "牙科"], ["牙醫", "牙科"], ["牙科", "牙科"],
+  ["口腔", "牙科"], ["牙", "牙科"],
+  // 外科細分（長詞在前）
+  ["心臟血管外科", "外科"], ["胸腔外科", "外科"], ["大腸直腸", "外科"],
+  ["消化外科", "外科"], ["一般外科", "外科"],
+  // 內科細分
+  ["心臟", "內科"], ["胃腸", "內科"], ["肝膽", "內科"], ["胸腔內", "內科"],
+  ["風濕", "內科"], ["免疫", "內科"], ["血液", "內科"], ["內分泌", "內科"],
+  ["新陳代謝", "內科"], ["感染", "內科"],
+  // 其他主科
   ["耳鼻喉", "耳鼻喉科"],
   ["婦產", "婦產科"], ["婦科", "婦產科"], ["產科", "婦產科"],
   ["復健", "復健科"],
-  ["精神", "精神科"],
+  ["精神", "精神科"], ["身心", "精神科"],
   ["神經", "神經科"],
   ["皮膚", "皮膚科"],
   ["眼科", "眼科"],
   ["泌尿", "泌尿科"],
-  ["骨科", "骨科"],
+  ["骨科", "骨科"], ["骨外科", "骨科"],
   ["小兒", "兒科"], ["兒科", "兒科"],
-  ["急診", "急診醫學科"],
   ["家醫", "家醫科"], ["家庭醫", "家醫科"],
+  ["整形", "整形外科"], ["醫美", "整形外科"], ["美容外科", "整形外科"],
+  ["職業醫", "職業醫學科"], ["職業病", "職業醫學科"],
+  ["洗腎", "洗腎科"],
   ["不分科", "不分科"],
   ["外科", "外科"],
   ["內科", "內科"],
@@ -46,18 +70,19 @@ const DEPT_KEYWORDS: [string, string][] = [
 function resolveDept(raw: string): string | null {
   const clean = raw.replace(/\s/g, "").replace(/[（）()]/g, "");
   if (!clean) return null;
+  // 先排除醫院專屬科別
+  for (const kw of DEPT_EXCLUDE) {
+    if (clean.includes(kw)) return null;
+  }
+  // 精確命中白名單
   if (STANDARD_DEPTS.has(clean)) return clean;
+  // 關鍵詞映射
   for (const [kw, target] of DEPT_KEYWORDS) {
     if (clean.includes(kw)) return target;
   }
   return null;
 }
 
-/**
- * 從 specialty 欄位萃取標準科別清單。
- * specialty 格式為 "科別1,科別2 類型"，末尾是「空格 + type」。
- * 先剝離 type，再按逗號切分，逐項解析為白名單主科別，最後去重。
- */
 function extractDepartments(clinic: Clinic): string[] {
   const specialty = (clinic.specialty || "").trim();
   const type = (clinic.type || "").trim();
@@ -81,7 +106,7 @@ function extractDepartments(clinic: Clinic): string[] {
 }
 
 /* ============================================================
- * 縣市 / 行政區（沿用你原本的邏輯，未改動）
+ * 縣市 / 行政區
  * ============================================================ */
 const COUNTY_ORDER = [
   "基隆市","臺北市","新北市","桃園市","新竹市","新竹縣","苗栗縣",
@@ -177,7 +202,6 @@ export default function ClinicsPage() {
     return ["全部", ...Array.from(set).sort()];
   }, [selectedCounty]);
 
-  // 【修正】一覽表科別清單：改用 extractDepartments，只顯示白名單主科別
   const allSpecialties = useMemo(() => {
     const set = new Set<string>();
     clinics.forEach(c => extractDepartments(c).forEach(s => set.add(s)));
@@ -208,64 +232,118 @@ export default function ClinicsPage() {
     });
   }, [filtered]);
 
+  // 👇 Turnstile 初始化：與 hospitals/page.tsx 完全一致
   useEffect(() => {
-    const init = () => {
+    const initTurnstile = () => {
       if (!window.turnstile) return false;
       const id = window.turnstile.render("#turnstile-container", {
-        sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", execution: "execute", appearance: "always",
-        callback: (t: string) => { (window as any).turnstileToken = t; },
-        "error-callback": () => console.error("Turnstile fail"),
-        "expired-callback": () => { (window as any).turnstileToken = null; },
+        sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
+        execution: "execute",
+        appearance: "always",
+        callback: (token: string) => {
+          (window as any).turnstileToken = token;
+        },
+        "error-callback": () => {
+          console.error("Turnstile 驗證失敗");
+        },
+        "expired-callback": () => {
+          (window as any).turnstileToken = null;
+        },
       });
-      setWidgetId(id); return true;
+      setWidgetId(id);
+      return true;
     };
-    if (init()) return;
-    const interval = setInterval(() => { if (init()) clearInterval(interval); }, 500);
+
+    if (initTurnstile()) return;
+
+    const interval = setInterval(() => {
+      if (initTurnstile()) clearInterval(interval);
+    }, 500);
+
     return () => clearInterval(interval);
   }, []);
 
-  const getFp = () => {
+  const getFingerprint = () => {
     let fp = localStorage.getItem("tw16-fp");
-    if (!fp) { fp = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("tw16-fp", fp); }
+    if (!fp) {
+      fp = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("tw16-fp", fp);
+    }
     return fp;
   };
 
   const handleVote = async (id: string, type: "good" | "bad") => {
-    const key = `tw16-voted-${id}`;
-    if (localStorage.getItem(key)) return alert("您已經給這家機構投過票了！");
-    if (!window.turnstile || !widgetId) return alert("人機驗證載入中，請稍後再點擊。");
+    const votedKey = `tw16-voted-${id}`;
+    if (localStorage.getItem(votedKey)) {
+      alert("您已經給這家機構投過票了！");
+      return;
+    }
+
+    if (!window.turnstile || !widgetId) {
+      alert("人機驗證載入中，請稍後再點擊。");
+      return;
+    }
 
     setVotingId(id);
-    const cur = reviews[id] || { good: 0, bad: 0 };
-    setReviews(p => ({ ...p, [id]: { ...cur, [type]: cur[type] + 1 } }));
+    const current = reviews[id] || { good: 0, bad: 0 };
+    setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
     window.turnstile.execute(widgetId);
-    const token = await new Promise<string>((res, rej) => {
-      let n = 0; const iv = setInterval(() => {
+
+    const token = await new Promise<string>((resolve, reject) => {
+      let attempts = 0;
+      const interval = setInterval(() => {
         const t = (window as any).turnstileToken;
-        if (t) { clearInterval(iv); res(t); }
-        if (++n > 50) { clearInterval(iv); rej(new Error("timeout")); }
+        if (t) {
+          clearInterval(interval);
+          resolve(t);
+        }
+        if (++attempts > 50) {
+          clearInterval(interval);
+          reject(new Error("驗證超時"));
+        }
       }, 100);
     }).catch(() => null);
 
-    if (!token) { alert("人機驗證失敗，請稍後再試。"); setVotingId(null); setReviews(p => ({ ...p, [id]: cur })); return; }
+    if (!token) {
+      alert("人機驗證失敗，請稍後再試。");
+      setVotingId(null);
+      setReviews((prev) => ({ ...prev, [id]: current }));
+      return;
+    }
 
     try {
       const res = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, token, fingerprint: getFp() }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, token, fingerprint: getFingerprint() }),
       });
-      if (res.status === 409) { alert("您已經投票過了！"); localStorage.setItem(key, "true"); setVotingId(null); return; }
+
+      if (res.status === 409) {
+        alert("您已經投票過了！");
+        localStorage.setItem(votedKey, "true");
+        setVotingId(null);
+        return;
+      }
+
       if (res.ok) {
         const data = await res.json();
-        setReviews(p => ({ ...p, [id]: data }));
-        localStorage.setItem(key, "true");
+        setReviews((prev) => ({ ...prev, [id]: data }));
+        localStorage.setItem(votedKey, "true");
         (window as any).turnstileToken = null;
         window.turnstile.reset(widgetId);
-        alert("✅ 感謝您的投票！");
-      } else { const e = await res.json(); alert(e.error || "投票失敗"); setReviews(p => ({ ...p, [id]: cur })); }
-    } catch { alert("網路錯誤，請稍後再試。"); setReviews(p => ({ ...p, [id]: cur })); }
-    finally { setVotingId(null); }
+        alert("✅ 感謝您的投票！您的意見已成功記錄。");
+      } else {
+        const err = await res.json();
+        alert(err.error || "投票失敗");
+        setReviews((prev) => ({ ...prev, [id]: current }));
+      }
+    } catch (e) {
+      alert("網路錯誤，請稍後再試。");
+      setReviews((prev) => ({ ...prev, [id]: current }));
+    } finally {
+      setVotingId(null);
+    }
   };
 
   return (
