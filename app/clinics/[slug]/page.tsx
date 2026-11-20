@@ -13,6 +13,71 @@ type Clinic = {
 
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
+/* ============================================================
+ * 科別白名單與清洗（與 clinics/page.tsx 完全一致）
+ * ============================================================ */
+const DEPT_ORDER = [
+  "不分科", "家醫科", "內科", "外科", "兒科", "婦產科", "骨科", "泌尿科",
+  "耳鼻喉科", "眼科", "皮膚科", "神經科", "精神科", "復健科", "牙科",
+  "中醫一般科", "急診醫學科",
+];
+const STANDARD_DEPTS = new Set(DEPT_ORDER);
+
+const DEPT_KEYWORDS: [string, string][] = [
+  ["中醫", "中醫一般科"],
+  ["牙醫", "牙科"], ["牙科", "牙科"], ["牙", "牙科"],
+  ["耳鼻喉", "耳鼻喉科"],
+  ["婦產", "婦產科"], ["婦科", "婦產科"], ["產科", "婦產科"],
+  ["復健", "復健科"],
+  ["精神", "精神科"],
+  ["神經", "神經科"],
+  ["皮膚", "皮膚科"],
+  ["眼科", "眼科"],
+  ["泌尿", "泌尿科"],
+  ["骨科", "骨科"],
+  ["小兒", "兒科"], ["兒科", "兒科"],
+  ["急診", "急診醫學科"],
+  ["家醫", "家醫科"], ["家庭醫", "家醫科"],
+  ["不分科", "不分科"],
+  ["外科", "外科"],
+  ["內科", "內科"],
+];
+
+function resolveDept(raw: string): string | null {
+  const clean = raw.replace(/\s/g, "").replace(/[（）()]/g, "");
+  if (!clean) return null;
+  if (STANDARD_DEPTS.has(clean)) return clean;
+  for (const [kw, target] of DEPT_KEYWORDS) {
+    if (clean.includes(kw)) return target;
+  }
+  return null;
+}
+
+function extractDepartments(clinic: Clinic): string[] {
+  const specialty = (clinic.specialty || "").trim();
+  const type = (clinic.type || "").trim();
+
+  let deptPart = specialty;
+  if (type) {
+    if (deptPart === type) {
+      deptPart = "";
+    } else if (deptPart.endsWith(" " + type)) {
+      deptPart = deptPart.slice(0, deptPart.length - type.length - 1).trim();
+    }
+  }
+  if (!deptPart) return [];
+
+  const result = new Set<string>();
+  for (const raw of deptPart.split(/[,、，；;\/]/)) {
+    const resolved = resolveDept(raw);
+    if (resolved) result.add(resolved);
+  }
+  return Array.from(result);
+}
+
+/* ============================================================
+ * 縣市解析（沿用原本邏輯）
+ * ============================================================ */
 function normalizeCountyName(name: string): string {
   return name.replace(/台/g, "臺");
 }
@@ -24,36 +89,9 @@ function getCountyFromAddress(address: string): string {
   return normalizeCountyName(match[1]);
 }
 
-function getAllSpecialties(c: Clinic): string[] {
-  const specs = new Set<string>();
-  const addValid = (s: string) => {
-    const cleaned = s.trim();
-    if (cleaned && cleaned.length < 10) specs.add(cleaned);
-  };
-  const process = (value: string) => {
-    if (!value) return;
-    value.split(/[、,，；;\/]/).forEach((seg) => {
-      const trimmed = seg.trim();
-      if (!trimmed) return;
-      const words = trimmed.split(/\s+/);
-      if (words.length > 1) {
-        const hasShortWord = words.some((w) => w.length === 1);
-        if (hasShortWord) {
-          addValid(trimmed.replace(/\s+/g, ""));
-        } else {
-          words.forEach((w) => addValid(w));
-          addValid(trimmed.replace(/\s+/g, ""));
-        }
-      } else {
-        addValid(trimmed);
-      }
-    });
-  };
-  process(c.specialty);
-  process(c.type);
-  return Array.from(specs);
-}
-
+/* ============================================================
+ * 靜態路徑生成：只生成「縣市」與「縣市-標準科別」兩種頁面
+ * ============================================================ */
 export async function generateStaticParams() {
   const params: { slug: string }[] = [];
   const countyMap = new Map<string, Set<string>>();
@@ -62,7 +100,7 @@ export async function generateStaticParams() {
     const county = getCountyFromAddress(c.address);
     if (county === "其他") return;
     if (!countyMap.has(county)) countyMap.set(county, new Set());
-    getAllSpecialties(c).forEach((spec) => countyMap.get(county)!.add(spec));
+    extractDepartments(c).forEach((spec) => countyMap.get(county)!.add(spec));
   });
 
   countyMap.forEach((specs, county) => {
@@ -112,11 +150,8 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
 
   let finalClinics = countyClinics;
   if (specialtyName) {
-    const targetSpec = specialtyName.replace(/\s+/g, "");
-    finalClinics = countyClinics.filter((c) => {
-      const specs = getAllSpecialties(c);
-      return specs.some((s) => s.includes(targetSpec) || targetSpec.includes(s));
-    });
+    const targetSpec = resolveDept(specialtyName) || specialtyName.replace(/\s+/g, "");
+    finalClinics = countyClinics.filter((c) => extractDepartments(c).includes(targetSpec));
   }
 
   return (
@@ -181,7 +216,6 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
           </Link>
         </div>
 
-        {/* 👇 新增：動態 SEO 導語區塊 */}
         <div className="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-100 rounded-2xl p-6 md:p-8 mb-8 shadow-sm">
           <h2 className="font-serif text-xl md:text-2xl font-bold text-slate-900 mb-3">
             在 {countyName} 尋找 {specialtyName || "合適的診所"} 嗎？
@@ -204,7 +238,10 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
           <div className="mb-8 p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
             <p className="text-sm font-bold text-slate-500 mb-3">🩺 依科別瀏覽 {countyName} 診所</p>
             <div className="flex flex-wrap gap-2">
-              {Array.from(new Set(countyClinics.flatMap((c) => getAllSpecialties(c)))).map((spec) => (
+              {Array.from(new Set(countyClinics.flatMap((c) => extractDepartments(c)))).sort((a, b) => {
+                const ia = DEPT_ORDER.indexOf(a), ib = DEPT_ORDER.indexOf(b);
+                return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+              }).map((spec) => (
                 <Link
                   key={spec}
                   href={`/clinics/${encodeURIComponent(`${countyName}-${spec}`)}`}
@@ -218,25 +255,28 @@ export default async function ClinicLocationPage({ params }: { params: Promise<{
         )}
 
         <div className="grid md:grid-cols-2 gap-4">
-          {finalClinics.slice(0, 100).map((c, i) => (
-            <article key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                {c.type && (
-                  <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">
-                    {c.type}
-                  </span>
+          {finalClinics.slice(0, 100).map((c, i) => {
+            const depts = extractDepartments(c);
+            return (
+              <article key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  {c.type && (
+                    <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">
+                      {c.type}
+                    </span>
+                  )}
+                </div>
+                <h3 className="font-serif text-lg font-bold text-slate-900">{c.name}</h3>
+                <p className="text-sm text-slate-600 mt-2">{c.address}</p>
+                <p className="text-sm text-slate-500 mt-1">電話：{c.phone || "—"}</p>
+                {depts.length > 0 && (
+                  <p className="text-xs font-medium text-blue-600 mt-3 bg-blue-50 inline-block px-2 py-1 rounded-md">
+                    科別：{depts.join("、")}
+                  </p>
                 )}
-              </div>
-              <h3 className="font-serif text-lg font-bold text-slate-900">{c.name}</h3>
-              <p className="text-sm text-slate-600 mt-2">{c.address}</p>
-              <p className="text-sm text-slate-500 mt-1">電話：{c.phone || "—"}</p>
-              {c.specialty && (
-                <p className="text-xs font-medium text-blue-600 mt-3 bg-blue-50 inline-block px-2 py-1 rounded-md">
-                  科別：{c.specialty}
-                </p>
-              )}
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
 
         {finalClinics.length > 100 && (
