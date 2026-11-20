@@ -6,6 +6,7 @@ import rawData from "@/data/symptoms.json";
 import rawClinics from "@/data/clinics.json";
 import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
+import { getSafeDepartments } from "@/lib/department-constants";
 
 type Option = {
   label: string;
@@ -31,7 +32,7 @@ const allCounties = Array.from(
 
 export default function SymptomsFlowPage() {
   const [mode, setMode] = useState<"select" | "ai">("select");
-  
+
   // 多步問答狀態
   const [step, setStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -60,12 +61,12 @@ export default function SymptomsFlowPage() {
     if (!aiInput.trim()) return;
     setAiLoading(true);
     setAiResult(null);
-    
+
     try {
       const res = await fetch("/api/ai-triage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms: aiInput })
+        body: JSON.stringify({ symptoms: aiInput }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -79,6 +80,16 @@ export default function SymptomsFlowPage() {
       setAiLoading(false);
     }
   };
+
+  // AI 結果科別：映射、去重、兜底
+  const safeAiDepts: string[] = aiResult
+    ? getSafeDepartments(aiResult.departments ?? [])
+    : [];
+
+  // 點選結果科別：映射、去重、兜底
+  const safeResultDepts: string[] = result
+    ? getSafeDepartments(result.departments ?? [])
+    : [];
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -100,7 +111,7 @@ export default function SymptomsFlowPage() {
 
       <section className="max-w-3xl mx-auto px-6 py-8 w-full flex-1">
         <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-sm min-h-[500px] flex flex-col relative overflow-hidden">
-          
+
           <div className="flex bg-slate-100 p-1 rounded-xl mb-8">
             <button
               onClick={() => { setMode("select"); reset(); }}
@@ -148,9 +159,9 @@ export default function SymptomsFlowPage() {
                         {aiResult.is_emergency ? "建議立即就醫" : "建議門診評估"}
                       </h3>
                     </div>
-                    
+
                     <p className="text-slate-700 leading-relaxed mb-4">{aiResult.advice}</p>
-                    
+
                     {aiResult.warning && (
                       <p className="text-sm font-bold text-rose-600 bg-white/60 p-3 rounded-lg mb-4">
                         ⚠️ {aiResult.warning}
@@ -160,7 +171,7 @@ export default function SymptomsFlowPage() {
                     <div className="bg-white/60 p-4 rounded-xl border border-white">
                       <p className="text-xs text-slate-500 mb-2">建議掛號科別：</p>
                       <div className="flex flex-wrap gap-2">
-                        {aiResult.departments.map((d: string) => (
+                        {safeAiDepts.map((d: string) => (
                           <span key={d} className="px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">
                             {d}
                           </span>
@@ -170,7 +181,7 @@ export default function SymptomsFlowPage() {
                   </div>
 
                   <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
-                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {aiResult.departments[0]} 診所</h4>
+                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeAiDepts[0]} 診所</h4>
                     <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
                       <select
                         value={selectedCounty}
@@ -183,10 +194,10 @@ export default function SymptomsFlowPage() {
                         ))}
                       </select>
                       <Link
-                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${aiResult.departments[0]}`)}` : "#"}
+                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${safeAiDepts[0]}`)}` : "#"}
                         className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${
-                          selectedCounty 
-                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" 
+                          selectedCounty
+                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20"
                             : "bg-slate-200 text-slate-400 cursor-not-allowed"
                         }`}
                         onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}
@@ -214,7 +225,6 @@ export default function SymptomsFlowPage() {
                   <div className="text-center mb-8">
                     <h2 className="text-2xl font-serif font-bold text-slate-900 mb-2">請問您哪裡不舒服？</h2>
                   </div>
-                  {/* 👇 改為 grid-cols-2 md:grid-cols-3 以容納 9 大分類 */}
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {categories.map((c) => (
                       <button key={c.id} onClick={() => { setSelectedCategory(c); setStep(1); }} className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-teal-50 hover:border-teal-200 transition-all group">
@@ -268,14 +278,14 @@ export default function SymptomsFlowPage() {
                   <div className="bg-slate-50 rounded-xl p-4 mb-8 inline-block text-left border border-slate-100">
                     <p className="text-sm text-slate-500 mb-2">建議掛號科別：</p>
                     <div className="flex flex-wrap gap-2 justify-center">
-                      {result.departments.map((d) => (
+                      {safeResultDepts.map((d) => (
                         <span key={d} className="inline-block px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">{d}</span>
                       ))}
                     </div>
                   </div>
 
                   <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto">
-                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {result.departments[0]} 診所</h4>
+                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeResultDepts[0]} 診所</h4>
                     <div className="flex flex-col gap-3">
                       <select
                         value={selectedCounty}
@@ -288,10 +298,10 @@ export default function SymptomsFlowPage() {
                         ))}
                       </select>
                       <Link
-                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${result.departments[0]}`)}` : "#"}
+                        href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${safeResultDepts[0]}`)}` : "#"}
                         className={`w-full flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${
-                          selectedCounty 
-                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" 
+                          selectedCounty
+                            ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20"
                             : "bg-slate-200 text-slate-400 cursor-not-allowed"
                         }`}
                         onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}
