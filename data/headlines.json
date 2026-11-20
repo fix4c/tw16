@@ -1,38 +1,38 @@
 {
-  "lastUpdated": "2026-11-17T04:24:12.811Z",
+  "lastUpdated": "2026-11-20T02:54:06.027Z",
   "headlines": [
     {
       "id": "IaMe_xKw1Jn8wsW76UTJeQ",
-      "title": "公費Novavax新冠疫苗增購到貨 最快本週五開放接種",
-      "summary": "疾病管制署因應今年公費新冠疫苗接種踴躍，已緊急增購16.9萬劑Novavax疫苗。目前食品藥物管理署正進行封緘檢驗程序，預計最快於本週五配送至各縣市合約醫療院所，提供民眾接種服務。",
-      "whyItMatters": "偏好接種次單元蛋白質疫苗（Novavax）的民眾，可先致電當地合約醫療院所確認疫苗供應與預約情形，以及早獲得保護力。",
+      "title": "公費Novavax新冠疫苗16.9萬劑抵台 最快本週五開放接種",
+      "summary": "因應今年度公費新冠疫苗接種踴躍，疾管署增購之16.9萬劑Novavax新冠疫苗已進入封緘程序，預計最快於本週五撥配至各縣市衛生局與合約院所。目前全台新冠疫苗剩餘庫存約29.2萬劑，12月中旬起亦將有新批次莫德納與Novavax疫苗陸續到貨。",
+      "whyItMatters": "打算接種Novavax新冠疫苗的民眾，建議前往醫療院所前先電話諮詢確認庫存與接種時間，以利順利完成施打。",
       "sourceName": "疾病管制署",
       "sourceUrl": "https://www.cdc.gov.tw/Bulletin/Detail/IaMe_xKw1Jn8wsW76UTJeQ?typeId=9",
       "sourceTier": 1,
-      "publishedAt": "2026-11-16",
-      "fetchedAt": "2026-11-17T04:23:42.429Z"
+      "publishedAt": "2026-11-16T00:00:00Z",
+      "fetchedAt": "2026-11-20T02:53:50.983Z"
     },
     {
       "id": "t634764",
-      "title": "預防骨質疏鬆 衛福部解析雙能量X光與超音波骨密度檢查",
-      "summary": "臨床上常以雙能量X光吸光式測定儀（DXA）測量腰椎與髖部骨密度，作為評估骨質疏鬆的診斷標準。足跟超音波（QUS）無輻射且便於篩檢，但其數據不能直接替代DXA檢查結果；若超音波篩檢異常，仍需接受DXA進一步診斷。",
-      "whyItMatters": "幫助民眾正確認識不同骨密度檢測工具的差異與用途，若篩檢發現異常，能及時至醫療院所尋求專業醫師評估與追蹤。",
+      "title": "別等骨折才發現！衛福部解析雙能量X光與超音波骨密度檢查差異",
+      "summary": "臨床診斷骨質疏鬆主要採用雙能量X光吸光式測定儀（DXA）測量腰椎與髖部骨密度。足跟超音波（QUS）雖無輻射且方便，但檢測結果不能直接替代DXA，若超音波篩檢發現異常，仍須進行DXA檢查以精確診斷。",
+      "whyItMatters": "骨質疏鬆初期無明顯症狀，了解不同健檢儀器的功用，有助於您與醫師討論最合適的骨骼健康評估方案。",
       "sourceName": "食品藥物管理署",
       "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634764&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
       "sourceTier": 1,
-      "publishedAt": "2026-11-17",
-      "fetchedAt": "2026-11-17T04:23:42.429Z"
+      "publishedAt": "2026-11-17T00:00:00Z",
+      "fetchedAt": "2026-11-20T02:53:50.983Z"
     },
     {
       "id": "t634723",
-      "title": "保健食品非藥品 衛福部提醒切勿相信誇大廣告延誤就醫",
-      "summary": "食品藥物管理署監控發現有保健產品宣稱可「逆轉腎病」等醫療效能，涉嫌嚴重違反食品安全衛生管理法。食藥署強調食品並不具備治療疾病的功能，目前已對違規產品業者及代言人依法加重裁罰。",
-      "whyItMatters": "提醒民眾切勿輕信媒體或網路廣告宣稱的神奇療效，身體出現不適應尋求正規醫療，以免花錢又延誤治病時機。",
+      "title": "食藥署重罰違規產品「活化勝」 提醒食品無療效勿延誤就醫",
+      "summary": "食藥署持續監控違規食品廣告，查獲「活化勝」產品誇大宣稱具有「逆轉腎病」等醫療效能，已多次遭衛生局裁罰。食藥署強調，一般食品不具備治療疾病效果，過度信任誇大廣告可能導致病情惡化。",
+      "whyItMatters": "家中若有慢性病或腎臟病患者，切勿聽信電視或網路廣告購買宣稱療效的食品，應堅持正規醫療管道以維護健康。",
       "sourceName": "食品藥物管理署",
       "sourceUrl": "http://www.fda.gov.tw/tc/newsContent.aspx?cid=4&id=t634723&utm_source=rss&utm_medium=feed&utm_campaign=rss_subscription",
       "sourceTier": 1,
-      "publishedAt": "2026-11-17",
-      "fetchedAt": "2026-11-17T04:23:42.429Z"
+      "publishedAt": "2026-11-17T00:00:00Z",
+      "fetchedAt": "2026-11-20T02:53:50.983Z"
     }
   ]
 }
