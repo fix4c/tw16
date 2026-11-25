@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Header } from '@/app/components/Header';
 import { GuidePage } from '@/components/guides/GuidePage';
 import { getGuide, guides } from '@/lib/guides/manifest';
 import { getGuideContent } from '@/content/guides/registry';
@@ -66,6 +67,7 @@ export default async function Page({
 
   return (
     <>
+      <Header />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
