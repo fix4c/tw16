@@ -4,26 +4,35 @@ import "./globals.css";
 // ===== SEO / Metadata =====
 export const metadata: Metadata = {
   metadataBase: new URL("https://tw16.net"),
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: ["/icon.png"],
+  },
   title: {
-    default: "tw16.net 台灣醫療資訊網 | 醫院掛號、診所查找、醫療新聞",
+    default: "tw16.net 台灣醫療網 | 全台診所、醫院與就醫指南",
     template: "%s | tw16.net",
   },
   description:
-    "全台醫院掛號、健保診所查找、每日醫療新聞與 AI 分診助手。所有資訊由 AI 從衛福部、疾管署、食藥署等公開權威來源自動聚合。",
-  keywords: ["台灣醫療", "醫院掛號", "診所", "健保", "醫療新聞", "AI 分診"],
+    "全台診所與醫院查詢、AI 症狀分診、就醫指南、健保權益與檢驗報告解讀。tw16.net 提供民眾真正用得上的就醫資訊。",
+  keywords: ["台灣醫療", "全台診所", "醫院", "就醫指南", "症狀查科別", "AI 分診"],
   authors: [{ name: "tw16.net" }],
   openGraph: {
     type: "website",
     locale: "zh_TW",
     url: "https://tw16.net",
-    siteName: "tw16.net 台灣醫療資訊網",
-    title: "tw16.net 台灣醫療資訊網",
-    description: "全台醫院掛號、診所查找、每日醫療新聞與 AI 分診助手。",
+    siteName: "tw16.net 台灣醫療網",
+    title: "tw16.net 台灣醫療網",
+    description: "全台診所與醫院查詢、AI 症狀分診、就醫指南與健保權益。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "tw16.net 台灣醫療資訊網",
-    description: "全台醫院掛號、診所查找、每日醫療新聞與 AI 分診助手。",
+    title: "tw16.net 台灣醫療網",
+    description: "全台診所與醫院查詢、AI 症狀分診、就醫指南與健保權益。",
   },
   robots: {
     index: true,
@@ -34,7 +43,7 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
     },
   },
-  // 若你有 Search Console 驗證碼，可加在這裡
+  // 谷歌 Search Console 驗證碼可放在這裡
   // verification: { google: "xxxxxx" },
 };
 
@@ -54,8 +63,8 @@ export default function RootLayout({
       <head>
         {/* =============================================
             AdSense 驗證碼
-            ⚠️ 必須用「原生 <script> 標籤」，不可用 next/script
-            ⚠️ client 必須與 /ads.txt 的 pub-id 完全一致
+            ⚠️ 必須用原生 <script> 標籤，不能用 next/script
+            ⚠️ client 驗證用 /ads.txt 的 pub-id 要一致
             ============================================= */}
         <script
           async
@@ -64,7 +73,7 @@ export default function RootLayout({
         />
 
         {/* =============================================
-            Google Translate（台灣人常用）
+            Google Translate（多語言用）
             ============================================= */}
         <script
           dangerouslySetInnerHTML={{
@@ -90,8 +99,8 @@ export default function RootLayout({
 
         {/* =============================================
             Cloudflare Turnstile
-            ⚠️ 若 Turnstile 只在特定頁面（如表單）使用，
-               建議把這行移到該頁面而非 root layout
+            ⚠️ 只在需要的頁面（如投票）載入
+            建議移到需要的頁面，不要放在 root layout
             ============================================= */}
         <script
           src="https://challenges.cloudflare.com/turnstile/v0/api.js"
