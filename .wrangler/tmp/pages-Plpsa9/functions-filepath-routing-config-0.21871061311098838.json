@@ -1,0 +1,37 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/reviews/:id",
+      "mountPath": "/api/reviews",
+      "method": "",
+      "module": [
+        "api/reviews/[id].js:onRequest"
+      ]
+    },
+    {
+      "routePath": "/api/ai-triage",
+      "mountPath": "/api",
+      "method": "POST",
+      "module": [
+        "api/ai-triage.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/debug-env",
+      "mountPath": "/api",
+      "method": "",
+      "module": [
+        "api/debug-env.ts:onRequest"
+      ]
+    },
+    {
+      "routePath": "/api/rankings",
+      "mountPath": "/api",
+      "method": "",
+      "module": [
+        "api/rankings.js:onRequest"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}

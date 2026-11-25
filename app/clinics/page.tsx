@@ -177,6 +177,32 @@ export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
   const [selectedDistrict, setSelectedDistrict] = useState("全部");
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
+
+  // ① 首次挂载：从 URL 读取 department 参数
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const dept = params.get("department");
+    if (dept) {
+      setSelectedSpecialty(dept);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ② 科别变化：同步写回 URL（不触发路由，纯替换地址栏）
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (selectedSpecialty && selectedSpecialty !== "全部") {
+      params.set("department", selectedSpecialty);
+    } else {
+      params.delete("department");
+    }
+    const qs = params.toString();
+    const newUrl = `${window.location.pathname}${qs ? "?" + qs : ""}`;
+    window.history.replaceState(null, "", newUrl);
+  }, [selectedSpecialty]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
   const [widgetId, setWidgetId] = useState<string | null>(null);
