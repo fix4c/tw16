@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import type { GuideContent, GuideEntry } from '@/lib/guides/types';
 import { guideCategories, guides } from '@/lib/guides/manifest';
+import { TableOfContents } from './TableOfContents';
 
-// 英文 slug → /clinics 能识别的中文科别名
 const departmentLabels: Record<string, string> = {
   'family-medicine': '家庭醫學科',
   cardiology: '心臟內科',
@@ -57,7 +57,20 @@ export function GuidePage({
         {content.intro}
       </div>
 
-      <div className="mt-6 leading-relaxed text-slate-700 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-slate-900 [&_p]:my-3 [&_ul]:my-3 [&_li]:my-1">
+      <details className="mt-6 rounded-xl border border-slate-200 p-4 lg:hidden">
+        <summary className="cursor-pointer text-sm font-bold text-slate-800">
+          本文目錄
+        </summary>
+        <div className="mt-3">
+          <TableOfContents showTitle={false} />
+        </div>
+      </details>
+
+      <div className="mt-6 hidden rounded-xl border border-slate-200 p-4 lg:block">
+        <TableOfContents />
+      </div>
+
+      <div className="guide-body mt-6 leading-relaxed text-slate-700 [&_h2]:scroll-mt-24 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-slate-900 [&_p]:my-3 [&_ul]:my-3 [&_li]:my-1">
         {content.body}
       </div>
 
@@ -91,7 +104,7 @@ export function GuidePage({
               return (
                 <Link
                   key={d}
-                  href={`/clinics?department=${encodeURIComponent(label)}`}
+                  href="/clinics"
                   className="rounded-full bg-blue-50 px-3 py-1 text-sm text-blue-700 hover:bg-blue-100"
                 >
                   全台{label}診所

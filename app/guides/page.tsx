@@ -47,11 +47,29 @@ export default function GuidesIndexPage() {
         </section>
       )}
 
+      {/* 分類快速跳轉 */}
+      <nav className="mt-10 flex flex-wrap items-center gap-2 border-y border-slate-200 py-4">
+        <span className="text-sm font-medium text-slate-500">跳到分類：</span>
+        {categoryOrder.map((cat) => (
+          <a
+            key={cat}
+            href={`#category-${cat}`}
+            className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700 hover:bg-blue-100 hover:text-blue-700"
+          >
+            {guideCategories[cat].label}
+          </a>
+        ))}
+      </nav>
+
       {categoryOrder.map((cat) => {
         const list = guides.filter((g) => g.category === cat);
         if (list.length === 0) return null;
         return (
-          <section key={cat} className="mt-10">
+          <section
+            key={cat}
+            id={`category-${cat}`}
+            className="mt-10 scroll-mt-24"
+          >
             <h2 className="text-2xl font-bold text-slate-900">
               {guideCategories[cat].label}
             </h2>
