@@ -5,6 +5,8 @@ import { GuidePage } from '@/components/guides/GuidePage';
 import { getGuide, guides } from '@/lib/guides/manifest';
 import { getGuideContent } from '@/content/guides/registry';
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return guides.filter((g) => !g.existing).map((g) => ({ slug: g.slug }));
 }
