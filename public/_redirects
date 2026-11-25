@@ -1,1 +1,3 @@
+/clinics/* /clinics/[slug].html 200
+/guides/* /guides/[slug].html 200
 /clinics/:slug/*  /clinics/:slug.html  200
