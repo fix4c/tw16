@@ -1,0 +1,16 @@
+[
+  {
+    "id": "fasting-glucose",
+    "name": "空腹血糖",
+    "category": "代谢",
+    "meaning": "评估糖尿病与糖尿病前期风险。",
+    "recommendedFor": ["40岁以上", "有糖尿病家族史", "体重过重"]
+  },
+  {
+    "id": "lipid-profile",
+    "name": "血脂四项",
+    "category": "心血管",
+    "meaning": "评估心血管疾病风险，包含总胆固醇、三酸甘油脂、HDL、LDL。",
+    "recommendedFor": ["40岁以上", "有心血管家族史", "高血压"]
+  }
+]

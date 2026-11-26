@@ -1,210 +1,1057 @@
 {
   "categories": [
     {
-      "id": "head",
-      "name": "頭部與神經",
+      "id": "head_neck",
+      "name": "头颈部",
       "icon": "🧠",
       "symptoms": [
         {
           "id": "headache",
-          "name": "頭痛 / 頭暈",
-          "question": "您的頭痛或頭暈是否有以下特徵？",
+          "name": "头痛",
+          "question": "头痛的状况比较接近哪一种？",
           "options": [
-            { "label": "突發劇烈頭痛（像被雷打到），或伴隨手腳無力", "type": "emergency", "advice": "突發性劇烈頭痛或單側無力可能是腦中風或腦出血前兆，請立即撥打 119 或直奔急診。", "departments": ["急診", "神經內科"] },
-            { "label": "伴隨發燒、頸部僵硬或意識不清", "type": "emergency", "advice": "這可能是腦膜炎等嚴重感染，請盡速至急診就醫。", "departments": ["急診", "感染科"] },
-            { "label": "長期反覆頭痛、偏頭痛，無其他危險症狀", "type": "normal", "advice": "慢性頭痛建議由神經內科醫師評估，找出誘發原因並開立合適的藥物。", "departments": ["神經內科", "家醫科"] }
+            {
+              "label": "突然剧烈的爆炸性头痛，或伴随颈部僵硬、意识变化",
+              "type": "emergency",
+              "advice": "突发剧烈头痛合併颈部僵硬或意识改变，需排除脑出血、脑膜炎等急症，请立即就医。",
+              "departments": ["神经内科", "急诊"]
+            },
+            {
+              "label": "单侧、搏动性头痛，会反胃或怕光怕吵",
+              "type": "normal",
+              "advice": "可能是偏头痛，可先至神经内科评估，记录头痛频率与诱发因素。",
+              "departments": ["神经内科", "家医科"]
+            },
+            {
+              "label": "后脑勺或颈部起源的头痛，肩颈紧绷时加重",
+              "type": "normal",
+              "advice": "可能与颈因性头痛或肌肉紧绷有关，神经内科或复健科可进一步评估。",
+              "departments": ["神经内科", "复健科"]
+            },
+            {
+              "label": "长期反覆头痛，最近频率或强度明显增加",
+              "type": "normal",
+              "advice": "慢性头痛发生变化时，建议神经内科评估是否需要进一步检查。",
+              "departments": ["神经内科"]
+            }
           ]
         },
         {
           "id": "dizziness",
-          "name": "天旋地轉 / 眩暈",
-          "question": "您的眩暈狀況是？",
+          "name": "头晕／眩晕",
+          "question": "头晕的感觉比较像哪一种？",
           "options": [
-            { "label": "伴隨複視、口齒不清或單側無力", "type": "emergency", "advice": "可能是中風前兆，請立即就醫。", "departments": ["急診", "神經內科"] },
-            { "label": "改變姿勢時特別暈，伴隨耳鳴或聽力下降", "type": "normal", "advice": "可能與內耳前庭系統有關，建議至耳鼻喉科檢查。", "departments": ["耳鼻喉科", "神經內科"] }
+            {
+              "label": "天旋地转，合併耳鸣、听力下降或耳闷",
+              "type": "normal",
+              "advice": "眩晕合併耳部症状，可能与内耳问题有关，耳鼻喉科是合适的初步科别。",
+              "departments": ["耳鼻喉科", "神经内科"]
+            },
+            {
+              "label": "头重脚轻、快要昏倒，但不会天旋地转",
+              "type": "normal",
+              "advice": "这种头晕可能与血压、血糖、贫血或药物有关，家医科或神经内科可做初步评估。",
+              "departments": ["家医科", "神经内科"]
+            },
+            {
+              "label": "头晕合併单侧手脚无力、口齿不清或视力模糊",
+              "type": "emergency",
+              "advice": "合併神经学症状的头晕需立即排除中风，请直接急诊。",
+              "departments": ["急诊", "神经内科"]
+            },
+            {
+              "label": "头晕合併心悸、冒冷汗或胸闷",
+              "type": "normal",
+              "advice": "心血管问题也可能以头晕表现，心脏内科可评估心律与血压状况。",
+              "departments": ["心脏内科", "家医科"]
+            }
+          ]
+        },
+        {
+          "id": "neck_pain",
+          "name": "颈部疼痛／僵硬",
+          "question": "颈部不适的状况是？",
+          "options": [
+            {
+              "label": "合併发烧、剧烈头痛或颈部完全无法前弯",
+              "type": "emergency",
+              "advice": "发烧合併颈部僵硬需排除脑膜炎，请立即急诊。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "长期肩颈紧绷、酸痛，与姿势或工作有关",
+              "type": "normal",
+              "advice": "肌肉筋膜问题常见，复健科或骨科可评估，物理治疗与姿势调整有帮助。",
+              "departments": ["复健科", "骨科"]
+            },
+            {
+              "label": "颈部疼痛合併手臂麻木、无力或刺痛",
+              "type": "normal",
+              "advice": "可能是神经根压迫，骨科或神经内科可安排影像学检查。",
+              "departments": ["骨科", "神经内科"]
+            }
+          ]
+        },
+        {
+          "id": "lymph_node",
+          "name": "颈部肿块／淋巴结肿大",
+          "question": "肿块的情况是？",
+          "options": [
+            {
+              "label": "肿块快速变大、固定不动、合併发烧或夜间盗汗",
+              "type": "normal",
+              "advice": "需排除感染或肿瘤，建议尽速至耳鼻喉科或一般外科评估。",
+              "departments": ["耳鼻喉科", "一般外科"]
+            },
+            {
+              "label": "感冒后出现，压痛、可滑动，随感冒好转缩小",
+              "type": "normal",
+              "advice": "反应性淋巴结常见，可先观察；若持续超过两周未缩小，建议就医。",
+              "departments": ["家医科", "耳鼻喉科"]
+            }
           ]
         }
       ]
     },
     {
-      "id": "eye",
-      "name": "眼睛與視力",
+      "id": "eyes",
+      "name": "眼睛与视力",
       "icon": "👁️",
       "symptoms": [
         {
-          "id": "eye_pain",
-          "name": "眼睛紅腫 / 疼痛",
-          "question": "您的眼睛狀況是？",
+          "id": "vision_loss",
+          "name": "视力模糊／视力丧失",
+          "question": "视力变化是突然发生还是逐渐出现？",
           "options": [
-            { "label": "突發視力模糊、視野缺損或劇烈疼痛", "type": "emergency", "advice": "可能是急性青光眼或視網膜剝離，請立即就醫。", "departments": ["急診", "眼科"] },
-            { "label": "眼睛紅癢、分泌物多，但視力正常", "type": "normal", "advice": "可能是結膜炎或過敏，建議至眼科診所就醫。", "departments": ["眼科"] }
+            {
+              "label": "突然发生，且只有单眼受影响",
+              "type": "emergency",
+              "advice": "突发单眼视力丧失需立即排除视网膜动脉阻塞、眼中风等急症，请马上急诊或眼科。",
+              "departments": ["眼科", "急诊"]
+            },
+            {
+              "label": "慢慢发生，看近看远都不清楚",
+              "type": "normal",
+              "advice": "逐渐的视力变化可能与屈光、白内障或黄斑部问题有关，眼科可安排检查。",
+              "departments": ["眼科"]
+            },
+            {
+              "label": "合併眼睛红、痛、畏光或看到光晕",
+              "type": "normal",
+              "advice": "可能与非特异性发炎或眼压升高有关，眼科需评估。",
+              "departments": ["眼科"]
+            }
           ]
         },
         {
-          "id": "blurred_vision",
-          "name": "視力模糊",
-          "question": "視力模糊的狀況是？",
+          "id": "red_eye",
+          "name": "眼睛红／分泌物",
+          "question": "眼睛红的状况是？",
           "options": [
-            { "label": "突然發生，且只有單眼受影響", "type": "emergency", "advice": "突發性單眼視力喪失可能是眼中風，請立即就醫。", "departments": ["急診", "眼科"] },
-            { "label": "慢慢發生，看近看遠都不清楚", "type": "normal", "advice": "可能是老花、近視或白內障，建議至眼科驗光檢查。", "departments": ["眼科"] }
+            {
+              "label": "大量脓性分泌物、视力下降、剧烈疼痛",
+              "type": "normal",
+              "advice": "需排除角膜感染或眼内炎，尽速至眼科。",
+              "departments": ["眼科"]
+            },
+            {
+              "label": "痒、水样分泌物，合併打喷嚏或鼻塞",
+              "type": "normal",
+              "advice": "过敏性结膜炎常见，眼科或家医科可评估。",
+              "departments": ["眼科", "家医科"]
+            },
+            {
+              "label": "单眼红、异物感，最近有外伤或异物进入",
+              "type": "normal",
+              "advice": "需排除角膜异物或刮伤，眼科可处理。",
+              "departments": ["眼科"]
+            }
           ]
         }
       ]
     },
     {
       "id": "ent",
-      "name": "耳鼻喉與口腔",
+      "name": "耳鼻喉与口腔",
       "icon": "👂",
       "symptoms": [
         {
-          "id": "ear_pain",
-          "name": "耳朵痛 / 耳鳴",
-          "question": "您的耳朵狀況是？",
+          "id": "sore_throat",
+          "name": "喉咙痛",
+          "question": "喉咙的状况是？",
           "options": [
-            { "label": "伴隨突發性聽力喪失", "type": "emergency", "advice": "突發性耳聾有黃金治療期，請盡速至耳鼻喉科或急診就醫。", "departments": ["耳鼻喉科", "急診"] },
-            { "label": "耳朵痛、流膿，可能是中耳炎", "type": "normal", "advice": "建議至耳鼻喉科由醫師清理並開立藥物。", "departments": ["耳鼻喉科"] }
+            {
+              "label": "合併呼吸困难、吞咽困难、流口水或无法张嘴",
+              "type": "emergency",
+              "advice": "需排除会厌炎、扁桃腺周围脓疡等急症，请立即急诊。",
+              "departments": ["急诊", "耳鼻喉科"]
+            },
+            {
+              "label": "合併发烧、扁桃腺红肿或白色渗出物",
+              "type": "normal",
+              "advice": "可能是急性扁桃腺炎或咽炎，耳鼻喉科或家医科可评估。",
+              "departments": ["耳鼻喉科", "家医科"]
+            },
+            {
+              "label": "喉咙异物感、慢性咳嗽或声音沙哑超过两周",
+              "type": "normal",
+              "advice": "需评估声带、咽喉或胃酸逆流，耳鼻喉科可安排内视镜检查。",
+              "departments": ["耳鼻喉科"]
+            }
           ]
         },
         {
-          "id": "sore_throat",
-          "name": "喉嚨痛 / 吞嚥困難",
-          "question": "您的喉嚨狀況是？",
+          "id": "hearing_tinnitus",
+          "name": "听力下降／耳鸣",
+          "question": "听力或耳鸣的状况是？",
           "options": [
-            { "label": "伴隨呼吸困難、無法吞口水或高燒", "type": "emergency", "advice": "可能是扁桃腺周圍膿瘍或會厭炎，請立即至急診。", "departments": ["急診", "耳鼻喉科"] },
-            { "label": "喉嚨痛、有痰，但沒有呼吸困難", "type": "normal", "advice": "多為一般感冒或咽喉炎，可至耳鼻喉科或家醫科診所就醫。", "departments": ["耳鼻喉科", "家醫科"] }
+            {
+              "label": "突然一侧听力明显下降，或合併眩晕",
+              "type": "emergency",
+              "advice": "突发性耳聋需在黄金时间内治疗，请立即至耳鼻喉科或急诊。",
+              "departments": ["耳鼻喉科", "急诊"]
+            },
+            {
+              "label": "逐渐听力变差，合併耳闷或耳鸣",
+              "type": "normal",
+              "advice": "可能与内耳、耳垢或老化有关，耳鼻喉科可安排听力检查。",
+              "departments": ["耳鼻喉科"]
+            }
           ]
-        }
-      ]
-    },
-    {
-      "id": "dental",
-      "name": "牙齒與口腔",
-      "icon": "🦷",
-      "symptoms": [
+        },
         {
-          "id": "toothache",
-          "name": "牙痛 / 牙齦腫痛",
-          "question": "您的牙齒狀況是？",
+          "id": "nasal",
+          "name": "鼻塞／流鼻水／鼻出血",
+          "question": "鼻部症状比较接近？",
           "options": [
-            { "label": "臉部嚴重腫脹、發燒，甚至影響呼吸", "type": "emergency", "advice": "可能是蜂窩性組織炎，請立即至急診或口腔顎面外科就醫。", "departments": ["急診", "牙科"] },
-            { "label": "吃東西會痛、牙齦流血或長膿包", "type": "normal", "advice": "可能是蛀牙或牙周病，建議至牙科診所檢查。", "departments": ["牙科"] }
+            {
+              "label": "长期鼻塞合併打鼾、睡眠呼吸中止或白天嗜睡",
+              "type": "normal",
+              "advice": "耳鼻喉科可评估鼻中隔、鼻息肉或睡眠呼吸问题。",
+              "departments": ["耳鼻喉科"]
+            },
+            {
+              "label": "反覆流鼻血，量多或不易止住",
+              "type": "normal",
+              "advice": "需评估鼻腔血管、凝血功能或肿瘤，耳鼻喉科可处理。",
+              "departments": ["耳鼻喉科"]
+            }
           ]
         }
       ]
     },
     {
-      "id": "chest",
-      "name": "胸腔與心血管",
+      "id": "chest_resp",
+      "name": "胸腔与呼吸道",
       "icon": "🫀",
       "symptoms": [
         {
           "id": "chest_pain",
-          "name": "胸痛 / 胸悶",
-          "question": "您的胸悶或胸痛感覺是？",
+          "name": "胸痛／胸闷",
+          "question": "胸痛的状况是？",
           "options": [
-            { "label": "像被重物壓住、冒冷汗、痛到左肩", "type": "emergency", "advice": "這是典型的心肌梗塞前兆，請立刻停止活動，坐下休息並打 119 叫救護車。", "departments": ["急診", "心臟內科"] },
-            { "label": "運動或爬樓梯時才會喘", "type": "normal", "advice": "活動性喘可能與心肺功能有關，建議至醫院安排心電圖或 X 光檢查。", "departments": ["心臟內科", "胸腔內科"] }
+            {
+              "label": "压迫性胸痛，合併冒冷汗、呼吸困难或放射到左肩、下巴",
+              "type": "emergency",
+              "advice": "高度怀疑急性冠心症，请立即拨打 119 或急诊。",
+              "departments": ["急诊", "心脏内科"]
+            },
+            {
+              "label": "吸气时胸痛加剧，最近有感冒或咳嗽",
+              "type": "normal",
+              "advice": "可能与肋膜炎或肌肉骨骼疼痛有关，胸腔内科或家医科可评估。",
+              "departments": ["胸腔内科", "家医科"]
+            },
+            {
+              "label": "胸闷合併心悸、心跳不规则",
+              "type": "normal",
+              "advice": "心律不整也可能以胸闷表现，心脏内科可安排心电图。",
+              "departments": ["心脏内科"]
+            },
+            {
+              "label": "胸口灼热感，饭后或躺下时加重",
+              "type": "normal",
+              "advice": "胃食道逆流是常见原因，胃肠肝胆科可评估。",
+              "departments": ["胃肠肝胆科"]
+            }
           ]
         },
         {
-          "id": "palpitations",
-          "name": "心悸",
-          "question": "您的心悸狀況是？",
+          "id": "dyspnea",
+          "name": "呼吸困难／喘",
+          "question": "呼吸困难的状况是？",
           "options": [
-            { "label": "伴隨暈厥、呼吸困難或胸痛", "type": "emergency", "advice": "請盡速就醫，可能為嚴重心律不整。", "departments": ["急診", "心臟內科"] },
-            { "label": "只是偶爾覺得心跳很快，無其他不適", "type": "normal", "advice": "建議至心臟內科安排心電圖檢查，排除心律不整。", "departments": ["心臟內科", "家醫科"] }
+            {
+              "label": "突然发生，合併嘴唇发紫、无法完整说话或意识变化",
+              "type": "emergency",
+              "advice": "立即急诊或拨打 119。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "活动时喘，休息会改善，合併下肢水肿",
+              "type": "normal",
+              "advice": "可能与心脏衰竭或肺部疾病有关，心脏内科或胸腔内科可评估。",
+              "departments": ["心脏内科", "胸腔内科"]
+            },
+            {
+              "label": "夜间或清晨喘，合併咳嗽或喘鸣声",
+              "type": "normal",
+              "advice": "气喘或过敏可能，胸腔内科可安排肺功能检查。",
+              "departments": ["胸腔内科"]
+            }
+          ]
+        },
+        {
+          "id": "cough",
+          "name": "咳嗽／咳血",
+          "question": "咳嗽的状况是？",
+          "options": [
+            {
+              "label": "咳血（血液来自呼吸道），量多或持续",
+              "type": "normal",
+              "advice": "需排除肺结核、肿瘤或支气管扩张，胸腔内科可安排影像与痰液检查。",
+              "departments": ["胸腔内科"]
+            },
+            {
+              "label": "咳嗽超过三周，合併体重减轻、夜间盗汗",
+              "type": "normal",
+              "advice": "慢性咳嗽合併全身症状需排除结核或肿瘤，胸腔内科评估。",
+              "departments": ["胸腔内科"]
+            },
+            {
+              "label": "感冒后咳嗽，有痰，逐渐改善",
+              "type": "normal",
+              "advice": "急性支气管炎常见，家医科或胸腔内科可评估。",
+              "departments": ["家医科", "胸腔内科"]
+            }
           ]
         }
       ]
     },
     {
-      "id": "abdomen",
-      "name": "消化與腹部",
+      "id": "digestive",
+      "name": "消化与腹部",
       "icon": "🫄",
       "symptoms": [
         {
-          "id": "stomachache",
-          "name": "腹痛 / 胃痛",
-          "question": "您的肚子痛位置在哪裡？",
+          "id": "abdominal_pain",
+          "name": "腹痛",
+          "question": "腹痛的位置与状况是？",
           "options": [
-            { "label": "右下腹（肚臍右下方）劇痛且按壓會痛", "type": "emergency", "advice": "需排除盲腸炎可能，請盡速至急診或一般外科評估。", "departments": ["急診", "一般外科"] },
-            { "label": "右上腹（右肋骨下方）", "type": "normal", "advice": "右上腹痛可能與肝膽系統有關，建議至胃腸肝膽科檢查。", "departments": ["胃腸肝膽科"] },
-            { "label": "上腹部（胃部）", "type": "normal", "advice": "上腹痛多為胃部發炎或消化不良。若解黑便、吐血或劇痛，請立即至急診。", "departments": ["胃腸肝膽科", "家醫科"] }
+            {
+              "label": "右下腹剧痛，合併发烧、反跳痛或无法行走",
+              "type": "emergency",
+              "advice": "需排除急性阑尾炎或腹膜炎，请立即急诊。",
+              "departments": ["急诊", "一般外科"]
+            },
+            {
+              "label": "上腹或右上腹钝痛，饭后或吃油腻食物后加重",
+              "type": "normal",
+              "advice": "可能与胃、胆囊或胰脏有关，胃肠肝胆科可安排超音波。",
+              "departments": ["胃肠肝胆科"]
+            },
+            {
+              "label": "反覆腹痛合併腹泻或便秘，排便后改善",
+              "type": "normal",
+              "advice": "肠躁症或功能性肠胃问题常见，胃肠肝胆科可评估。",
+              "departments": ["胃肠肝胆科"]
+            },
+            {
+              "label": "女性下腹痛，合併异常分泌物或月经异常",
+              "type": "normal",
+              "advice": "需考虑妇科因素，妇产科可评估。",
+              "departments": ["妇产科"]
+            }
           ]
         },
         {
-          "id": "diarrhea",
-          "name": "腹瀉 / 腸胃不適",
-          "question": "您的腹瀉狀況是？",
+          "id": "vomit_diarrhea",
+          "name": "恶心／呕吐／腹泻",
+          "question": "肠胃症状的状况是？",
           "options": [
-            { "label": "伴隨嚴重脫水、高燒或血便", "type": "emergency", "advice": "請盡速就醫，可能是細菌感染或嚴重腸胃炎。", "departments": ["急診", "胃腸肝膽科"] },
-            { "label": "輕微腹瀉，但還能正常喝水", "type": "normal", "advice": "請多補充水分與電解質，若症狀持續可至胃腸肝膽科或家醫科。", "departments": ["胃腸肝膽科", "家醫科"] }
+            {
+              "label": "严重呕吐或腹泻，合併尿量减少、嘴唇干、头晕",
+              "type": "emergency",
+              "advice": "可能已脱水，需急诊补液。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "吃了可疑食物后，多人同时上吐下泻",
+              "type": "normal",
+              "advice": "疑似食物中毒，请就医并保留检体，家医科或胃肠肝胆科可处理。",
+              "departments": ["家医科", "胃肠肝胆科"]
+            },
+            {
+              "label": "慢性腹泻合併体重减轻或血便",
+              "type": "normal",
+              "advice": "需排除发炎性肠道疾病或肿瘤，胃肠肝胆科安排大肠镜。",
+              "departments": ["胃肠肝胆科"]
+            }
+          ]
+        },
+        {
+          "id": "jaundice",
+          "name": "黄疸（皮肤或眼白变黄）",
+          "question": "黄疸的状况是？",
+          "options": [
+            {
+              "label": "合併发烧、右上腹痛、意识变化",
+              "type": "emergency",
+              "advice": "需排除胆管炎或急性肝衰竭，请立即急诊。",
+              "departments": ["急诊", "胃肠肝胆科"]
+            },
+            {
+              "label": "逐渐出现，合併茶色尿、灰白便或皮肤痒",
+              "type": "normal",
+              "advice": "可能与胆道阻塞或肝炎有关，胃肠肝胆科可安排影像与肝功能检查。",
+              "departments": ["胃肠肝胆科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urinary",
+      "name": "泌尿与肾脏",
+      "icon": "🚻",
+      "symptoms": [
+        {
+          "id": "dysuria",
+          "name": "排尿疼痛／频尿／血尿",
+          "question": "排尿症状的状况是？",
+          "options": [
+            {
+              "label": "合併发烧、腰痛（敲击痛）或畏寒",
+              "type": "normal",
+              "advice": "可能是肾盂肾炎，需尽速就医，泌尿科或感染科可评估。",
+              "departments": ["泌尿科", "感染科", "急诊"]
+            },
+            {
+              "label": "排尿灼热、频尿、急尿，但无发烧",
+              "type": "normal",
+              "advice": "膀胱炎常见，泌尿科或家医科可验尿。",
+              "departments": ["泌尿科", "家医科"]
+            },
+            {
+              "label": "无痛性血尿，反复出现",
+              "type": "normal",
+              "advice": "需排除泌尿道上皮肿瘤，泌尿科安排膀胱镜或影像检查。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "解尿困难、尿流变细，男性",
+              "type": "normal",
+              "advice": "可能与摄护腺肥大有关，泌尿科可评估。",
+              "departments": ["泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "edema_renal",
+          "name": "水肿／泡泡尿",
+          "question": "水肿或尿液状况是？",
+          "options": [
+            {
+              "label": "眼皮或下肢水肿，合併泡泡尿久不消散",
+              "type": "normal",
+              "advice": "可能为肾病症候群或肾炎，肾脏科可安排尿液与血液检查。",
+              "departments": ["肾脏科"]
+            },
+            {
+              "label": "全身水肿，合併呼吸困难或端坐呼吸",
+              "type": "emergency",
+              "advice": "可能为心脏或肾脏衰竭急症，请立即急诊。",
+              "departments": ["急诊"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neuro",
+      "name": "神经与感觉",
+      "icon": "⚡",
+      "symptoms": [
+        {
+          "id": "weakness_numbness",
+          "name": "肢体无力／麻木",
+          "question": "无力或麻木的状况是？",
+          "options": [
+            {
+              "label": "突然单侧手脚无力、脸歪、口齿不清",
+              "type": "emergency",
+              "advice": "急性中风征兆，请立即拨打 119。",
+              "departments": ["急诊", "神经内科"]
+            },
+            {
+              "label": "对称性手脚麻木，像戴手套袜套的感觉",
+              "type": "normal",
+              "advice": "可能为周边神经病变，神经内科可安排神经传导检查。",
+              "departments": ["神经内科"]
+            },
+            {
+              "label": "局部麻木合併颈痛或背痛，特定姿势加重",
+              "type": "normal",
+              "advice": "可能与神经根压迫有关，骨科或神经内科可评估。",
+              "departments": ["骨科", "神经内科"]
+            }
+          ]
+        },
+        {
+          "id": "seizure",
+          "name": "抽搐／意识丧失",
+          "question": "抽搐或意识状况是？",
+          "options": [
+            {
+              "label": "首次发生全身抽搐或意识丧失",
+              "type": "emergency",
+              "advice": "首次癫痫发作需急诊评估，排除代谢或结构性原因。",
+              "departments": ["急诊", "神经内科"]
+            },
+            {
+              "label": "已知癫痫，发作频率或型态改变",
+              "type": "normal",
+              "advice": "神经内科调整药物或评估。",
+              "departments": ["神经内科"]
+            }
+          ]
+        },
+        {
+          "id": "tremor",
+          "name": "颤抖／不自主运动",
+          "question": "颤抖的状况是？",
+          "options": [
+            {
+              "label": "静止时手抖，合併动作变慢、僵硬",
+              "type": "normal",
+              "advice": "需评估帕金森氏症，神经内科可安排检查。",
+              "departments": ["神经内科"]
+            },
+            {
+              "label": "拿东西或做精细动作时手抖，家族有类似情况",
+              "type": "normal",
+              "advice": "可能是原发性颤抖，神经内科可评估。",
+              "departments": ["神经内科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "psych",
+      "name": "心理与睡眠",
+      "icon": "🧘",
+      "symptoms": [
+        {
+          "id": "mood",
+          "name": "情绪低落／焦虑",
+          "question": "情绪状况比较接近？",
+          "options": [
+            {
+              "label": "持续两周以上情绪低落、失去兴趣，合併睡眠或食欲改变",
+              "type": "normal",
+              "advice": "可能与忧郁症有关，精神科或身心科可评估。",
+              "departments": ["精神科", "身心科", "家医科"]
+            },
+            {
+              "label": "反覆恐慌发作，合併心悸、发抖、快要失控的感觉",
+              "type": "normal",
+              "advice": "恐慌症可透过精神科评估与治疗，先排除心脏问题。",
+              "departments": ["精神科", "心脏内科"]
+            },
+            {
+              "label": "焦虑合併失眠，但白天精神仍可维持",
+              "type": "normal",
+              "advice": "家医科或精神科可初步评估，短期药物与非药物介入都有帮助。",
+              "departments": ["家医科", "精神科"]
+            }
+          ]
+        },
+        {
+          "id": "insomnia",
+          "name": "失眠",
+          "question": "睡眠状况是？",
+          "options": [
+            {
+              "label": "难以入睡、易醒，持续超过一个月，影响白天功能",
+              "type": "normal",
+              "advice": "慢性失眠可至精神科或身心科评估，认知行为治疗是首选。",
+              "departments": ["精神科", "身心科"]
+            },
+            {
+              "label": "打鼾声大，白天嗜睡，旁人观察到呼吸中止",
+              "type": "normal",
+              "advice": "疑似睡眠呼吸中止，胸腔内科或睡眠中心可安排检查。",
+              "departments": ["胸腔内科", "耳鼻喉科"]
+            }
           ]
         }
       ]
     },
     {
       "id": "skin",
-      "name": "皮膚與毛髮",
+      "name": "皮肤与毛发",
       "icon": "🧴",
       "symptoms": [
         {
           "id": "rash",
-          "name": "皮膚紅疹 / 發癢",
-          "question": "您的皮膚狀況是？",
+          "name": "红疹／搔痒",
+          "question": "皮疹的状况是？",
           "options": [
-            { "label": "伴隨發燒、呼吸困難或黏膜潰爛", "type": "emergency", "advice": "可能是嚴重藥物過敏或感染，請立即就醫。", "departments": ["急診", "皮膚科"] },
-            { "label": "局部紅癢、起疹子，無其他不適", "type": "normal", "advice": "可能是濕疹、過敏或黴菌感染，建議至皮膚科就醫。", "departments": ["皮膚科", "家醫科"] }
+            {
+              "label": "合併高烧、皮肤大片脱皮或黏膜溃烂",
+              "type": "emergency",
+              "advice": "需排除严重药物疹或感染，请立即急诊。",
+              "departments": ["急诊", "皮肤科"]
+            },
+            {
+              "label": "反覆荨麻疹，合併呼吸困难或嘴唇肿胀",
+              "type": "emergency",
+              "advice": "可能为过敏性休克前兆，请立即急诊。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "慢性搔痒、红疹，与季节或接触物有关",
+              "type": "normal",
+              "advice": "湿疹或接触性皮肤炎常见，皮肤科可评估。",
+              "departments": ["皮肤科"]
+            },
+            {
+              "label": "带状分布的疼痛水泡",
+              "type": "normal",
+              "advice": "可能是带状疱疹，皮肤科可开立抗病毒药，越早治疗越好。",
+              "departments": ["皮肤科"]
+            }
+          ]
+        },
+        {
+          "id": "hair_loss",
+          "name": "掉发",
+          "question": "掉发的状况是？",
+          "options": [
+            {
+              "label": "合併皮疹、关节痛或全身症状",
+              "type": "normal",
+              "advice": "需排除自体免疫或全身性疾病，风湿免疫科或皮肤科可评估。",
+              "departments": ["风湿免疫科", "皮肤科"]
+            },
+            {
+              "label": "局部圆形掉发，头皮外观正常",
+              "type": "normal",
+              "advice": "可能是圆秃，皮肤科可评估。",
+              "departments": ["皮肤科"]
+            },
+            {
+              "label": "广泛性掉发，最近有压力、生产或快速减重",
+              "type": "normal",
+              "advice": "休止期落发常见，皮肤科可评估并追踪。",
+              "departments": ["皮肤科"]
+            }
           ]
         }
       ]
     },
     {
-      "id": "bone",
-      "name": "骨骼與肌肉",
+      "id": "msk",
+      "name": "骨骼与肌肉",
       "icon": "🦴",
       "symptoms": [
         {
-          "id": "back_pain",
-          "name": "背痛 / 腰痛",
-          "question": "您的背痛或腰痛狀況是？",
+          "id": "joint_pain",
+          "name": "关节痛／肿胀",
+          "question": "关节痛的情况是？",
           "options": [
-            { "label": "伴隨下肢無力、麻木或大小便失禁", "type": "emergency", "advice": "可能是脊椎壓迫或馬尾症候群，請立即至急診或神經外科。", "departments": ["急診", "神經外科"] },
-            { "label": "彎腰或搬重物後開始痛，無下肢無力", "type": "normal", "advice": "多為肌肉拉傷或脊椎退化，建議至骨科或復健科。", "departments": ["骨科", "復健科"] }
+            {
+              "label": "单一大关节红、肿、热、痛，突然发作",
+              "type": "normal",
+              "advice": "需排除痛风或感染性关节炎，可至风湿免疫科或急诊。",
+              "departments": ["风湿免疫科", "急诊", "骨科"]
+            },
+            {
+              "label": "对称性多关节肿痛，晨间僵硬超过一小时",
+              "type": "normal",
+              "advice": "需评估类风湿性关节炎，风湿免疫科可安排抽血与影像。",
+              "departments": ["风湿免疫科"]
+            },
+            {
+              "label": "膝关节痛，上下楼梯或蹲下时加重",
+              "type": "normal",
+              "advice": "退化性关节炎常见，骨科或复健科可评估。",
+              "departments": ["骨科", "复健科"]
+            }
           ]
         },
         {
-          "id": "joint_pain",
-          "name": "關節痛 / 關節腫脹",
-          "question": "您的關節狀況是？",
+          "id": "back_pain",
+          "name": "背痛／腰痛",
+          "question": "背痛或腰痛的情况是？",
           "options": [
-            { "label": "多處關節同時腫痛，伴隨晨間僵硬", "type": "normal", "advice": "建議至風濕免疫科檢查，排除類風濕性關節炎。", "departments": ["風濕免疫科", "骨科"] },
-            { "label": "單一關節紅腫熱痛，可能是痛風", "type": "normal", "advice": "痛風發作請盡速至風濕免疫科或家醫科就醫。", "departments": ["風濕免疫科", "家醫科"] }
+            {
+              "label": "合併大小便失禁、下肢无力或发烧",
+              "type": "emergency",
+              "advice": "需排除马尾症候群或感染，请立即急诊。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "慢性下背痛，久站或弯腰加重，休息改善",
+              "type": "normal",
+              "advice": "机械性背痛常见，骨科或复健科可评估。",
+              "departments": ["骨科", "复健科"]
+            }
           ]
         }
       ]
     },
     {
-      "id": "pediatric",
-      "name": "婦幼與小兒",
-      "icon": "👶",
+      "id": "endocrine",
+      "name": "内分泌与代谢",
+      "icon": "⚖️",
       "symptoms": [
         {
-          "id": "child_fever",
-          "name": "兒童發燒",
-          "question": "您的孩子發燒狀況是？",
+          "id": "thyroid",
+          "name": "颈部肿大／心悸／体重变化",
+          "question": "比较接近哪种状况？",
           "options": [
-            { "label": "三個月以下嬰兒發燒、活動力極差或抽搐", "type": "emergency", "advice": "請立即至急診或小兒科就醫，嬰兒發燒可能代表嚴重感染。", "departments": ["急診", "小兒科"] },
-            { "label": "輕微發燒，但活動力與食慾正常", "type": "normal", "advice": "可先觀察並多補充水分，若持續發燒可至小兒科診所就醫。", "departments": ["小兒科", "家醫科"] }
+            {
+              "label": "心悸、手抖、怕热、体重减轻",
+              "type": "normal",
+              "advice": "可能为甲状腺机能亢进，内分泌暨新陈代谢科可安排抽血。",
+              "departments": ["内分泌暨新陈代谢科"]
+            },
+            {
+              "label": "怕冷、体重增加、便秘、皮肤干燥",
+              "type": "normal",
+              "advice": "可能为甲状腺机能低下，内分泌暨新陈代谢科评估。",
+              "departments": ["内分泌暨新陈代谢科"]
+            },
+            {
+              "label": "颈部前方肿大，合併吞咽或呼吸不顺",
+              "type": "normal",
+              "advice": "需评估甲状腺结节或肿大，内分泌科或一般外科。",
+              "departments": ["内分泌暨新陈代谢科", "一般外科"]
+            }
           ]
         },
         {
-          "id": "vaginal_bleeding",
-          "name": "異常陰道出血 / 經痛",
-          "question": "您的婦科狀況是？",
+          "id": "diabetes_symptoms",
+          "name": "多吃／多喝／多尿／体重减轻",
+          "question": "血糖相关症状是？",
           "options": [
-            { "label": "懷孕期間出血或劇烈腹痛", "type": "emergency", "advice": "可能是流產或子宮外孕前兆，請立即至急診或婦產科。", "departments": ["急診", "婦產科"] },
-            { "label": "經痛嚴重到影響生活，或經期不規則", "type": "normal", "advice": "建議至婦產科檢查，排除子宮內膜異位等問題。", "departments": ["婦產科"] }
+            {
+              "label": "明显吃多、喝多、尿多，体重下降",
+              "type": "normal",
+              "advice": "典型高血糖症状，内分泌暨新陈代谢科应尽速评估。",
+              "departments": ["内分泌暨新陈代谢科"]
+            },
+            {
+              "label": "已知糖尿病，出现意识混乱、冒冷汗、手抖",
+              "type": "emergency",
+              "advice": "可能为低血糖，意识清楚时立即补充糖分，意识不清请拨 119。",
+              "departments": ["急诊", "内分泌暨新陈代谢科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hematology",
+      "name": "血液与贫血",
+      "icon": "🩸",
+      "symptoms": [
+        {
+          "id": "anemia",
+          "name": "贫血相关症状（苍白、头晕、疲劳）",
+          "question": "贫血症状的状况是？",
+          "options": [
+            {
+              "label": "已知贫血，最近头晕加剧或活动会喘",
+              "type": "normal",
+              "advice": "需评估贫血是否恶化，血液肿瘤科可安排抽血。",
+              "departments": ["血液肿瘤科", "家医科"]
+            },
+            {
+              "label": "不明原因贫血，合併体重减轻或发烧",
+              "type": "normal",
+              "advice": "需排除慢性感染或肿瘤，血液肿瘤科可评估。",
+              "departments": ["血液肿瘤科"]
+            }
+          ]
+        },
+        {
+          "id": "bleeding",
+          "name": "容易瘀青／出血",
+          "question": "出血或瘀青的状况是？",
+          "options": [
+            {
+              "label": "无故大片瘀青、牙龈或鼻腔反覆出血",
+              "type": "normal",
+              "advice": "需评估凝血功能或血小板问题，血液肿瘤科可安排检查。",
+              "departments": ["血液肿瘤科"]
+            },
+            {
+              "label": "服用抗凝血剂，出现血便、血尿或剧烈头痛",
+              "type": "emergency",
+              "advice": "可能为抗凝血剂相关出血，请立即急诊。",
+              "departments": ["急诊"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "infection",
+      "name": "发烧与感染",
+      "icon": "🌡️",
+      "symptoms": [
+        {
+          "id": "fever",
+          "name": "发烧",
+          "question": "发烧的状况是？",
+          "options": [
+            {
+              "label": "高烧合併意识变化、抽搐、呼吸困难或紫斑",
+              "type": "emergency",
+              "advice": "需排除败血症或脑膜炎，请立即急诊。",
+              "departments": ["急诊", "感染科"]
+            },
+            {
+              "label": "发烧超过三天，合併咳嗽、腹痛或排尿症状",
+              "type": "normal",
+              "advice": "需寻找感染源，家医科或感染科可评估。",
+              "departments": ["家医科", "感染科"]
+            },
+            {
+              "label": "近期旅游史，返国后发烧",
+              "type": "normal",
+              "advice": "需排除疟疾、登革热等旅游相关感染，感染科可评估。",
+              "departments": ["感染科", "家医科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rheumatology",
+      "name": "风湿免疫",
+      "icon": "🛡️",
+      "symptoms": [
+        {
+          "id": "autoimmune",
+          "name": "多系统症状（关节痛＋皮疹＋发烧）",
+          "question": "是否有多系统受影响？",
+          "options": [
+            {
+              "label": "关节痛合併皮疹、口腔溃疡、掉发或光敏感",
+              "type": "normal",
+              "advice": "需评估系统性红斑狼疮等自体免疫疾病，风湿免疫科可安排抽血。",
+              "departments": ["风湿免疫科"]
+            },
+            {
+              "label": "长期口干、眼干，合併关节痛或腮腺肿大",
+              "type": "normal",
+              "advice": "可能为干燥症，风湿免疫科可评估。",
+              "departments": ["风湿免疫科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "male",
+      "name": "男性健康",
+      "icon": "♂️",
+      "symptoms": [
+        {
+          "id": "male_urinary",
+          "name": "摄护腺／男性泌尿问题",
+          "question": "状况比较接近？",
+          "options": [
+            {
+              "label": "解尿困难、尿流细、夜尿频繁",
+              "type": "normal",
+              "advice": "可能与摄护腺肥大有关，泌尿科可评估。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "阴囊肿痛，突然发生",
+              "type": "emergency",
+              "advice": "需排除睾丸扭转，请立即急诊或泌尿科。",
+              "departments": ["急诊", "泌尿科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "geriatric",
+      "name": "老年与多重用药",
+      "icon": "👵",
+      "symptoms": [
+        {
+          "id": "geriatric_syndrome",
+          "name": "跌倒／衰弱／多重用药",
+          "question": "长辈的状况比较接近？",
+          "options": [
+            {
+              "label": "近期反复跌倒，合併头晕或步态不稳",
+              "type": "normal",
+              "advice": "需评估跌倒原因（药物、视力、神经、心脏），老年医学科或家医科可整合评估。",
+              "departments": ["老年医学科", "家医科"]
+            },
+            {
+              "label": "服用多种药物，出现新的不适或意识变化",
+              "type": "normal",
+              "advice": "可能为药物交互作用或副作用，老年医学科或家医科可做用药整合。",
+              "departments": ["老年医学科", "家医科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oncology",
+      "name": "癌症相关症状",
+      "icon": "🎗️",
+      "symptoms": [
+        {
+          "id": "cancer_related",
+          "name": "不明原因体重减轻／肿块／疼痛",
+          "question": "是否合併全身性警讯？",
+          "options": [
+            {
+              "label": "半年内体重减轻超过 10%，合併食欲下降或疲劳",
+              "type": "normal",
+              "advice": "需排除恶性肿瘤或慢性感染，血液肿瘤科或家医科可安排检查。",
+              "departments": ["血液肿瘤科", "家医科"]
+            },
+            {
+              "label": "身体出现逐渐变大的肿块，固定不动",
+              "type": "normal",
+              "advice": "需评估肿块性质，一般外科或相关专科可安排影像与切片。",
+              "departments": ["一般外科", "血液肿瘤科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "poisoning_injury",
+      "name": "中毒与外伤",
+      "icon": "⚠️",
+      "symptoms": [
+        {
+          "id": "poisoning",
+          "name": "误食／接触毒物",
+          "question": "状况是？",
+          "options": [
+            {
+              "label": "误食药物、清洁剂或不明物质，出现呕吐、意识变化",
+              "type": "emergency",
+              "advice": "请立即急诊，并携带可疑物质或包装供医师参考。",
+              "departments": ["急诊"]
+            },
+            {
+              "label": "吸入烟雾、瓦斯或化学气体，合併头晕、咳嗽",
+              "type": "emergency",
+              "advice": "立即移至通风处并急诊。",
+              "departments": ["急诊"]
+            }
+          ]
+        },
+        {
+          "id": "wound",
+          "name": "伤口／外伤",
+          "question": "伤口状况是？",
+          "options": [
+            {
+              "label": "伤口深、出血不止、合併异物或动物咬伤",
+              "type": "emergency",
+              "advice": "需急诊清创、止血与破伤风评估。",
+              "departments": ["急诊", "一般外科"]
+            },
+            {
+              "label": "表浅擦伤或切割伤，可自行止血",
+              "type": "normal",
+              "advice": "可先清洁包扎，若红肿热痛加剧再至一般外科或家医科。",
+              "departments": ["一般外科", "家医科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "post_op",
+      "name": "术后与伤口照护",
+      "icon": "🩹",
+      "symptoms": [
+        {
+          "id": "post_op_fever",
+          "name": "术后发烧／伤口红肿",
+          "question": "术后状况是？",
+          "options": [
+            {
+              "label": "术后合併高烧、伤口化脓、剧烈疼痛或呼吸困难",
+              "type": "emergency",
+              "advice": "需排除术后感染或肺栓塞，请立即联系原手术医院或急诊。",
+              "departments": ["急诊", "原手术科别"]
+            },
+            {
+              "label": "伤口轻微红肿，无发烧，渗液不多",
+              "type": "normal",
+              "advice": "可先回原手术科门诊评估，一般外科亦可处理。",
+              "departments": ["一般外科", "原手术科别"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systemic",
+      "name": "其他全身性症状",
+      "icon": "🌀",
+      "symptoms": [
+        {
+          "id": "fatigue",
+          "name": "长期疲劳／虚弱",
+          "question": "疲劳的状况是？",
+          "options": [
+            {
+              "label": "疲劳合併发烧、体重减轻或夜间盗汗",
+              "type": "normal",
+              "advice": "需排除慢性感染、肿瘤或内分泌问题，家医科可安排初步检查。",
+              "departments": ["家医科"]
+            },
+            {
+              "label": "疲劳合併情绪低落、睡眠障碍",
+              "type": "normal",
+              "advice": "身心因素常见，精神科或家医科可评估。",
+              "departments": ["精神科", "家医科"]
+            },
+            {
+              "label": "单纯疲劳，最近压力大或作息改变",
+              "type": "normal",
+              "advice": "可先调整作息，若持续超过一个月再至家医科评估。",
+              "departments": ["家医科"]
+            }
+          ]
+        },
+        {
+          "id": "syncope",
+          "name": "晕厥／昏倒",
+          "question": "昏倒的状况是？",
+          "options": [
+            {
+              "label": "运动中或平躺时昏倒，合併胸痛或心悸",
+              "type": "emergency",
+              "advice": "需排除心因性晕厥，请立即急诊。",
+              "departments": ["急诊", "心脏内科"]
+            },
+            {
+              "label": "站立太久或情绪刺激后昏倒，很快恢复意识",
+              "type": "normal",
+              "advice": "血管迷走性晕厥常见，心脏内科或神经内科可评估。",
+              "departments": ["心脏内科", "神经内科"]
+            }
           ]
         }
       ]
