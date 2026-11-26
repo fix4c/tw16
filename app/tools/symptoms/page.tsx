@@ -7,6 +7,7 @@ import rawClinics from "@/data/clinics.json";
 import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
 import { getSafeDepartments } from "@/lib/department-constants";
+import { getTriageReason } from "@/lib/triage";
 
 type Option = {
   label: string;
@@ -90,6 +91,21 @@ export default function SymptomsFlowPage() {
   const safeResultDepts: string[] = result
     ? getSafeDepartments(result.departments ?? [])
     : [];
+
+  // AI 模式建議理由（找不到時為 null）
+  const aiReason =
+    aiResult && safeAiDepts[0]
+      ? getTriageReason(aiInput, safeAiDepts[0])
+      : null;
+
+  // 點選模式建議理由（找不到時為 null）
+  const selectReason =
+    result && selectedSymptom && safeResultDepts[0]
+      ? getTriageReason(
+          `${selectedSymptom.name} ${result.label} ${result.advice}`,
+          safeResultDepts[0]
+        )
+      : null;
 
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
@@ -178,6 +194,14 @@ export default function SymptomsFlowPage() {
                         ))}
                       </div>
                     </div>
+
+                    {/* 新增：為什麼建議這個科別 */}
+                    {aiReason && (
+                      <div className="mt-4 p-3 bg-white/80 border border-teal-100 rounded-lg">
+                        <p className="text-xs font-bold text-teal-700 mb-1">💡 為什麼建議這個科別？</p>
+                        <p className="text-sm text-slate-700 leading-relaxed">{aiReason}</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
@@ -275,7 +299,7 @@ export default function SymptomsFlowPage() {
                   </div>
                   <h2 className={`text-2xl font-serif font-bold mb-4 ${result.type === "emergency" ? "text-rose-600" : "text-teal-700"}`}>{result.type === "emergency" ? "建議立即就醫" : "建議門診評估"}</h2>
                   <p className="text-slate-600 leading-relaxed mb-8 max-w-md mx-auto">{result.advice}</p>
-                  <div className="bg-slate-50 rounded-xl p-4 mb-8 inline-block text-left border border-slate-100">
+                  <div className="bg-slate-50 rounded-xl p-4 mb-4 inline-block text-left border border-slate-100">
                     <p className="text-sm text-slate-500 mb-2">建議掛號科別：</p>
                     <div className="flex flex-wrap gap-2 justify-center">
                       {safeResultDepts.map((d) => (
@@ -283,6 +307,14 @@ export default function SymptomsFlowPage() {
                       ))}
                     </div>
                   </div>
+
+                  {/* 新增：為什麼建議這個科別 */}
+                  {selectReason && (
+                    <div className="max-w-md mx-auto mb-8 p-3 bg-teal-50 border border-teal-100 rounded-lg text-left">
+                      <p className="text-xs font-bold text-teal-700 mb-1">💡 為什麼建議這個科別？</p>
+                      <p className="text-sm text-slate-700 leading-relaxed">{selectReason}</p>
+                    </div>
+                  )}
 
                   <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto">
                     <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeResultDepts[0]} 診所</h4>

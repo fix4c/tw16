@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Header } from "../../components/Header"; 
+import { Header } from "../../components/Header";
 import { ToolNav } from "../../components/ToolNav";
+import { TrendChart } from "@/components/tracker/TrendChart";
 
 type Record = {
   id: string;
@@ -13,9 +14,17 @@ type Record = {
   sugar: string;
 };
 
+const CONDITION_OPTIONS = [
+  { key: "hypertension", label: "高血壓" },
+  { key: "diabetes", label: "糖尿病" },
+  { key: "liver", label: "肝臟相關" },
+  { key: "kidney", label: "腎臟相關" },
+];
+
 export default function HealthTrackerPage() {
   const [records, setRecords] = useState<Record[]>([]);
   const [form, setForm] = useState({ date: "", bpSys: "", bpDia: "", sugar: "" });
+  const [conditions, setConditions] = useState<string[]>([]);
 
   // 載入本地儲存的紀錄
   useEffect(() => {
@@ -23,6 +32,13 @@ export default function HealthTrackerPage() {
     if (saved) {
       try {
         setRecords(JSON.parse(saved));
+      } catch (e) {}
+    }
+    // 載入健康狀況
+    const savedCond = localStorage.getItem("tw16-health-conditions");
+    if (savedCond) {
+      try {
+        setConditions(JSON.parse(savedCond));
       } catch (e) {}
     }
     // 預設帶入今天日期
@@ -45,7 +61,7 @@ export default function HealthTrackerPage() {
     const updated = [newRecord, ...records];
     setRecords(updated);
     localStorage.setItem("tw16-health-records", JSON.stringify(updated));
-    
+
     // 清空血壓血糖欄位，保留日期
     setForm({ date: form.date, bpSys: "", bpDia: "", sugar: "" });
   };
@@ -62,6 +78,23 @@ export default function HealthTrackerPage() {
       localStorage.removeItem("tw16-health-records");
     }
   };
+
+  const toggleCondition = (key: string) => {
+    const updated = conditions.includes(key)
+      ? conditions.filter((c) => c !== key)
+      : [...conditions, key];
+    setConditions(updated);
+    localStorage.setItem("tw16-health-conditions", JSON.stringify(updated));
+  };
+
+  // 趨勢資料：依日期排序，過濾空值
+  const sortedRecords = [...records].sort((a, b) => a.date.localeCompare(b.date));
+  const bpData = sortedRecords
+    .filter((r) => r.bpSys && !isNaN(Number(r.bpSys)))
+    .map((r) => ({ date: r.date, value: Number(r.bpSys) }));
+  const sugarData = sortedRecords
+    .filter((r) => r.sugar && !isNaN(Number(r.sugar)))
+    .map((r) => ({ date: r.date, value: Number(r.sugar) }));
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -136,6 +169,28 @@ export default function HealthTrackerPage() {
                 儲存紀錄
               </button>
             </form>
+
+            {/* 新增：我的健康狀況 */}
+            <div className="mt-6 pt-4 border-t border-slate-100">
+              <p className="text-sm font-bold text-slate-700 mb-1">我的健康狀況（選填）</p>
+              <p className="text-xs text-slate-400 mb-3">
+                勾選後，首頁新聞若與您的狀況相關，會加上提示標籤。
+              </p>
+              <div className="space-y-1.5">
+                {CONDITION_OPTIONS.map(({ key, label }) => (
+                  <label key={key} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={conditions.includes(key)}
+                      onChange={() => toggleCondition(key)}
+                      className="w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
             <div className="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400">
               💡 小提醒：測量血壓前請先安靜休息 5 分鐘，並保持坐姿端正。
             </div>
@@ -153,6 +208,18 @@ export default function HealthTrackerPage() {
                 </button>
               )}
             </div>
+
+            {/* 新增：趨勢圖（各項 ≥2 筆才顯示） */}
+            {(bpData.length >= 2 || sugarData.length >= 2) && (
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                {bpData.length >= 2 && (
+                  <TrendChart data={bpData} label="收縮壓" unit="mmHg" />
+                )}
+                {sugarData.length >= 2 && (
+                  <TrendChart data={sugarData} label="血糖" unit="mg/dL" />
+                )}
+              </div>
+            )}
 
             {records.length === 0 ? (
               <div className="text-center py-20 text-slate-400">
@@ -178,7 +245,7 @@ export default function HealthTrackerPage() {
                         )}
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleDelete(r.id)}
                       className="text-slate-400 hover:text-red-500 p-2"
                       title="刪除"
