@@ -45,6 +45,31 @@ function cleanAndAbsolutize(html, baseUrl) {
     root.querySelectorAll(tag).forEach((el) => el.remove());
   }
 
+  // 👇 新增：移除可能的裝飾性大圖（避免 Readability 誤抓頁首圖示）
+  root.querySelectorAll("img").forEach((img) => {
+    const src = (img.getAttribute("src") || "").toLowerCase();
+    const alt = (img.getAttribute("alt") || "").toLowerCase();
+    const classStr = (img.getAttribute("class") || "").toLowerCase();
+    const idStr = (img.getAttribute("id") || "").toLowerCase();
+
+    const noiseKeywords = [
+      "logo", "icon", "house", "home", "banner",
+      "header", "footer", "placeholder", "spacer",
+    ];
+
+    const isNoise = noiseKeywords.some(
+      (kw) =>
+        src.includes(kw) ||
+        alt.includes(kw) ||
+        classStr.includes(kw) ||
+        idStr.includes(kw)
+    );
+
+    if (isNoise) {
+      img.remove();
+    }
+  });
+
   root.querySelectorAll("*").forEach((el) => {
     // 移除所有的 on* 内联事件
     for (const attr of [...el.attributes]) {

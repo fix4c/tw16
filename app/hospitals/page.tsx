@@ -23,6 +23,13 @@ declare global {
   }
 }
 
+// 👇 新增：全台縣市地理排序
+const COUNTY_ORDER = [
+  "基隆市","臺北市","新北市","桃園市","新竹市","新竹縣","苗栗縣",
+  "臺中市","彰化縣","南投縣","雲林縣","嘉義市","嘉義縣","臺南市",
+  "高雄市","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣","金門縣","連江縣"
+];
+
 function normalizeCounty(name: string): string {
   return name.replace(/台/g, "臺");
 }
@@ -35,10 +42,16 @@ export default function HospitalsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
+  // 👇 修改：套用 COUNTY_ORDER 進行地理排序
   const regions = useMemo(() => {
     const set = new Set<string>();
     hospitals.forEach((h) => set.add(normalizeCounty(h.region)));
-    return ["全部", ...Array.from(set).sort()];
+    const sorted = Array.from(set).sort((a, b) => {
+      const ia = COUNTY_ORDER.indexOf(a);
+      const ib = COUNTY_ORDER.indexOf(b);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
+    return ["全部", ...sorted];
   }, []);
 
   const levels = useMemo(() => {
