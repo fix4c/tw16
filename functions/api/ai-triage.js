@@ -160,8 +160,8 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 症狀描述：「${symptoms}」
 `;
 
-    // 👇 關鍵修正：將已淘汰的 gemini-1.5-flash 改為目前可用的 gemini-2.5-flash
-    // 若你的 API Key 仍無法使用 2.5-flash，可改用別名 "gemini-flash-latest"
+    // 👇 關鍵修正：Google 已不對新 API Key 開放 gemini-2.5 系列模型，
+    // 直接返回 404。改用目前推薦的 gemini-3.8-flash。
     const res = await fetchGeminiWithRetry(
       "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
@@ -171,7 +171,7 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
           "Authorization": `Bearer ${GEMINI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gemini-2.5-flash",
+          model: "gemini-3.8-flash",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.1,
           max_tokens: 500,
