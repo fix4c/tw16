@@ -51,31 +51,13 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ error: "未設定 AI API Key" }), { status: 500 });
     }
 
-    const prompt = `
-你是一個專業的台灣醫療分診導航助手。
-請根據使用者的症狀，判斷建議掛號的科別，並評估緊急程度。
+    // 👇 優化：極簡化 Prompt。因為我們已經設定 response_format: json_object，
+    // 所以不需要再用長文解釋 JSON 格式，大幅減少 AI 預填充時間。
+    const prompt = `你是台灣醫療分診助手。根據症狀輸出 JSON。嚴禁診斷或建議藥物。
+科別必須從以下白名單選擇：${STANDARD_DEPARTMENTS.join("、")}
+輸出格式：{"is_emergency":bool,"departments":["科別"],"advice":"2-3句建議","warning":"緊急紅線或空"}
+症狀：${symptoms}`;
 
-【嚴格規則】
-1. 絕對不要進行疾病診斷，也不要建議藥物。
-2. 只能提供「建議科別」、「是否緊急」與「就醫前注意事項」。
-3. 必須嚴格輸出 JSON 格式，絕對不要包含任何 markdown 標記、前言或後語。
-4. departments 陣列中的每一個科別名稱，必須完全等於下列白名單中的字串：
-${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
-5. 如果症狀可能涉及多個科別，請挑選最相關的 1 至 3 個。
-6. 若無法判斷，請使用 "家醫科"。
-
-【輸出 JSON 格式】
-{
-  "is_emergency": true 或 false,
-  "departments": ["科別1", "科別2"],
-  "advice": "用 2-3 句話說明為什麼建議看這個科別，以及就醫前的注意事項。",
-  "warning": "若為緊急狀況，請填寫具體紅線警告；若非緊急，填空字串。"
-}
-
-症狀描述：「${symptoms}」
-`;
-
-    // 👇 改用串流 (stream: true) 請求
     const res = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
@@ -84,13 +66,17 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
           "Content-Type": "application/json",
           "Authorization": `Bearer ${GEMINI_API_KEY}`,
         },
+        // 👇 清理了原本重複的 body 定義
         body: JSON.stringify({
           model: "gemini-3.8-flash",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.1,
-          max_tokens: 500,
+          max_tokens: 300,
           response_format: { type: "json_object" },
-          stream: true, // 開啟串流
+          stream: true,
+          thinkingConfig: {
+            thinkingLevel: "LOW",
+          },
         }),
       }
     );
@@ -100,16 +86,14 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
       throw new Error(`Gemini API error: ${res.status} ${errText.slice(0, 200)}`);
     }
 
-    // 👇 建立一個 TransformStream 來處理串流和心跳
     const { readable, writable } = new TransformStream();
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
 
-    // 發送心跳，防止連線逾時
     const keepAliveInterval = setInterval(() => {
       writer.write(encoder.encode(`: keep-alive\n\n`));
-    }, 15000); // 每 15 秒發送一次
+    }, 15000); 
 
     (async () => {
       const reader = res.body.getReader();
@@ -131,17 +115,13 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
                 const json = JSON.parse(data);
                 const content = json.choices?.[0]?.delta?.content || "";
                 if (content) {
-                  // 將收到的內容片段傳給前端
                   await writer.write(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
                 }
-              } catch (e) {
-                // 忽略無法解析的行
-              }
+              } catch (e) {}
             }
           }
         }
       } catch (error) {
-        // 串流過程中發生錯誤
         await writer.write(encoder.encode(`data: ${JSON.stringify({ error: "串流中斷" })}\n\n`));
       } finally {
         clearInterval(keepAliveInterval);
@@ -150,7 +130,6 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
       }
     })();
 
-    // 回傳串流回應
     return new Response(readable, {
       headers: {
         "Content-Type": "text/event-stream",
