@@ -4,6 +4,7 @@ import type { Headline, HeadlineFeed } from "@/lib/types";
 import { Header } from "./components/Header";
 import { DynamicHealthDashboard } from "./components/DynamicHealthDashboard";
 import { PersonalizedBadge } from "@/components/news/PersonalizedBadge";
+import NewsLink from "@/components/news/NewsLink";
 
 const data = rawData as HeadlineFeed;
 
@@ -50,14 +51,11 @@ function HeadlineCard({ headline }: { headline: Headline }) {
           {headline.whyItMatters}
         </p>
       </div>
-      <a
-        href={headline.sourceUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <NewsLink
+        url={headline.sourceUrl}
+        title="閱讀完整報導 →"
         className="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors"
-      >
-        閱讀完整報導 →
-      </a>
+      />
     </article>
   );
 }
