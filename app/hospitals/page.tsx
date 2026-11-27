@@ -23,7 +23,6 @@ declare global {
   }
 }
 
-// 👇 新增：將「台」統一正規化為「臺」
 function normalizeCounty(name: string): string {
   return name.replace(/台/g, "臺");
 }
@@ -36,7 +35,6 @@ export default function HospitalsPage() {
   const [widgetId, setWidgetId] = useState<string | null>(null);
   const [votingId, setVotingId] = useState<string | null>(null);
 
-  // 👇 這裡加入正規化，避免選單出現重複縣市
   const regions = useMemo(() => {
     const set = new Set<string>();
     hospitals.forEach((h) => set.add(normalizeCounty(h.region)));
@@ -73,33 +71,49 @@ export default function HospitalsPage() {
   }, [filtered]);
 
   useEffect(() => {
+    let interval: any;
+    let initialized = false;
+
     const initTurnstile = () => {
-      if (!window.turnstile) return false;
-      const id = window.turnstile.render("#turnstile-container", {
-        sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
-        execution: "execute",
-        appearance: "always",
-        callback: (token: string) => {
-          (window as any).turnstileToken = token;
-        },
-        "error-callback": () => {
-          console.error("Turnstile 驗證失敗");
-        },
-        "expired-callback": () => {
-          (window as any).turnstileToken = null;
-        },
-      });
-      setWidgetId(id);
-      return true;
+      if (initialized) return true;
+      if (typeof window === "undefined" || !window.turnstile) return false;
+
+      const container = document.getElementById("turnstile-container");
+      if (container) container.innerHTML = "";
+
+      try {
+        const id = window.turnstile.render("#turnstile-container", {
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 正式 Key
+          execution: "execute",
+          appearance: "interaction-only", // 改為 interaction-only，避免隱藏時卡死
+          callback: (token: string) => {
+            (window as any).turnstileToken = token;
+          },
+          "error-callback": (err: any) => {
+            console.error("Turnstile 驗證失敗詳細資訊:", err);
+          },
+          "expired-callback": () => {
+            (window as any).turnstileToken = null;
+          },
+        });
+        setWidgetId(id);
+        initialized = true;
+        return true;
+      } catch (e) {
+        console.error("Turnstile 渲染發生錯誤:", e);
+        return false;
+      }
     };
 
     if (initTurnstile()) return;
 
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       if (initTurnstile()) clearInterval(interval);
     }, 500);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   const getFingerprint = () => {
@@ -127,6 +141,8 @@ export default function HospitalsPage() {
     const current = reviews[id] || { good: 0, bad: 0 };
     setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
+    (window as any).turnstileToken = null;
+    window.turnstile.reset(widgetId);
     window.turnstile.execute(widgetId);
 
     const token = await new Promise<string>((resolve, reject) => {
@@ -137,7 +153,7 @@ export default function HospitalsPage() {
           clearInterval(interval);
           resolve(t);
         }
-        if (++attempts > 50) {
+        if (++attempts > 100) {
           clearInterval(interval);
           reject(new Error("驗證超時"));
         }
@@ -311,6 +327,7 @@ export default function HospitalsPage() {
         </div>
       </section>
 
+      {/* 移除隱藏屬性，確保需要驗證時右下角能彈出打勾框 */}
       <div
         id="turnstile-container"
         aria-hidden="true"
@@ -319,10 +336,8 @@ export default function HospitalsPage() {
           bottom: "10px",
           right: "10px",
           width: "300px",
-          height: "65px",
-          opacity: 0,
-          pointerEvents: "none",
-          zIndex: -1,
+          minHeight: "65px",
+          zIndex: 9999,
         }}
       ></div>
 

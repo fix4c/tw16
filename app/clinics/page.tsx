@@ -10,12 +10,6 @@ const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
 /* ============================================================
  * 科別白名單（依健保署 A21030000I-D2100F-001.csv 分類）
- * ------------------------------------------------------------
- * 只保留「診所適用」科別，已排除醫院專屬：
- *   07 神經外科、22 急診醫學科、25 重症醫學科、26 感染科、2A 結核科
- *   81 麻醉科、82 放射線科、83 病理科、84 核子醫學科、85 放射腫瘤科
- *   86 放射診斷科、87 解剖病理科、88 臨床病理科
- * 牙科（40）含 11 個細分科（41~51），統一映射到「牙科」。
  * ============================================================ */
 const DEPT_ORDER = [
   "不分科", "家醫科", "內科", "外科", "兒科", "婦產科", "骨科", "泌尿科",
@@ -24,30 +18,23 @@ const DEPT_ORDER = [
 ];
 const STANDARD_DEPTS = new Set(DEPT_ORDER);
 
-// 醫院專屬科別：命中任一即丟棄（避免「神經外科」誤匹配「神經」）
 const DEPT_EXCLUDE = [
   "神經外科", "急診", "重症", "麻醉", "放射線", "放射診斷", "放射腫瘤",
   "病理", "核子醫學", "結核",
 ];
 
-// 關鍵詞 → 主科（長詞放在前面避免誤匹配）
 const DEPT_KEYWORDS: [string, string][] = [
-  // 中醫
   ["中醫", "中醫一般科"],
-  // 牙科細分（長詞在前，避免「口腔病理科」被「口腔」搶走）
   ["特殊需求者口腔", "牙科"], ["家庭牙醫", "牙科"], ["兒童牙", "牙科"],
   ["牙體復形", "牙科"], ["齒顎矯正", "牙科"], ["贋復補綴", "牙科"],
   ["牙周病", "牙科"], ["牙髓病", "牙科"], ["口腔顎面", "牙科"],
   ["口腔診斷", "牙科"], ["牙醫", "牙科"], ["牙科", "牙科"],
   ["口腔", "牙科"], ["牙", "牙科"],
-  // 外科細分（長詞在前）
   ["心臟血管外科", "外科"], ["胸腔外科", "外科"], ["大腸直腸", "外科"],
   ["消化外科", "外科"], ["一般外科", "外科"],
-  // 內科細分
   ["心臟", "內科"], ["胃腸", "內科"], ["肝膽", "內科"], ["胸腔內", "內科"],
   ["風濕", "內科"], ["免疫", "內科"], ["血液", "內科"], ["內分泌", "內科"],
   ["新陳代謝", "內科"], ["感染", "內科"],
-  // 其他主科
   ["耳鼻喉", "耳鼻喉科"],
   ["婦產", "婦產科"], ["婦科", "婦產科"], ["產科", "婦產科"],
   ["復健", "復健科"],
@@ -70,13 +57,10 @@ const DEPT_KEYWORDS: [string, string][] = [
 function resolveDept(raw: string): string | null {
   const clean = raw.replace(/\s/g, "").replace(/[（）()]/g, "");
   if (!clean) return null;
-  // 先排除醫院專屬科別
   for (const kw of DEPT_EXCLUDE) {
     if (clean.includes(kw)) return null;
   }
-  // 精確命中白名單
   if (STANDARD_DEPTS.has(clean)) return clean;
-  // 關鍵詞映射
   for (const [kw, target] of DEPT_KEYWORDS) {
     if (clean.includes(kw)) return target;
   }
@@ -177,8 +161,11 @@ export default function ClinicsPage() {
   const [selectedCounty, setSelectedCounty] = useState("全部");
   const [selectedDistrict, setSelectedDistrict] = useState("全部");
   const [selectedSpecialty, setSelectedSpecialty] = useState("全部");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
+  const [widgetId, setWidgetId] = useState<string | null>(null);
+  const [votingId, setVotingId] = useState<string | null>(null);
 
-  // ① 首次挂载：从 URL 读取 department 参数
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -186,10 +173,8 @@ export default function ClinicsPage() {
     if (dept) {
       setSelectedSpecialty(dept);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ② 科别变化：同步写回 URL（不触发路由，纯替换地址栏）
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -202,11 +187,6 @@ export default function ClinicsPage() {
     const newUrl = `${window.location.pathname}${qs ? "?" + qs : ""}`;
     window.history.replaceState(null, "", newUrl);
   }, [selectedSpecialty]);
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [reviews, setReviews] = useState<Record<string, { good: number; bad: number }>>({});
-  const [widgetId, setWidgetId] = useState<string | null>(null);
-  const [votingId, setVotingId] = useState<string | null>(null);
 
   const counties = useMemo(() => {
     const set = new Set<string>();
@@ -258,35 +238,50 @@ export default function ClinicsPage() {
     });
   }, [filtered]);
 
-  // 👇 Turnstile 初始化：與 hospitals/page.tsx 完全一致
   useEffect(() => {
+    let interval: any;
+    let initialized = false;
+
     const initTurnstile = () => {
-      if (!window.turnstile) return false;
-      const id = window.turnstile.render("#turnstile-container", {
-        sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
-        execution: "execute",
-        appearance: "always",
-        callback: (token: string) => {
-          (window as any).turnstileToken = token;
-        },
-        "error-callback": () => {
-          console.error("Turnstile 驗證失敗");
-        },
-        "expired-callback": () => {
-          (window as any).turnstileToken = null;
-        },
-      });
-      setWidgetId(id);
-      return true;
+      if (initialized) return true;
+      if (typeof window === "undefined" || !window.turnstile) return false;
+
+      const container = document.getElementById("turnstile-container");
+      if (container) container.innerHTML = "";
+
+      try {
+        const id = window.turnstile.render("#turnstile-container", {
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 正式 Key
+          execution: "execute",
+          appearance: "interaction-only", // 改為 interaction-only
+          callback: (token: string) => {
+            (window as any).turnstileToken = token;
+          },
+          "error-callback": (err: any) => {
+            console.error("Turnstile 驗證失敗詳細資訊:", err);
+          },
+          "expired-callback": () => {
+            (window as any).turnstileToken = null;
+          },
+        });
+        setWidgetId(id);
+        initialized = true;
+        return true;
+      } catch (e) {
+        console.error("Turnstile 渲染發生錯誤:", e);
+        return false;
+      }
     };
 
     if (initTurnstile()) return;
 
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       if (initTurnstile()) clearInterval(interval);
     }, 500);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   const getFingerprint = () => {
@@ -314,6 +309,8 @@ export default function ClinicsPage() {
     const current = reviews[id] || { good: 0, bad: 0 };
     setReviews((prev) => ({ ...prev, [id]: { ...current, [type]: current[type] + 1 } }));
 
+    (window as any).turnstileToken = null;
+    window.turnstile.reset(widgetId);
     window.turnstile.execute(widgetId);
 
     const token = await new Promise<string>((resolve, reject) => {
@@ -324,7 +321,7 @@ export default function ClinicsPage() {
           clearInterval(interval);
           resolve(t);
         }
-        if (++attempts > 50) {
+        if (++attempts > 100) {
           clearInterval(interval);
           reject(new Error("驗證超時"));
         }
@@ -461,7 +458,9 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      <div id="turnstile-container" aria-hidden="true" style={{ position: "fixed", bottom: "10px", right: "10px", width: "300px", height: "65px", opacity: 0, pointerEvents: "none", zIndex: -1 }} />
+      {/* 移除隱藏屬性，確保需要驗證時右下角能彈出打勾框 */}
+      <div id="turnstile-container" aria-hidden="true" style={{ position: "fixed", bottom: "10px", right: "10px", width: "300px", minHeight: "65px", zIndex: 9999 }} />
+      
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">
         <div className="max-w-5xl mx-auto px-6 py-6 text-xs text-slate-500">
           <p>資料來源：衛生福利部中央健康保險署開放資料平台 · 每日更新</p>
