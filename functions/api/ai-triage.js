@@ -147,6 +147,6 @@ export async function onRequestPost(context) {
     });
   } catch (e) {
     console.error("ai-triage error:", e);
-    return jsonResponse({ error: "AI 分析失敗" }, 500);
+    return jsonResponse({ error: "AI 分析失敗 - 重整頁面 - 6字以上、60字內" }, 500);
   }
 }
