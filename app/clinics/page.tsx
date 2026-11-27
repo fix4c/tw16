@@ -8,9 +8,6 @@ import { Header } from "../components/Header";
 type Clinic = { name: string; type: string; address: string; phone: string; specialty: string; };
 const clinics = (rawData as { clinics: Clinic[] }).clinics;
 
-/* ============================================================
- * 科別白名單（依健保署 A21030000I-D2100F-001.csv 分類）
- * ============================================================ */
 const DEPT_ORDER = [
   "不分科", "家醫科", "內科", "外科", "兒科", "婦產科", "骨科", "泌尿科",
   "耳鼻喉科", "眼科", "皮膚科", "神經科", "精神科", "復健科",
@@ -89,9 +86,6 @@ function extractDepartments(clinic: Clinic): string[] {
   return Array.from(result);
 }
 
-/* ============================================================
- * 縣市 / 行政區
- * ============================================================ */
 const COUNTY_ORDER = [
   "基隆市","臺北市","新北市","桃園市","新竹市","新竹縣","苗栗縣",
   "臺中市","彰化縣","南投縣","雲林縣","嘉義市","嘉義縣","臺南市",
@@ -152,9 +146,6 @@ function getDistrictFromAddress(address: string, county: string): string {
   return "其他";
 }
 
-/* ============================================================
- * 主元件
- * ============================================================ */
 declare global { interface Window { turnstile: any; } }
 
 export default function ClinicsPage() {
@@ -251,9 +242,9 @@ export default function ClinicsPage() {
 
       try {
         const id = window.turnstile.render("#turnstile-container", {
-          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 正式 Key
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
           execution: "execute",
-          appearance: "interaction-only", // 改為 interaction-only
+          appearance: "interaction-only",
           callback: (token: string) => {
             (window as any).turnstileToken = token;
           },
@@ -458,7 +449,6 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      {/* 移除隱藏屬性，確保需要驗證時右下角能彈出打勾框 */}
       <div id="turnstile-container" aria-hidden="true" style={{ position: "fixed", bottom: "10px", right: "10px", width: "300px", minHeight: "65px", zIndex: 9999 }} />
       
       <footer className="border-t border-slate-200 bg-slate-50 mt-auto">

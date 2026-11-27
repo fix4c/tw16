@@ -1,16 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-// ===== SEO / Metadata =====
 export const metadata: Metadata = {
   metadataBase: new URL("https://tw16.net"),
   icons: {
-    icon: [
-      { url: "/icon.png", type: "image/png" },
-    ],
-    apple: [
-      { url: "/icon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
     shortcut: ["/icon.png"],
   },
   title: {
@@ -43,8 +38,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
     },
   },
-  // 谷歌 Search Console 驗證碼可放在這裡
-  // verification: { google: "xxxxxx" },
 };
 
 export const viewport: Viewport = {
@@ -60,21 +53,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-TW">
-      <head>
-        {/* =============================================
-            AdSense 驗證碼
-            ⚠️ 必須用原生 <script> 標籤，不能用 next/script
-            ⚠️ client 驗證用 /ads.txt 的 pub-id 要一致
-            ============================================= */}
+      <body className="antialiased bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+        {children}
+
+        {/* AdSense */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8501375619420785"
           crossOrigin="anonymous"
         />
 
-        {/* =============================================
-            Google Translate（多語言用）
-            ============================================= */}
+        {/* Google Translate */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -97,19 +86,12 @@ export default function RootLayout({
           defer
         />
 
-        {/* =============================================
-            Cloudflare Turnstile
-            ⚠️ 只在需要的頁面（如投票）載入
-            建議移到需要的頁面，不要放在 root layout
-            ============================================= */}
+        {/* Cloudflare Turnstile */}
         <script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
           async
           defer
         />
-      </head>
-      <body className="antialiased bg-slate-50 text-slate-900 min-h-screen flex flex-col">
-        {children}
       </body>
     </html>
   );

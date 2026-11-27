@@ -83,9 +83,9 @@ export default function HospitalsPage() {
 
       try {
         const id = window.turnstile.render("#turnstile-container", {
-          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4", // 正式 Key
+          sitekey: "0x4AAAAAAGCQOLZJ-kNPvci4",
           execution: "execute",
-          appearance: "interaction-only", // 改為 interaction-only，避免隱藏時卡死
+          appearance: "interaction-only",
           callback: (token: string) => {
             (window as any).turnstileToken = token;
           },
@@ -327,7 +327,6 @@ export default function HospitalsPage() {
         </div>
       </section>
 
-      {/* 移除隱藏屬性，確保需要驗證時右下角能彈出打勾框 */}
       <div
         id="turnstile-container"
         aria-hidden="true"

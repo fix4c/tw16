@@ -1,0 +1,1391 @@
+{
+  "categories": [
+    {
+      "id": "hematology",
+      "name": "血液與貧血",
+      "icon": "🩸",
+      "symptoms": [
+        {
+          "id": "anemia",
+          "name": "貧血症狀（蒼白、頭暈、疲勞）",
+          "question": "貧血症狀的狀況是？",
+          "options": [
+            {
+              "label": "已知貧血，最近頭暈加劇或活動會喘",
+              "type": "normal",
+              "advice": "需評估貧血是否惡化，血液腫瘤科可安排抽血。",
+              "departments": ["血液腫瘤科", "家醫科"]
+            },
+            {
+              "label": "不明原因貧血，合併體重減輕或發燒",
+              "type": "normal",
+              "advice": "需排除慢性感染或腫瘤，血液腫瘤科可評估。",
+              "departments": ["血液腫瘤科"]
+            }
+          ]
+        },
+        {
+          "id": "bruising",
+          "name": "容易瘀青",
+          "question": "瘀青的狀況是？",
+          "options": [
+            {
+              "label": "無故大片瘀青，合併牙齦或鼻腔反覆出血",
+              "type": "normal",
+              "advice": "需評估凝血功能或血小板問題，血液腫瘤科可安排檢查。",
+              "departments": ["血液腫瘤科"]
+            },
+            {
+              "label": "服用抗凝血劑，出現血便、血尿或劇烈頭痛",
+              "type": "emergency",
+              "advice": "可能為抗凝血劑相關出血，請立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "bleeding",
+          "name": "異常出血",
+          "question": "出血的狀況是？",
+          "options": [
+            {
+              "label": "牙齦或鼻腔反覆出血，不易止住",
+              "type": "normal",
+              "advice": "需評估凝血功能，血液腫瘤科可安排抽血。",
+              "departments": ["血液腫瘤科", "牙科"]
+            },
+            {
+              "label": "大量出血或出血不止，合併頭暈或意識變化",
+              "type": "emergency",
+              "advice": "請立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "lymphoma_sign",
+          "name": "淋巴結腫大合併全身症狀",
+          "question": "淋巴結與全身症狀的狀況是？",
+          "options": [
+            {
+              "label": "淋巴結腫大合併夜間盜汗、體重減輕、發燒",
+              "type": "normal",
+              "advice": "需排除淋巴瘤或感染，血液腫瘤科可安排切片。",
+              "departments": ["血液腫瘤科"]
+            },
+            {
+              "label": "淋巴結腫大但無其他症狀，可滑動",
+              "type": "normal",
+              "advice": "可先觀察兩週，未縮小再至耳鼻喉科或家醫科。",
+              "departments": ["家醫科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "fatigue_blood",
+          "name": "疲勞合併貧血相關檢查異常",
+          "question": "疲勞的狀況是？",
+          "options": [
+            {
+              "label": "疲勞合併抽血發現血球異常",
+              "type": "normal",
+              "advice": "血液腫瘤科可評估血球異常原因。",
+              "departments": ["血液腫瘤科"]
+            },
+            {
+              "label": "疲勞但抽血正常，與壓力或睡眠有關",
+              "type": "normal",
+              "advice": "家醫科可做整體評估，排除慢性疲勞症候群。",
+              "departments": ["家醫科", "精神科"]
+            }
+          ]
+        },
+        {
+          "id": "transfusion",
+          "name": "輸血相關問題",
+          "question": "輸血相關的狀況是？",
+          "options": [
+            {
+              "label": "輸血後發燒、發冷、皮疹或呼吸困難",
+              "type": "emergency",
+              "advice": "可能為輸血反應，請立即告知醫護或急診。",
+              "departments": ["急診", "血液腫瘤科"]
+            },
+            {
+              "label": "長期輸血，想了解相關風險與照護",
+              "type": "normal",
+              "advice": "血液腫瘤科可說明輸血相關鐵質沉積與照護。",
+              "departments": ["血液腫瘤科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "infection",
+      "name": "發燒與感染",
+      "icon": "🌡️",
+      "symptoms": [
+        {
+          "id": "fever",
+          "name": "發燒",
+          "question": "發燒的狀況是？",
+          "options": [
+            {
+              "label": "高燒合併意識變化、抽搐、呼吸困難或紫斑",
+              "type": "emergency",
+              "advice": "需排除敗血症或腦膜炎，請立即急診。",
+              "departments": ["急診", "感染科"]
+            },
+            {
+              "label": "發燒超過三天，合併咳嗽、腹痛或排尿症狀",
+              "type": "normal",
+              "advice": "需尋找感染源，家醫科或感染科可評估。",
+              "departments": ["家醫科", "感染科"]
+            },
+            {
+              "label": "近期旅遊史，返國後發燒",
+              "type": "normal",
+              "advice": "需排除瘧疾、登革熱等旅遊相關感染，感染科可評估。",
+              "departments": ["感染科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "chills",
+          "name": "畏寒",
+          "question": "畏寒的狀況是？",
+          "options": [
+            {
+              "label": "畏寒合併高燒、意識變化或血壓偏低",
+              "type": "emergency",
+              "advice": "需排除敗血症，請立即急診。",
+              "departments": ["急診", "感染科"]
+            },
+            {
+              "label": "畏寒合併發燒，伴隨咳嗽或排尿症狀",
+              "type": "normal",
+              "advice": "需尋找感染源，家醫科或感染科可評估。",
+              "departments": ["家醫科", "感染科"]
+            }
+          ]
+        },
+        {
+          "id": "night_sweat",
+          "name": "夜間盜汗",
+          "question": "夜間盜汗的狀況是？",
+          "options": [
+            {
+              "label": "夜間盜汗合併體重減輕、發燒或淋巴結腫大",
+              "type": "normal",
+              "advice": "需排除結核或淋巴瘤，感染科或血液腫瘤科可評估。",
+              "departments": ["感染科", "血液腫瘤科"]
+            },
+            {
+              "label": "夜間盜汗與更年期或壓力有關",
+              "type": "normal",
+              "advice": "婦產科或家醫科可評估，必要時轉內分泌科。",
+              "departments": ["婦產科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "travel_infection",
+          "name": "旅遊後發燒或腹瀉",
+          "question": "旅遊後症狀的狀況是？",
+          "options": [
+            {
+              "label": "返國後發燒、皮疹或腹瀉，曾至熱帶地區",
+              "type": "normal",
+              "advice": "需排除瘧疾、登革熱或傷寒，感染科可評估。",
+              "departments": ["感染科", "急診"]
+            },
+            {
+              "label": "返國後輕微腹瀉，無發燒或血便",
+              "type": "normal",
+              "advice": "旅遊者腹瀉常見，家醫科可評估並補充水分。",
+              "departments": ["家醫科", "胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "needle_stick",
+          "name": "針扎或體液暴露",
+          "question": "暴露的狀況是？",
+          "options": [
+            {
+              "label": "針扎或黏膜接觸他人血液，需評估愛滋、B 肝、C 肝",
+              "type": "emergency",
+              "advice": "請立即至急診或感染科，評估是否需要預防性投藥。",
+              "departments": ["急診", "感染科"]
+            },
+            {
+              "label": "已完成初步清消，想追蹤後續檢查",
+              "type": "normal",
+              "advice": "感染科可安排追蹤抽血。",
+              "departments": ["感染科"]
+            }
+          ]
+        },
+        {
+          "id": "immunocompromised",
+          "name": "免疫低下合併發燒",
+          "question": "免疫低下與發燒的狀況是？",
+          "options": [
+            {
+              "label": "化療、器官移植或長期使用類固醇，合併發燒",
+              "type": "emergency",
+              "advice": "免疫低下者發燒可能迅速惡化，請立即急診。",
+              "departments": ["急診", "感染科"]
+            },
+            {
+              "label": "免疫低下，但無發燒，想了解預防方式",
+              "type": "normal",
+              "advice": "感染科可說明疫苗與預防策略。",
+              "departments": ["感染科"]
+            }
+          ]
+        },
+        {
+          "id": "vaccine",
+          "name": "疫苗接種相關",
+          "question": "疫苗相關的狀況是？",
+          "options": [
+            {
+              "label": "接種後嚴重過敏反應（呼吸困難、全身皮疹）",
+              "type": "emergency",
+              "advice": "請立即急診或撥打 119。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "接種後輕微發燒或注射部位紅腫",
+              "type": "normal",
+              "advice": "多為正常反應，數天內緩解；若持續惡化請就醫。",
+              "departments": ["家醫科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rheumatology",
+      "name": "風濕免疫",
+      "icon": "🛡️",
+      "symptoms": [
+        {
+          "id": "lupus",
+          "name": "多系統症狀（關節痛＋皮疹＋發燒）",
+          "question": "是否有多系統受影響？",
+          "options": [
+            {
+              "label": "關節痛合併皮疹、口腔潰瘍、掉髮或光敏感",
+              "type": "normal",
+              "advice": "需評估系統性紅斑狼瘡等自體免疫疾病，風濕免疫科可安排抽血。",
+              "departments": ["風濕免疫科"]
+            },
+            {
+              "label": "多系統症狀合併高燒、意識變化或呼吸困難",
+              "type": "emergency",
+              "advice": "需排除嚴重自體免疫急症，請立即急診。",
+              "departments": ["急診", "風濕免疫科"]
+            }
+          ]
+        },
+        {
+          "id": "sjogren",
+          "name": "口乾／眼乾",
+          "question": "乾燥症狀的狀況是？",
+          "options": [
+            {
+              "label": "長期口乾、眼乾，合併關節痛或腮腺腫大",
+              "type": "normal",
+              "advice": "可能為乾燥症，風濕免疫科可評估。",
+              "departments": ["風濕免疫科"]
+            },
+            {
+              "label": "口乾眼乾，合併體重減輕或夜間盜汗",
+              "type": "normal",
+              "advice": "需排除其他全身性疾病，風濕免疫科可評估。",
+              "departments": ["風濕免疫科"]
+            }
+          ]
+        },
+        {
+          "id": "ra",
+          "name": "類風濕性關節炎",
+          "question": "關節症狀的狀況是？",
+          "options": [
+            {
+              "label": "對稱性多關節腫痛，晨間僵硬超過一小時",
+              "type": "normal",
+              "advice": "需評估類風濕性關節炎，風濕免疫科可安排抽血與影像。",
+              "departments": ["風濕免疫科"]
+            },
+            {
+              "label": "關節腫痛合併發燒、皮疹",
+              "type": "normal",
+              "advice": "需評估其他風濕免疫疾病，風濕免疫科可評估。",
+              "departments": ["風濕免疫科"]
+            }
+          ]
+        },
+        {
+          "id": "gout",
+          "name": "痛風",
+          "question": "痛風的狀況是？",
+          "options": [
+            {
+              "label": "單一大關節紅腫熱痛，突然發作",
+              "type": "normal",
+              "advice": "需排除痛風或感染性關節炎，風濕免疫科或急診可評估。",
+              "departments": ["風濕免疫科", "急診"]
+            },
+            {
+              "label": "反覆關節痛，過去曾診斷痛風",
+              "type": "normal",
+              "advice": "風濕免疫科可評估尿酸控制與預防治療。",
+              "departments": ["風濕免疫科"]
+            }
+          ]
+        },
+        {
+          "id": "vasculitis",
+          "name": "血管炎症狀（紫斑、腎功能異常）",
+          "question": "血管炎的狀況是？",
+          "options": [
+            {
+              "label": "皮膚紫斑合併血尿、腎功能異常或呼吸困難",
+              "type": "emergency",
+              "advice": "需排除血管炎急症，請立即急診。",
+              "departments": ["急診", "風濕免疫科"]
+            },
+            {
+              "label": "反覆紫斑，無其他器官症狀",
+              "type": "normal",
+              "advice": "風濕免疫科可評估，必要時安排皮膚切片。",
+              "departments": ["風濕免疫科", "皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "allergy_autoimmune",
+          "name": "反覆過敏／免疫異常",
+          "question": "過敏或免疫異常的狀況是？",
+          "options": [
+            {
+              "label": "反覆嚴重過敏反應，需評估免疫異常",
+              "type": "normal",
+              "advice": "風濕免疫科可安排免疫球蛋白與過敏原檢查。",
+              "departments": ["風濕免疫科"]
+            },
+            {
+              "label": "反覆感染，懷疑免疫功能低下",
+              "type": "normal",
+              "advice": "風濕免疫科或感染科可評估免疫功能。",
+              "departments": ["風濕免疫科", "感染科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "male",
+      "name": "男性健康",
+      "icon": "♂️",
+      "symptoms": [
+        {
+          "id": "prostate",
+          "name": "攝護腺相關",
+          "question": "攝護腺相關的狀況是？",
+          "options": [
+            {
+              "label": "解尿困難、尿流細、夜尿頻繁",
+              "type": "normal",
+              "advice": "可能與攝護腺肥大有關，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "完全解不出尿，合併下腹脹痛",
+              "type": "emergency",
+              "advice": "需立即急診導尿。",
+              "departments": ["急診", "泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "testicular",
+          "name": "睪丸疼痛／腫脹",
+          "question": "睪丸的狀況是？",
+          "options": [
+            {
+              "label": "陰囊腫痛，突然發生",
+              "type": "emergency",
+              "advice": "需排除睪丸扭轉，請立即急診或泌尿科。",
+              "departments": ["急診", "泌尿科"]
+            },
+            {
+              "label": "睪丸腫脹合併發燒或排尿疼痛",
+              "type": "normal",
+              "advice": "需排除副睪炎，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "erectile",
+          "name": "性功能相關",
+          "question": "性功能的狀況是？",
+          "options": [
+            {
+              "label": "勃起功能障礙，合併心血管風險因子",
+              "type": "normal",
+              "advice": "需評估心血管與荷爾蒙，泌尿科或心臟內科可評估。",
+              "departments": ["泌尿科", "心臟內科"]
+            },
+            {
+              "label": "性慾下降、疲倦，合併肌肉量減少",
+              "type": "normal",
+              "advice": "需評估睪固酮，泌尿科或內分泌科可抽血。",
+              "departments": ["泌尿科", "內分泌暨新陳代謝科"]
+            }
+          ]
+        },
+        {
+          "id": "male_infertility",
+          "name": "男性不孕",
+          "question": "不孕相關的狀況是？",
+          "options": [
+            {
+              "label": "嘗試懷孕一年未成功，想評估男性因素",
+              "type": "normal",
+              "advice": "泌尿科可安排精液分析與荷爾蒙檢查。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "曾有睪丸外傷或感染，擔心影響生育",
+              "type": "normal",
+              "advice": "泌尿科可評估並安排精液分析。",
+              "departments": ["泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "male_hormone",
+          "name": "男性荷爾蒙相關",
+          "question": "男性荷爾蒙的狀況是？",
+          "options": [
+            {
+              "label": "男性乳房增大",
+              "type": "normal",
+              "advice": "需評估荷爾蒙或藥物影響，內分泌科可評估。",
+              "departments": ["內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "性慾下降、疲倦、肌肉量減少",
+              "type": "normal",
+              "advice": "需評估睪固酮，泌尿科或內分泌科可抽血。",
+              "departments": ["泌尿科", "內分泌暨新陳代謝科"]
+            }
+          ]
+        },
+        {
+          "id": "male_urinary",
+          "name": "男性泌尿道感染",
+          "question": "泌尿道感染的狀況是？",
+          "options": [
+            {
+              "label": "排尿疼痛合併發燒或腰痛",
+              "type": "normal",
+              "advice": "需排除腎盂腎炎，泌尿科或感染科可評估。",
+              "departments": ["泌尿科", "感染科"]
+            },
+            {
+              "label": "排尿疼痛但無發燒",
+              "type": "normal",
+              "advice": "泌尿科或家醫科可驗尿。",
+              "departments": ["泌尿科", "家醫科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "geriatric",
+      "name": "老年與多重用藥",
+      "icon": "👵",
+      "symptoms": [
+        {
+          "id": "fall",
+          "name": "跌倒",
+          "question": "跌倒的狀況是？",
+          "options": [
+            {
+              "label": "近期反覆跌倒，合併頭暈或步態不穩",
+              "type": "normal",
+              "advice": "需評估跌倒原因（藥物、視力、神經、心臟），老年醫學科或家醫科可整合評估。",
+              "departments": ["老年醫學科", "家醫科"]
+            },
+            {
+              "label": "跌倒後意識喪失、劇烈頭痛或無法移動",
+              "type": "emergency",
+              "advice": "請立即撥打 119，勿自行移動傷者。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "polypharmacy",
+          "name": "多重用藥",
+          "question": "用藥的狀況是？",
+          "options": [
+            {
+              "label": "服用多種藥物，出現新的不適或意識變化",
+              "type": "normal",
+              "advice": "可能為藥物交互作用或副作用，老年醫學科或家醫科可做用藥整合。",
+              "departments": ["老年醫學科", "家醫科"]
+            },
+            {
+              "label": "服用多種藥物，想定期檢視是否需要調整",
+              "type": "normal",
+              "advice": "老年醫學科可做完整用藥檢視。",
+              "departments": ["老年醫學科"]
+            }
+          ]
+        },
+        {
+          "id": "frailty",
+          "name": "衰弱",
+          "question": "衰弱的狀況是？",
+          "options": [
+            {
+              "label": "近期體重減輕、活動力下降、容易疲倦",
+              "type": "normal",
+              "advice": "需評估衰弱症，老年醫學科可安排整合評估。",
+              "departments": ["老年醫學科", "家醫科"]
+            },
+            {
+              "label": "衰弱合併吞嚥困難或反覆感染",
+              "type": "normal",
+              "advice": "老年醫學科可評估營養與吞嚥，必要時轉介。",
+              "departments": ["老年醫學科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "delirium",
+          "name": "急性意識混亂",
+          "question": "意識變化的狀況是？",
+          "options": [
+            {
+              "label": "突然意識混亂、看到不存在的事物或躁動",
+              "type": "emergency",
+              "advice": "需排除急性譫妄、感染或中風，請立即急診。",
+              "departments": ["急診", "老年醫學科"]
+            },
+            {
+              "label": "住院後出現意識混亂，時好時壞",
+              "type": "normal",
+              "advice": "需評估譫妄，請告知醫護團隊。",
+              "departments": ["老年醫學科", "急診"]
+            }
+          ]
+        },
+        {
+          "id": "incontinence_elderly",
+          "name": "尿失禁（長者）",
+          "question": "尿失禁的狀況是？",
+          "options": [
+            {
+              "label": "長者突然出現尿失禁，合併意識變化或發燒",
+              "type": "emergency",
+              "advice": "需排除感染或神經急症，請盡速就醫。",
+              "departments": ["急診", "老年醫學科"]
+            },
+            {
+              "label": "長期尿失禁，逐漸加重",
+              "type": "normal",
+              "advice": "泌尿科或婦產科可評估，老年醫學科可整合照護。",
+              "departments": ["泌尿科", "老年醫學科"]
+            }
+          ]
+        },
+        {
+          "id": "nutrition_elderly",
+          "name": "營養不良",
+          "question": "營養的狀況是？",
+          "options": [
+            {
+              "label": "體重減輕、食慾差，合併吞嚥困難",
+              "type": "normal",
+              "advice": "老年醫學科或耳鼻喉科可評估吞嚥與營養。",
+              "departments": ["老年醫學科", "耳鼻喉科"]
+            },
+            {
+              "label": "食慾差，與情緒或孤獨有關",
+              "type": "normal",
+              "advice": "家醫科或精神科可評估，必要時轉介長照。",
+              "departments": ["家醫科", "精神科"]
+            }
+          ]
+        },
+        {
+          "id": "long_term_care",
+          "name": "長照需求評估",
+          "question": "長照相關的狀況是？",
+          "options": [
+            {
+              "label": "想了解長照資源與申請方式",
+              "type": "normal",
+              "advice": "可撥打 1966 長照專線，或至各地長照管理中心。",
+              "departments": ["長照管理中心", "家醫科"]
+            },
+            {
+              "label": "已使用長照服務，想調整服務內容",
+              "type": "normal",
+              "advice": "請聯繫原服務單位或長照管理中心。",
+              "departments": ["長照管理中心"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oncology",
+      "name": "癌症相關症狀",
+      "icon": "🎗️",
+      "symptoms": [
+        {
+          "id": "weight_loss_cancer",
+          "name": "不明原因體重減輕",
+          "question": "體重減輕的狀況是？",
+          "options": [
+            {
+              "label": "半年內體重減輕超過 10%，合併食慾下降或疲勞",
+              "type": "normal",
+              "advice": "需排除惡性腫瘤或慢性感染，血液腫瘤科或家醫科可安排檢查。",
+              "departments": ["血液腫瘤科", "家醫科"]
+            },
+            {
+              "label": "體重減輕但近期有刻意減重或飲食調整",
+              "type": "normal",
+              "advice": "可先觀察，若持續下降再至家醫科評估。",
+              "departments": ["家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "lump",
+          "name": "不明腫塊",
+          "question": "腫塊的狀況是？",
+          "options": [
+            {
+              "label": "身體出現逐漸變大的腫塊，固定不動",
+              "type": "normal",
+              "advice": "需評估腫塊性質，一般外科或相關專科可安排影像與切片。",
+              "departments": ["一般外科", "血液腫瘤科"]
+            },
+            {
+              "label": "淋巴結腫大超過兩週未縮小",
+              "type": "normal",
+              "advice": "需評估淋巴瘤或轉移，血液腫瘤科或耳鼻喉科可安排檢查。",
+              "departments": ["血液腫瘤科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "cancer_pain",
+          "name": "癌症相關疼痛",
+          "question": "疼痛的狀況是？",
+          "options": [
+            {
+              "label": "已知癌症，疼痛加劇或出現新疼痛",
+              "type": "normal",
+              "advice": "需評估疼痛原因與控制，腫瘤科或疼痛科可協助。",
+              "departments": ["血液腫瘤科", "疼痛科"]
+            },
+            {
+              "label": "突發劇痛，合併意識變化或呼吸困難",
+              "type": "emergency",
+              "advice": "請立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "chemo_side",
+          "name": "化療副作用",
+          "question": "化療副作用的狀況是？",
+          "options": [
+            {
+              "label": "化療後發燒、嚴重嘔吐或腹瀉",
+              "type": "emergency",
+              "advice": "可能為化療後感染或嚴重副作用，請立即急診或聯繫原主治醫師。",
+              "departments": ["急診", "血液腫瘤科"]
+            },
+            {
+              "label": "輕微噁心、疲倦，可在家休息",
+              "type": "normal",
+              "advice": "可聯繫原主治醫師調整治療，或至血液腫瘤科門診。",
+              "departments": ["血液腫瘤科"]
+            }
+          ]
+        },
+        {
+          "id": "screen_cancer",
+          "name": "癌症篩檢諮詢",
+          "question": "篩檢相關的狀況是？",
+          "options": [
+            {
+              "label": "想了解適合的癌症篩檢項目",
+              "type": "normal",
+              "advice": "家醫科或相關專科可依年齡與風險因子建議篩檢。",
+              "departments": ["家醫科"]
+            },
+            {
+              "label": "篩檢結果異常，需進一步檢查",
+              "type": "normal",
+              "advice": "請依原篩檢單位建議，至相關專科安排確診檢查。",
+              "departments": ["血液腫瘤科", "胃腸肝膽科", "胸腔內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "poisoning_injury",
+      "name": "中毒與外傷",
+      "icon": "⚠️",
+      "symptoms": [
+        {
+          "id": "poisoning",
+          "name": "誤食／接觸毒物",
+          "question": "中毒的狀況是？",
+          "options": [
+            {
+              "label": "誤食藥物、清潔劑或不明物質，出現嘔吐、意識變化",
+              "type": "emergency",
+              "advice": "請立即急診，並攜帶可疑物質或包裝供醫師參考。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "吸入煙霧、瓦斯或化學氣體，合併頭暈、咳嗽",
+              "type": "emergency",
+              "advice": "立即移至通風處並急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "wound",
+          "name": "外傷／傷口",
+          "question": "傷口的狀況是？",
+          "options": [
+            {
+              "label": "傷口深、出血不止、合併異物或動物咬傷",
+              "type": "emergency",
+              "advice": "需急診清創、止血與破傷風評估。",
+              "departments": ["急診", "一般外科"]
+            },
+            {
+              "label": "表淺擦傷或切割傷，可自行止血",
+              "type": "normal",
+              "advice": "可先清潔包紮，若紅腫熱痛加劇再至一般外科或家醫科。",
+              "departments": ["一般外科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "burn",
+          "name": "燒燙傷",
+          "question": "燒燙傷的狀況是？",
+          "options": [
+            {
+              "label": "大面積、深度燒燙傷，或合併吸入性傷害",
+              "type": "emergency",
+              "advice": "請立即撥打 119。",
+              "departments": ["急診", "整形外科"]
+            },
+            {
+              "label": "小面積表淺燒燙傷，無水泡或少量水泡",
+              "type": "normal",
+              "advice": "可先沖水降溫、清潔包紮，必要時至一般外科或整形外科。",
+              "departments": ["一般外科", "整形外科"]
+            }
+          ]
+        },
+        {
+          "id": "head_injury_trauma",
+          "name": "頭部外傷",
+          "question": "頭部外傷的狀況是？",
+          "options": [
+            {
+              "label": "撞擊後意識喪失、嘔吐、劇烈頭痛或瞳孔不等大",
+              "type": "emergency",
+              "advice": "需立即急診評估是否有顱內出血。",
+              "departments": ["急診", "神經外科"]
+            },
+            {
+              "label": "撞擊後輕微頭痛，無意識喪失，活動正常",
+              "type": "normal",
+              "advice": "可先觀察 24 小時，若出現嘔吐、嗜睡或頭痛加劇請立即就醫。",
+              "departments": ["急診", "神經外科"]
+            }
+          ]
+        },
+        {
+          "id": "drowning",
+          "name": "溺水",
+          "question": "溺水的狀況是？",
+          "options": [
+            {
+              "label": "溺水後意識不清或呼吸困難",
+              "type": "emergency",
+              "advice": "請立即撥打 119，持續 CPR。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "溺水後意識清楚，但咳嗽或不適",
+              "type": "normal",
+              "advice": "仍應至急診評估是否有吸入性肺炎。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "electric_shock",
+          "name": "電擊",
+          "question": "電擊的狀況是？",
+          "options": [
+            {
+              "label": "電擊後意識喪失、燒傷或心律不整",
+              "type": "emergency",
+              "advice": "請立即撥打 119，先斷電再接近傷者。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "電擊後意識清楚，僅局部麻或輕微燒傷",
+              "type": "normal",
+              "advice": "仍應至急診評估心律與深層組織損傷。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "fracture_trauma",
+          "name": "疑似骨折",
+          "question": "外傷的狀況是？",
+          "options": [
+            {
+              "label": "明顯變形、開放性傷口或無法移動",
+              "type": "emergency",
+              "advice": "請立即撥打 119，勿自行移動傷肢。",
+              "departments": ["急診", "骨科"]
+            },
+            {
+              "label": "懷疑骨折，輕微腫脹但可移動",
+              "type": "normal",
+              "advice": "需 X 光確認，骨科可評估。",
+              "departments": ["骨科", "急診"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "post_op",
+      "name": "術後與傷口照護",
+      "icon": "🩹",
+      "symptoms": [
+        {
+          "id": "post_op_fever",
+          "name": "術後發燒",
+          "question": "術後發燒的狀況是？",
+          "options": [
+            {
+              "label": "術後合併高燒、傷口化膿、劇烈疼痛或呼吸困難",
+              "type": "emergency",
+              "advice": "需排除術後感染或肺栓塞，請立即聯繫原手術醫院或急診。",
+              "departments": ["急診", "原手術科別"]
+            },
+            {
+              "label": "術後輕微發燒，無其他症狀",
+              "type": "normal",
+              "advice": "可聯繫原手術科門診評估。",
+              "departments": ["原手術科別"]
+            }
+          ]
+        },
+        {
+          "id": "wound_infection",
+          "name": "傷口紅腫",
+          "question": "傷口的狀況是？",
+          "options": [
+            {
+              "label": "傷口輕微紅腫，無發燒，滲液不多",
+              "type": "normal",
+              "advice": "可先回原手術科門診評估，一般外科亦可處理。",
+              "departments": ["一般外科", "原手術科別"]
+            },
+            {
+              "label": "傷口紅腫擴大、化膿或合併發燒",
+              "type": "emergency",
+              "advice": "需排除傷口感染，請立即就醫。",
+              "departments": ["急診", "原手術科別"]
+            }
+          ]
+        },
+        {
+          "id": "post_op_pain",
+          "name": "術後疼痛",
+          "question": "術後疼痛的狀況是？",
+          "options": [
+            {
+              "label": "疼痛加劇、止痛藥無效或合併呼吸困難",
+              "type": "emergency",
+              "advice": "需排除出血或肺栓塞，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "術後輕微疼痛，可忍受",
+              "type": "normal",
+              "advice": "可依醫囑使用止痛藥，回診時與醫師討論。",
+              "departments": ["原手術科別"]
+            }
+          ]
+        },
+        {
+          "id": "drain_tube",
+          "name": "引流管照護",
+          "question": "引流管的狀況是？",
+          "options": [
+            {
+              "label": "引流液突然增加、顏色改變或引流量減少",
+              "type": "normal",
+              "advice": "請聯繫原手術科門診或護理師。",
+              "departments": ["原手術科別"]
+            },
+            {
+              "label": "引流管滑脫或傷口滲血不止",
+              "type": "emergency",
+              "advice": "請立即就醫。",
+              "departments": ["急診", "原手術科別"]
+            }
+          ]
+        },
+        {
+          "id": "post_op_dvt",
+          "name": "術後下肢腫脹",
+          "question": "下肢腫脹的狀況是？",
+          "options": [
+            {
+              "label": "單側下肢腫脹、疼痛、發熱",
+              "type": "emergency",
+              "advice": "需排除深層靜脈血栓，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "雙側輕微腫脹，無明顯疼痛",
+              "type": "normal",
+              "advice": "可抬高下肢、適度活動，回診時與醫師討論。",
+              "departments": ["原手術科別"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systemic",
+      "name": "其他全身性症狀",
+      "icon": "🌀",
+      "symptoms": [
+        {
+          "id": "fatigue",
+          "name": "長期疲勞",
+          "question": "疲勞的狀況是？",
+          "options": [
+            {
+              "label": "疲勞合併發燒、體重減輕或夜間盜汗",
+              "type": "normal",
+              "advice": "需排除慢性感染、腫瘤或內分泌問題，家醫科可安排初步檢查。",
+              "departments": ["家醫科"]
+            },
+            {
+              "label": "疲勞合併情緒低落、睡眠障礙",
+              "type": "normal",
+              "advice": "身心因素常見，精神科或家醫科可評估。",
+              "departments": ["精神科", "家醫科"]
+            },
+            {
+              "label": "單純疲勞，最近壓力大或作息改變",
+              "type": "normal",
+              "advice": "可先調整作息，若持續超過一個月再至家醫科評估。",
+              "departments": ["家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "syncope",
+          "name": "暈厥／昏倒",
+          "question": "昏倒的狀況是？",
+          "options": [
+            {
+              "label": "運動中或平躺時昏倒，合併胸痛或心悸",
+              "type": "emergency",
+              "advice": "需排除心因性暈厥，請立即急診。",
+              "departments": ["急診", "心臟內科"]
+            },
+            {
+              "label": "站立太久或情緒刺激後昏倒，很快恢復意識",
+              "type": "normal",
+              "advice": "血管迷走性暈厥常見，心臟內科或神經內科可評估。",
+              "departments": ["心臟內科", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "fever_unknown",
+          "name": "不明熱",
+          "question": "不明熱的狀況是？",
+          "options": [
+            {
+              "label": "反覆發燒超過三週，找不到原因",
+              "type": "normal",
+              "advice": "需評估感染、腫瘤或自體免疫，感染科可安排檢查。",
+              "departments": ["感染科", "家醫科"]
+            },
+            {
+              "label": "發燒合併體重減輕、夜間盜汗",
+              "type": "normal",
+              "advice": "需排除結核或腫瘤，感染科或血液腫瘤科可評估。",
+              "departments": ["感染科", "血液腫瘤科"]
+            }
+          ]
+        },
+        {
+          "id": "edema_systemic",
+          "name": "全身水腫",
+          "question": "水腫的狀況是？",
+          "options": [
+            {
+              "label": "全身水腫合併呼吸困難或端坐呼吸",
+              "type": "emergency",
+              "advice": "可能為心臟或腎臟衰竭急症，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "下肢水腫，合併泡泡尿或疲倦",
+              "type": "normal",
+              "advice": "需評估腎臟或心臟功能，腎臟科或心臟內科可評估。",
+              "departments": ["腎臟科", "心臟內科"]
+            }
+          ]
+        },
+        {
+          "id": "weight_gain",
+          "name": "體重快速增加",
+          "question": "體重增加的狀況是？",
+          "options": [
+            {
+              "label": "短期內體重快速增加，合併水腫",
+              "type": "normal",
+              "advice": "需評估心臟、腎臟或內分泌問題，家醫科可安排初步檢查。",
+              "departments": ["家醫科", "腎臟科"]
+            },
+            {
+              "label": "體重逐漸增加，與飲食或活動量有關",
+              "type": "normal",
+              "advice": "可至家醫科或營養諮詢評估。",
+              "departments": ["家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "pain_unknown",
+          "name": "不明疼痛",
+          "question": "疼痛的狀況是？",
+          "options": [
+            {
+              "label": "不明原因疼痛超過數週，找不到原因",
+              "type": "normal",
+              "advice": "需評估慢性疼痛原因，家醫科或疼痛科可安排檢查。",
+              "departments": ["家醫科", "疼痛科"]
+            },
+            {
+              "label": "突發劇痛，合併意識變化或呼吸困難",
+              "type": "emergency",
+              "advice": "請立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "insomnia_systemic",
+          "name": "睡眠障礙",
+          "question": "睡眠狀況是？",
+          "options": [
+            {
+              "label": "長期失眠，影響白天功能",
+              "type": "normal",
+              "advice": "精神科或身心科可評估，認知行為治療是首選。",
+              "departments": ["精神科", "身心科"]
+            },
+            {
+              "label": "打鼾聲大，白天嗜睡，旁人觀察到呼吸中止",
+              "type": "normal",
+              "advice": "疑似睡眠呼吸中止，胸腔內科或睡眠中心可安排檢查。",
+              "departments": ["胸腔內科", "耳鼻喉科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pediatric",
+      "name": "兒童與青少年",
+      "icon": "👶",
+      "symptoms": [
+        {
+          "id": "child_fever",
+          "name": "兒童發燒",
+          "question": "兒童發燒的狀況是？",
+          "options": [
+            {
+              "label": "3 個月以下嬰兒發燒，或合併活動力明顯下降",
+              "type": "emergency",
+              "advice": "請立即就醫。",
+              "departments": ["急診", "小兒科"]
+            },
+            {
+              "label": "發燒但活動力好，可進食",
+              "type": "normal",
+              "advice": "可先觀察，依需要退燒；若持續三天或活動力變差請就醫。",
+              "departments": ["小兒科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "child_diarrhea",
+          "name": "兒童腹瀉",
+          "question": "兒童腹瀉的狀況是？",
+          "options": [
+            {
+              "label": "腹瀉合併尿量減少、嘴唇乾、活動力差",
+              "type": "emergency",
+              "advice": "可能已脫水，請立即就醫。",
+              "departments": ["急診", "小兒科"]
+            },
+            {
+              "label": "輕微腹瀉，仍可進食與玩耍",
+              "type": "normal",
+              "advice": "注意補充水分與電解質，小兒科可評估。",
+              "departments": ["小兒科"]
+            }
+          ]
+        },
+        {
+          "id": "child_cough",
+          "name": "兒童咳嗽",
+          "question": "兒童咳嗽的狀況是？",
+          "options": [
+            {
+              "label": "咳嗽合併呼吸急促、胸凹或嘴唇發紫",
+              "type": "emergency",
+              "advice": "請立即就醫。",
+              "departments": ["急診", "小兒科"]
+            },
+            {
+              "label": "咳嗽但活動力好，無呼吸困難",
+              "type": "normal",
+              "advice": "小兒科可評估，注意是否有喘鳴或夜間咳嗽。",
+              "departments": ["小兒科"]
+            }
+          ]
+        },
+        {
+          "id": "child_rash",
+          "name": "兒童皮疹",
+          "question": "兒童皮疹的狀況是？",
+          "options": [
+            {
+              "label": "皮疹合併發燒、活動力差或出血性皮疹",
+              "type": "emergency",
+              "advice": "請立即就醫。",
+              "departments": ["急診", "小兒科"]
+            },
+            {
+              "label": "皮疹但無發燒，活動力正常",
+              "type": "normal",
+              "advice": "小兒科或皮膚科可評估。",
+              "departments": ["小兒科", "皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "child_growth",
+          "name": "生長發育問題",
+          "question": "生長發育的狀況是？",
+          "options": [
+            {
+              "label": "身高體重明顯落後或生長曲線下降",
+              "type": "normal",
+              "advice": "小兒科可安排生長評估與抽血。",
+              "departments": ["小兒科", "小兒內分泌科"]
+            },
+            {
+              "label": "青春期提早或延遲",
+              "type": "normal",
+              "advice": "小兒內分泌科可評估。",
+              "departments": ["小兒內分泌科", "小兒科"]
+            }
+          ]
+        },
+        {
+          "id": "child_vaccine",
+          "name": "兒童疫苗接種",
+          "question": "疫苗相關的狀況是？",
+          "options": [
+            {
+              "label": "接種後嚴重過敏反應（呼吸困難、全身皮疹）",
+              "type": "emergency",
+              "advice": "請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "接種後輕微發燒或注射部位紅腫",
+              "type": "normal",
+              "advice": "多為正常反應，數天內緩解。",
+              "departments": ["小兒科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "womens",
+      "name": "婦女健康",
+      "icon": "♀️",
+      "symptoms": [
+        {
+          "id": "menstrual",
+          "name": "月經異常",
+          "question": "月經異常的狀況是？",
+          "options": [
+            {
+              "label": "月經量過多，合併頭暈、心悸或疲倦",
+              "type": "normal",
+              "advice": "需評估貧血與子宮病變，婦產科可安排檢查。",
+              "departments": ["婦產科"]
+            },
+            {
+              "label": "月經週期不規則，合併多毛或青春痘",
+              "type": "normal",
+              "advice": "需評估多囊性卵巢，婦產科或內分泌科可抽血。",
+              "departments": ["婦產科", "內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "停經後出血",
+              "type": "normal",
+              "advice": "需排除子宮內膜病變，婦產科應盡速評估。",
+              "departments": ["婦產科"]
+            }
+          ]
+        },
+        {
+          "id": "pregnancy_symptom",
+          "name": "懷孕相關症狀",
+          "question": "懷孕相關的狀況是？",
+          "options": [
+            {
+              "label": "懷孕合併陰道出血、劇烈腹痛或胎動減少",
+              "type": "emergency",
+              "advice": "請立即就醫。",
+              "departments": ["急診", "婦產科"]
+            },
+            {
+              "label": "懷孕合併持續嘔吐、無法進食",
+              "type": "normal",
+              "advice": "可能為妊娠劇吐，婦產科可評估並補充水分。",
+              "departments": ["婦產科", "急診"]
+            }
+          ]
+        },
+        {
+          "id": "menopause",
+          "name": "更年期症狀",
+          "question": "更年期的狀況是？",
+          "options": [
+            {
+              "label": "熱潮紅、盜汗、失眠，影響生活",
+              "type": "normal",
+              "advice": "婦產科可評估荷爾蒙治療與非藥物介入。",
+              "departments": ["婦產科"]
+            },
+            {
+              "label": "停經後陰道出血",
+              "type": "normal",
+              "advice": "需排除子宮內膜病變，婦產科應盡速評估。",
+              "departments": ["婦產科"]
+            }
+          ]
+        },
+        {
+          "id": "vaginal_discharge",
+          "name": "陰道分泌物異常",
+          "question": "分泌物的狀況是？",
+          "options": [
+            {
+              "label": "分泌物異常合併下腹痛或發燒",
+              "type": "normal",
+              "advice": "需排除骨盆腔發炎，婦產科可評估。",
+              "departments": ["婦產科", "急診"]
+            },
+            {
+              "label": "分泌物異常，無發燒或腹痛",
+              "type": "normal",
+              "advice": "陰道炎常見，婦產科可評估並治療。",
+              "departments": ["婦產科"]
+            }
+          ]
+        },
+        {
+          "id": "breast",
+          "name": "乳房問題",
+          "question": "乳房的狀況是？",
+          "options": [
+            {
+              "label": "乳房硬塊，固定不動或合併皮膚變化",
+              "type": "normal",
+              "advice": "需排除乳癌，一般外科或乳房外科可安排影像與切片。",
+              "departments": ["一般外科", "乳房外科"]
+            },
+            {
+              "label": "乳房疼痛，與月經週期有關",
+              "type": "normal",
+              "advice": "多為良性，一般外科或婦產科可評估。",
+              "departments": ["一般外科", "婦產科"]
+            }
+          ]
+        },
+        {
+          "id": "pelvic_pain",
+          "name": "骨盆腔疼痛",
+          "question": "骨盆腔疼痛的狀況是？",
+          "options": [
+            {
+              "label": "突發劇烈下腹痛，合併頭暈或陰道出血",
+              "type": "emergency",
+              "advice": "需排除子宮外孕或卵巢扭轉，請立即急診。",
+              "departments": ["急診", "婦產科"]
+            },
+            {
+              "label": "慢性骨盆腔疼痛，與月經有關",
+              "type": "normal",
+              "advice": "婦產科可評估子宮內膜異位或其他原因。",
+              "departments": ["婦產科"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

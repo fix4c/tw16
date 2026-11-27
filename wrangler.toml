@@ -2,3 +2,10 @@
 compatibility_date = "2026-11-27"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./out"
+
+# D1 数据库绑定配置
+[[d1_databases]]
+binding = "TW16_REVIEWS"
+database_name = "tw16_reviews"
+database_id = "90a71d88-5fff-4f85-ae07-7db697326b71"
+preview_database_id = "90a71d88-5fff-4f85-ae07-7db697326b71"

@@ -46,35 +46,47 @@ function cleanAndAbsolutize(html, baseUrl) {
   }
 
   root.querySelectorAll("*").forEach((el) => {
+    // 移除所有的 on* 内联事件
     for (const attr of [...el.attributes]) {
       if (/^on/i.test(attr.name)) el.removeAttribute(attr.name);
     }
-    for (const attr of ["href", "src", "poster", "srcset"]) {
-      const v = el.getAttribute(attr);
-      if (!v || v.startsWith("data:") || v.startsWith("#") || v.startsWith("mailto:")) continue;
-      try {
-        if (attr === "srcset") {
-          el.setAttribute(
-            "srcset",
-            v
-              .split(",")
-              .map((part) => {
-                const [u, ...rest] = part.trim().split(/\s+/);
-                return [new URL(u, baseUrl).toString(), ...rest].join(" ");
-              })
-              .join(", ")
-          );
-        } else {
-          el.setAttribute(attr, new URL(v, baseUrl).toString());
+
+    const tagName = el.tagName ? el.tagName.toLowerCase() : "";
+
+    // 处理图片
+    if (tagName === "img") {
+      let src = el.getAttribute("src") || "";
+      // 处理懒加载：如果 src 是空的或 base64，从 data-src 找真实路径
+      if (!src || src.startsWith("data:") || src.includes("blank.gif")) {
+        src = el.getAttribute("data-src") || el.getAttribute("data-original") || el.getAttribute("data-lazy-src") || "";
+      }
+
+      if (src) {
+        try {
+          const absoluteSrc = new URL(src, baseUrl).toString();
+          // 通过我们的代理接口加载图片
+          el.setAttribute("src", `/api/img?url=${encodeURIComponent(absoluteSrc)}`);
+        } catch {
+          el.remove();
         }
-      } catch {}
-    }
-    if (el.tagName && el.tagName.toLowerCase() === "img") {
-      el.setAttribute("referrerpolicy", "no-referrer");
-      el.setAttribute("loading", "lazy");
-      el.setAttribute("decoding", "async");
-    }
-    if (el.tagName && el.tagName.toLowerCase() === "a") {
+      } else {
+        el.remove(); // 没有真实图片地址的直接删掉
+      }
+
+      // 清理样式，确保图片响应式不溢出
+      el.removeAttribute("width");
+      el.removeAttribute("height");
+      el.removeAttribute("style");
+      el.removeAttribute("srcset");
+      el.setAttribute("class", "max-w-full h-auto mx-auto my-4 rounded-lg");
+    } else if (tagName === "a") {
+      // 处理外链
+      const href = el.getAttribute("href");
+      if (href) {
+        try {
+          el.setAttribute("href", new URL(href, baseUrl).toString());
+        } catch {}
+      }
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener noreferrer");
     }

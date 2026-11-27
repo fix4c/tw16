@@ -1,0 +1,1942 @@
+{
+  "categories": [
+    {
+      "id": "head_neck",
+      "name": "頭部與神經",
+      "icon": "🧠",
+      "symptoms": [
+        {
+          "id": "headache",
+          "name": "頭痛",
+          "question": "頭痛的狀況比較接近哪一種？",
+          "options": [
+            {
+              "label": "突然劇烈的爆炸性頭痛，或伴隨頸部僵硬、意識變化",
+              "type": "emergency",
+              "advice": "突發劇烈頭痛合併頸部僵硬或意識改變，需排除腦出血、腦膜炎等急症，請立即就醫。",
+              "departments": ["神經內科", "急診"]
+            },
+            {
+              "label": "單側、搏動性頭痛，會反胃或怕光怕吵",
+              "type": "normal",
+              "advice": "可能是偏頭痛，可先至神經內科評估，記錄頭痛頻率與誘發因素。",
+              "departments": ["神經內科", "家醫科"]
+            },
+            {
+              "label": "後腦勺或頸部起源的頭痛，肩頸緊繃時加重",
+              "type": "normal",
+              "advice": "可能與頸因性頭痛或肌肉緊繃有關，神經內科或復健科可進一步評估。",
+              "departments": ["神經內科", "復健科"]
+            }
+          ]
+        },
+        {
+          "id": "dizziness",
+          "name": "頭暈／眩暈",
+          "question": "頭暈的感覺比較像哪一種？",
+          "options": [
+            {
+              "label": "天旋地轉，合併耳鳴、聽力下降或耳悶",
+              "type": "normal",
+              "advice": "眩暈合併耳部症狀，可能與內耳問題有關，耳鼻喉科是合適的初步科別。",
+              "departments": ["耳鼻喉科", "神經內科"]
+            },
+            {
+              "label": "頭重腳輕、快要昏倒，但不會天旋地轉",
+              "type": "normal",
+              "advice": "這種頭暈可能與血壓、血糖、貧血或藥物有關，家醫科或神經內科可做初步評估。",
+              "departments": ["家醫科", "神經內科"]
+            },
+            {
+              "label": "頭暈合併單側手腳無力、口齒不清或視力模糊",
+              "type": "emergency",
+              "advice": "合併神經學症狀的頭暈需立即排除中風，請直接急診。",
+              "departments": ["急診", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "neck_pain",
+          "name": "頸部疼痛／僵硬",
+          "question": "頸部不適的狀況是？",
+          "options": [
+            {
+              "label": "合併發燒、劇烈頭痛或頸部完全無法前彎",
+              "type": "emergency",
+              "advice": "發燒合併頸部僵硬需排除腦膜炎，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "長期肩頸緊繃、痠痛，與姿勢或工作有關",
+              "type": "normal",
+              "advice": "肌肉筋膜問題常見，復健科或骨科可評估，物理治療與姿勢調整有幫助。",
+              "departments": ["復健科", "骨科"]
+            },
+            {
+              "label": "頸部疼痛合併手臂麻木、無力或刺痛",
+              "type": "normal",
+              "advice": "可能是神經根壓迫，骨科或神經內科可安排影像學檢查。",
+              "departments": ["骨科", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "neck_mass",
+          "name": "頸部腫塊／淋巴結腫大",
+          "question": "腫塊的狀況是？",
+          "options": [
+            {
+              "label": "腫塊快速變大、固定不動、合併發燒或夜間盜汗",
+              "type": "normal",
+              "advice": "需排除感染或腫瘤，建議盡速至耳鼻喉科或一般外科評估。",
+              "departments": ["耳鼻喉科", "一般外科"]
+            },
+            {
+              "label": "感冒後出現，壓痛、可滑動，隨感冒好轉縮小",
+              "type": "normal",
+              "advice": "反應性淋巴結常見，可先觀察；若持續超過兩週未縮小，建議就醫。",
+              "departments": ["家醫科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "face_pain",
+          "name": "臉部疼痛／麻木",
+          "question": "臉部不適的狀況是？",
+          "options": [
+            {
+              "label": "突然單側臉部無力、嘴角歪斜、眼睛閉不緊",
+              "type": "emergency",
+              "advice": "需立即排除中風或顏面神經麻痺，請盡速急診或神經內科。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "單側臉部電擊般疼痛，碰觸或刷牙時誘發",
+              "type": "normal",
+              "advice": "可能是三叉神經痛，神經內科可評估並藥物治療。",
+              "departments": ["神經內科"]
+            },
+            {
+              "label": "臉部麻木合併手腳麻木或說話不清",
+              "type": "emergency",
+              "advice": "合併多處神經學症狀需立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "memory",
+          "name": "記憶力衰退／認知變化",
+          "question": "認知變化的狀況是？",
+          "options": [
+            {
+              "label": "突然出現意識混亂、定向感喪失",
+              "type": "emergency",
+              "advice": "突發意識混亂可能為急性譫妄或中風，請立即急診。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "逐漸記憶力變差，影響日常生活或工作",
+              "type": "normal",
+              "advice": "需評估失智症或輕度認知障礙，神經內科或老年醫學科可安排認知檢查。",
+              "departments": ["神經內科", "老年醫學科"]
+            },
+            {
+              "label": "近期壓力大、睡眠差，覺得注意力不集中",
+              "type": "normal",
+              "advice": "可能與壓力或睡眠有關，精神科或家醫科可初步評估。",
+              "departments": ["精神科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "head_injury",
+          "name": "頭部外傷",
+          "question": "頭部外傷的狀況是？",
+          "options": [
+            {
+              "label": "撞擊後意識喪失、嘔吐、劇烈頭痛或瞳孔不等大",
+              "type": "emergency",
+              "advice": "需立即急診評估是否有顱內出血。",
+              "departments": ["急診", "神經外科"]
+            },
+            {
+              "label": "撞擊後輕微頭痛，無意識喪失，活動正常",
+              "type": "normal",
+              "advice": "可先觀察 24 小時，若出現嘔吐、嗜睡或頭痛加劇請立即就醫。",
+              "departments": ["急診", "神經外科"]
+            }
+          ]
+        },
+        {
+          "id": "sleep_headache",
+          "name": "睡眠相關頭痛／打鼾合併頭痛",
+          "question": "頭痛與睡眠的關係是？",
+          "options": [
+            {
+              "label": "早晨起床頭痛，合併打鼾或白天嗜睡",
+              "type": "normal",
+              "advice": "可能與睡眠呼吸中止有關，胸腔內科或睡眠中心可安排檢查。",
+              "departments": ["胸腔內科", "神經內科"]
+            },
+            {
+              "label": "半夜痛醒，合併眼睛脹痛或視力模糊",
+              "type": "normal",
+              "advice": "需排除青光眼或叢發性頭痛，眼科或神經內科可評估。",
+              "departments": ["眼科", "神經內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eyes",
+      "name": "眼睛與視力",
+      "icon": "👁️",
+      "symptoms": [
+        {
+          "id": "vision_loss",
+          "name": "視力模糊／視力喪失",
+          "question": "視力變化是突然發生還是逐漸出現？",
+          "options": [
+            {
+              "label": "突然發生，且只有單眼受影響",
+              "type": "emergency",
+              "advice": "突發單眼視力喪失需立即排除視網膜動脈阻塞、眼中風等急症，請馬上急診或眼科。",
+              "departments": ["眼科", "急診"]
+            },
+            {
+              "label": "慢慢發生，看近看遠都不清楚",
+              "type": "normal",
+              "advice": "逐漸的視力變化可能與屈光、白內障或黃斑部問題有關，眼科可安排檢查。",
+              "departments": ["眼科"]
+            }
+          ]
+        },
+        {
+          "id": "red_eye",
+          "name": "眼睛紅／分泌物",
+          "question": "眼睛紅的狀況是？",
+          "options": [
+            {
+              "label": "大量膿性分泌物、視力下降、劇烈疼痛",
+              "type": "normal",
+              "advice": "需排除角膜感染或眼內炎，盡速至眼科。",
+              "departments": ["眼科"]
+            },
+            {
+              "label": "癢、水樣分泌物，合併打噴嚏或鼻塞",
+              "type": "normal",
+              "advice": "過敏性結膜炎常見，眼科或家醫科可評估。",
+              "departments": ["眼科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "eye_pain",
+          "name": "眼睛疼痛／異物感",
+          "question": "眼睛疼痛的狀況是？",
+          "options": [
+            {
+              "label": "劇烈疼痛合併頭痛、噁心、看到光暈",
+              "type": "emergency",
+              "advice": "需排除急性青光眼，請立即急診或眼科。",
+              "departments": ["眼科", "急診"]
+            },
+            {
+              "label": "異物感，最近有異物進入或外傷",
+              "type": "normal",
+              "advice": "需排除角膜異物或刮傷，眼科可處理。",
+              "departments": ["眼科"]
+            }
+          ]
+        },
+        {
+          "id": "eye_itch",
+          "name": "眼睛癢",
+          "question": "眼睛癢的狀況是？",
+          "options": [
+            {
+              "label": "兩眼癢、流淚，季節性或接觸過敏原後出現",
+              "type": "normal",
+              "advice": "過敏性結膜炎常見，眼科或家醫科可評估。",
+              "departments": ["眼科", "家醫科"]
+            },
+            {
+              "label": "單眼癢，合併眼皮紅腫或脫屑",
+              "type": "normal",
+              "advice": "可能為瞼緣炎，眼科可評估。",
+              "departments": ["眼科"]
+            }
+          ]
+        },
+        {
+          "id": "eyelid",
+          "name": "眼瞼腫脹／眼皮跳",
+          "question": "眼瞼的狀況是？",
+          "options": [
+            {
+              "label": "單側眼瞼紅腫熱痛，合併發燒",
+              "type": "emergency",
+              "advice": "需排除眼窩蜂窩性組織炎，請立即就醫。",
+              "departments": ["眼科", "急診"]
+            },
+            {
+              "label": "眼皮局部紅腫，像針眼或霰粒腫",
+              "type": "normal",
+              "advice": "眼科可評估，初期熱敷有幫助。",
+              "departments": ["眼科"]
+            },
+            {
+              "label": "眼皮跳，持續數天至數週",
+              "type": "normal",
+              "advice": "多為良性，若合併其他神經學症狀需至神經內科。",
+              "departments": ["神經內科", "眼科"]
+            }
+          ]
+        },
+        {
+          "id": "diplopia",
+          "name": "複視（看東西有兩個影像）",
+          "question": "複視的狀況是？",
+          "options": [
+            {
+              "label": "突然出現複視，合併頭痛、複視或肢體無力",
+              "type": "emergency",
+              "advice": "需排除腦血管或神經急症，請立即急診。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "看遠時複視，看近正常，逐漸出現",
+              "type": "normal",
+              "advice": "可能與眼肌或神經問題有關，眼科或神經內科可評估。",
+              "departments": ["眼科", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "floaters",
+          "name": "飛蚊症／閃光",
+          "question": "飛蚊或閃光的狀況是？",
+          "options": [
+            {
+              "label": "突然大量飛蚊，合併閃光或視野缺損",
+              "type": "emergency",
+              "advice": "需立即排除視網膜剝離，請盡速至眼科。",
+              "departments": ["眼科", "急診"]
+            },
+            {
+              "label": "長期少量飛蚊，無明顯變化",
+              "type": "normal",
+              "advice": "多為良性，定期至眼科追蹤即可。",
+              "departments": ["眼科"]
+            }
+          ]
+        },
+        {
+          "id": "eye_injury",
+          "name": "眼睛外傷",
+          "question": "眼睛外傷的狀況是？",
+          "options": [
+            {
+              "label": "化學品噴入眼睛、穿刺傷或視力明顯受損",
+              "type": "emergency",
+              "advice": "化學品立即以大量清水沖洗 15 分鐘，並立即急診。",
+              "departments": ["急診", "眼科"]
+            },
+            {
+              "label": "輕微撞擊或異物進入，可張開眼睛但有不適",
+              "type": "normal",
+              "advice": "眼科可評估，不要自行揉眼或取出異物。",
+              "departments": ["眼科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ent",
+      "name": "耳鼻喉與口腔",
+      "icon": "👂",
+      "symptoms": [
+        {
+          "id": "sore_throat",
+          "name": "喉嚨痛",
+          "question": "喉嚨的狀況是？",
+          "options": [
+            {
+              "label": "合併呼吸困難、吞嚥困難、流口水或無法張嘴",
+              "type": "emergency",
+              "advice": "需排除會厭炎、扁桃腺周圍膿瘍等急症，請立即急診。",
+              "departments": ["急診", "耳鼻喉科"]
+            },
+            {
+              "label": "合併發燒、扁桃腺紅腫或白色滲出物",
+              "type": "normal",
+              "advice": "可能是急性扁桃腺炎或咽炎，耳鼻喉科或家醫科可評估。",
+              "departments": ["耳鼻喉科", "家醫科"]
+            },
+            {
+              "label": "喉嚨異物感、慢性咳嗽或聲音沙啞超過兩週",
+              "type": "normal",
+              "advice": "需評估聲帶、咽喉或胃酸逆流，耳鼻喉科可安排內視鏡檢查。",
+              "departments": ["耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "hearing_loss",
+          "name": "聽力下降／耳鳴",
+          "question": "聽力或耳鳴的狀況是？",
+          "options": [
+            {
+              "label": "突然一側聽力明顯下降，或合併眩暈",
+              "type": "emergency",
+              "advice": "突發性耳聾需在黃金時間內治療，請立即至耳鼻喉科或急診。",
+              "departments": ["耳鼻喉科", "急診"]
+            },
+            {
+              "label": "逐漸聽力變差，合併耳悶或耳鳴",
+              "type": "normal",
+              "advice": "可能與內耳、耳垢或老化有關，耳鼻喉科可安排聽力檢查。",
+              "departments": ["耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "ear_pain",
+          "name": "耳痛",
+          "question": "耳痛的狀況是？",
+          "options": [
+            {
+              "label": "合併發燒、耳朵流膿或聽力下降",
+              "type": "normal",
+              "advice": "可能為中耳炎或外耳炎，耳鼻喉科可評估。",
+              "departments": ["耳鼻喉科"]
+            },
+            {
+              "label": "耳朵流出血水，最近有頭部外傷或異物",
+              "type": "emergency",
+              "advice": "需立即急診，排除耳膜破裂或顱底骨折。",
+              "departments": ["急診", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "nasal",
+          "name": "鼻塞／流鼻水",
+          "question": "鼻部症狀比較接近？",
+          "options": [
+            {
+              "label": "長期鼻塞合併打鼾、睡眠呼吸中止或白天嗜睡",
+              "type": "normal",
+              "advice": "耳鼻喉科可評估鼻中隔、鼻息肉或睡眠呼吸問題。",
+              "departments": ["耳鼻喉科"]
+            },
+            {
+              "label": "過敏性鼻炎，季節性或接觸過敏原時加重",
+              "type": "normal",
+              "advice": "耳鼻喉科或家醫科可評估，環境控制與藥物都有幫助。",
+              "departments": ["耳鼻喉科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "epistaxis",
+          "name": "流鼻血",
+          "question": "流鼻血的狀況是？",
+          "options": [
+            {
+              "label": "反覆流鼻血，量多或不易止住",
+              "type": "normal",
+              "advice": "需評估鼻腔血管、凝血功能或腫瘤，耳鼻喉科可處理。",
+              "departments": ["耳鼻喉科"]
+            },
+            {
+              "label": "頭部外傷後流鼻血，合併意識變化",
+              "type": "emergency",
+              "advice": "需立即急診，排除顱底骨折。",
+              "departments": ["急診", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "hoarse",
+          "name": "聲音沙啞",
+          "question": "沙啞的狀況是？",
+          "options": [
+            {
+              "label": "沙啞超過兩週未改善，或合併吞嚥困難、體重減輕",
+              "type": "normal",
+              "advice": "需評估聲帶或咽喉病變，耳鼻喉科可安排內視鏡檢查。",
+              "departments": ["耳鼻喉科"]
+            },
+            {
+              "label": "最近感冒或大喊後沙啞，幾天內逐漸改善",
+              "type": "normal",
+              "advice": "急性聲帶炎常見，多休息、多喝水，若持續超過兩週再就醫。",
+              "departments": ["耳鼻喉科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "mouth_ulcer",
+          "name": "口腔潰瘍",
+          "question": "口腔潰瘍的狀況是？",
+          "options": [
+            {
+              "label": "潰瘍超過兩週未癒合，或合併硬塊、出血",
+              "type": "normal",
+              "advice": "需排除口腔癌，耳鼻喉科或口腔外科可安排切片。",
+              "departments": ["耳鼻喉科", "口腔外科"]
+            },
+            {
+              "label": "反覆嘴破，與壓力、睡眠或飲食有關",
+              "type": "normal",
+              "advice": "復發性口腔潰瘍常見，家醫科或耳鼻喉科可評估。",
+              "departments": ["家醫科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "dysphagia",
+          "name": "吞嚥困難",
+          "question": "吞嚥困難的狀況是？",
+          "options": [
+            {
+              "label": "逐漸出現，合併體重減輕或食物逆流",
+              "type": "normal",
+              "advice": "需評估食道或咽喉病變，胃腸肝膽科或耳鼻喉科可安排內視鏡。",
+              "departments": ["胃腸肝膽科", "耳鼻喉科"]
+            },
+            {
+              "label": "突然吞嚥困難，合併流口水、呼吸困難",
+              "type": "emergency",
+              "advice": "需立即急診，排除異物或急性神經問題。",
+              "departments": ["急診", "耳鼻喉科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teeth",
+      "name": "牙齒與口腔",
+      "icon": "🦷",
+      "symptoms": [
+        {
+          "id": "toothache",
+          "name": "牙痛",
+          "question": "牙痛的狀況是？",
+          "options": [
+            {
+              "label": "自發性劇痛，夜間加劇，冷熱刺激敏感",
+              "type": "normal",
+              "advice": "可能是牙髓炎，牙科可評估是否需要根管治療。",
+              "departments": ["牙科"]
+            },
+            {
+              "label": "咀嚼時疼痛，合併牙齦腫脹或膿包",
+              "type": "normal",
+              "advice": "可能為牙周膿瘍或根尖周圍炎，牙科可處理。",
+              "departments": ["牙科"]
+            },
+            {
+              "label": "牙痛合併臉部腫脹、發燒或呼吸困難",
+              "type": "emergency",
+              "advice": "需立即急診，排除蜂窩性組織炎。",
+              "departments": ["急診", "牙科"]
+            }
+          ]
+        },
+        {
+          "id": "gum_bleed",
+          "name": "牙齦出血／腫脹",
+          "question": "牙齦的狀況是？",
+          "options": [
+            {
+              "label": "刷牙或咬硬物時牙齦出血，牙齦紅腫",
+              "type": "normal",
+              "advice": "牙齦炎或牙周病常見，牙科可安排洗牙與評估。",
+              "departments": ["牙科"]
+            },
+            {
+              "label": "牙齦出血合併全身容易瘀青或凝血異常",
+              "type": "normal",
+              "advice": "需評估凝血功能，血液腫瘤科或牙科可協助。",
+              "departments": ["血液腫瘤科", "牙科"]
+            }
+          ]
+        },
+        {
+          "id": "bad_breath",
+          "name": "口腔異味",
+          "question": "口腔異味的狀況是？",
+          "options": [
+            {
+              "label": "長期口臭，合併牙齦出血或牙結石",
+              "type": "normal",
+              "advice": "牙周病或口腔衛生問題常見，牙科可評估。",
+              "departments": ["牙科"]
+            },
+            {
+              "label": "口臭合併胃酸逆流、上腹痛",
+              "type": "normal",
+              "advice": "需評估胃食道逆流，胃腸肝膽科可安排檢查。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "loose_tooth",
+          "name": "牙齒鬆動",
+          "question": "牙齒鬆動的狀況是？",
+          "options": [
+            {
+              "label": "多顆牙齒鬆動，合併牙齦萎縮",
+              "type": "normal",
+              "advice": "嚴重牙周病可能，牙科可評估並治療。",
+              "departments": ["牙科"]
+            },
+            {
+              "label": "外傷後單顆牙齒鬆動或移位",
+              "type": "normal",
+              "advice": "牙科可評估是否需固定或根管治療。",
+              "departments": ["牙科"]
+            }
+          ]
+        },
+        {
+          "id": "wisdom_tooth",
+          "name": "智齒疼痛",
+          "question": "智齒的狀況是？",
+          "options": [
+            {
+              "label": "智齒周圍牙齦腫痛，合併張口困難或發燒",
+              "type": "normal",
+              "advice": "可能是智齒冠周炎，牙科或口腔外科可評估拔除。",
+              "departments": ["牙科", "口腔外科"]
+            },
+            {
+              "label": "智齒區反覆輕微不適，無明顯腫脹",
+              "type": "normal",
+              "advice": "牙科可評估智齒生長狀況與是否需要拔除。",
+              "departments": ["牙科"]
+            }
+          ]
+        },
+        {
+          "id": "tmj",
+          "name": "顳顎關節痛",
+          "question": "顳顎關節的狀況是？",
+          "options": [
+            {
+              "label": "張口時耳前疼痛、有聲響，偶爾卡住",
+              "type": "normal",
+              "advice": "顳顎關節障礙常見，牙科或口腔外科可評估。",
+              "departments": ["牙科", "口腔外科"]
+            },
+            {
+              "label": "張口困難，合併臉部腫脹或發燒",
+              "type": "normal",
+              "advice": "需排除感染或關節問題，口腔外科可評估。",
+              "departments": ["口腔外科", "急診"]
+            }
+          ]
+        },
+        {
+          "id": "mouth_lump",
+          "name": "口腔腫塊",
+          "question": "口腔腫塊的狀況是？",
+          "options": [
+            {
+              "label": "口腔內出現硬塊，超過兩週未消退或逐漸變大",
+              "type": "normal",
+              "advice": "需排除口腔癌，口腔外科或耳鼻喉科可安排切片。",
+              "departments": ["口腔外科", "耳鼻喉科"]
+            },
+            {
+              "label": "口腔內小水泡或黏液囊腫，會自行破裂又復發",
+              "type": "normal",
+              "advice": "黏液囊腫常見，口腔外科可評估是否需要切除。",
+              "departments": ["口腔外科", "牙科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chest_resp",
+      "name": "胸腔與呼吸道",
+      "icon": "🫀",
+      "symptoms": [
+        {
+          "id": "chest_pain",
+          "name": "胸痛／胸悶",
+          "question": "胸痛的狀況是？",
+          "options": [
+            {
+              "label": "壓迫性胸痛，合併冒冷汗、呼吸困難或放射到左肩、下巴",
+              "type": "emergency",
+              "advice": "高度懷疑急性冠心症，請立即撥打 119 或急診。",
+              "departments": ["急診", "心臟內科"]
+            },
+            {
+              "label": "吸氣時胸痛加劇，最近有感冒或咳嗽",
+              "type": "normal",
+              "advice": "可能與肋膜炎或肌肉骨骼疼痛有關，胸腔內科或家醫科可評估。",
+              "departments": ["胸腔內科", "家醫科"]
+            },
+            {
+              "label": "胸悶合併心悸、心跳不規則",
+              "type": "normal",
+              "advice": "心律不整也可能以胸悶表現，心臟內科可安排心電圖。",
+              "departments": ["心臟內科"]
+            }
+          ]
+        },
+        {
+          "id": "dyspnea",
+          "name": "呼吸困難／喘",
+          "question": "呼吸困難的狀況是？",
+          "options": [
+            {
+              "label": "突然發生，合併嘴唇發紫、無法完整說話或意識變化",
+              "type": "emergency",
+              "advice": "立即急診或撥打 119。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "活動時喘，休息會改善，合併下肢水腫",
+              "type": "normal",
+              "advice": "可能與心臟衰竭或肺部疾病有關，心臟內科或胸腔內科可評估。",
+              "departments": ["心臟內科", "胸腔內科"]
+            },
+            {
+              "label": "夜間或清晨喘，合併咳嗽或喘鳴聲",
+              "type": "normal",
+              "advice": "氣喘或過敏可能，胸腔內科可安排肺功能檢查。",
+              "departments": ["胸腔內科"]
+            }
+          ]
+        },
+        {
+          "id": "cough",
+          "name": "咳嗽",
+          "question": "咳嗽的狀況是？",
+          "options": [
+            {
+              "label": "咳嗽超過三週，合併體重減輕、夜間盜汗",
+              "type": "normal",
+              "advice": "慢性咳嗽合併全身症狀需排除結核或腫瘤，胸腔內科評估。",
+              "departments": ["胸腔內科"]
+            },
+            {
+              "label": "感冒後咳嗽，有痰，逐漸改善",
+              "type": "normal",
+              "advice": "急性支氣管炎常見，家醫科或胸腔內科可評估。",
+              "departments": ["家醫科", "胸腔內科"]
+            }
+          ]
+        },
+        {
+          "id": "hemoptysis",
+          "name": "咳血",
+          "question": "咳血的狀況是？",
+          "options": [
+            {
+              "label": "咳血量多或持續，合併呼吸困難",
+              "type": "emergency",
+              "advice": "需立即急診，排除大量咳血或呼吸道阻塞。",
+              "departments": ["急診", "胸腔內科"]
+            },
+            {
+              "label": "少量血絲痰，反覆出現",
+              "type": "normal",
+              "advice": "需排除肺結核、腫瘤或支氣管擴張，胸腔內科可安排影像與痰液檢查。",
+              "departments": ["胸腔內科"]
+            }
+          ]
+        },
+        {
+          "id": "wheezing",
+          "name": "喘鳴聲",
+          "question": "喘鳴的狀況是？",
+          "options": [
+            {
+              "label": "呼吸有哮鳴聲，合併呼吸困難、無法說話",
+              "type": "emergency",
+              "advice": "可能是嚴重氣喘發作，請立即急診。",
+              "departments": ["急診", "胸腔內科"]
+            },
+            {
+              "label": "反覆喘鳴，與季節、過敏原或運動有關",
+              "type": "normal",
+              "advice": "氣喘可能，胸腔內科可安排肺功能檢查。",
+              "departments": ["胸腔內科"]
+            }
+          ]
+        },
+        {
+          "id": "palpitation",
+          "name": "心悸",
+          "question": "心悸的狀況是？",
+          "options": [
+            {
+              "label": "心悸合併胸痛、暈厥或呼吸困難",
+              "type": "emergency",
+              "advice": "需立即急診，排除嚴重心律不整。",
+              "departments": ["急診", "心臟內科"]
+            },
+            {
+              "label": "偶爾心悸，持續數秒至數分鐘，無其他症狀",
+              "type": "normal",
+              "advice": "心臟內科可安排心電圖或 24 小時心電圖監測。",
+              "departments": ["心臟內科"]
+            }
+          ]
+        },
+        {
+          "id": "sputum",
+          "name": "痰多／痰色異常",
+          "question": "痰的狀況是？",
+          "options": [
+            {
+              "label": "黃綠膿痰，合併發燒或呼吸困難",
+              "type": "normal",
+              "advice": "可能為細菌性感染，胸腔內科或家醫科可評估。",
+              "departments": ["胸腔內科", "家醫科"]
+            },
+            {
+              "label": "長期白痰，與抽菸或慢性咳嗽有關",
+              "type": "normal",
+              "advice": "慢性支氣管炎常見，胸腔內科可評估並戒菸。",
+              "departments": ["胸腔內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "digestive",
+      "name": "消化與腹部",
+      "icon": "🫄",
+      "symptoms": [
+        {
+          "id": "abdominal_pain",
+          "name": "腹痛",
+          "question": "腹痛的位置與狀況是？",
+          "options": [
+            {
+              "label": "右下腹劇痛，合併發燒、反彈痛或無法行走",
+              "type": "emergency",
+              "advice": "需排除急性闌尾炎或腹膜炎，請立即急診。",
+              "departments": ["急診", "一般外科"]
+            },
+            {
+              "label": "上腹或右上腹鈍痛，飯後或吃油膩食物後加重",
+              "type": "normal",
+              "advice": "可能與胃、膽囊或胰臟有關，胃腸肝膽科可安排超音波。",
+              "departments": ["胃腸肝膽科"]
+            },
+            {
+              "label": "反覆腹痛合併腹瀉或便秘，排便後改善",
+              "type": "normal",
+              "advice": "腸躁症或功能性腸胃問題常見，胃腸肝膽科可評估。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "nausea_vomit",
+          "name": "噁心／嘔吐",
+          "question": "噁心嘔吐的狀況是？",
+          "options": [
+            {
+              "label": "嚴重嘔吐，合併尿量減少、嘴唇乾、頭暈",
+              "type": "emergency",
+              "advice": "可能已脫水，需急診補液。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "吃了可疑食物後，多人同時上吐下瀉",
+              "type": "normal",
+              "advice": "疑似食物中毒，請就醫並保留檢體，家醫科或胃腸肝膽科可處理。",
+              "departments": ["家醫科", "胃腸肝膽科"]
+            },
+            {
+              "label": "反覆嘔吐，合併體重減輕或吞嚥困難",
+              "type": "normal",
+              "advice": "需評估消化道阻塞或神經問題，胃腸肝膽科可安排檢查。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "diarrhea",
+          "name": "腹瀉",
+          "question": "腹瀉的狀況是？",
+          "options": [
+            {
+              "label": "血便或黏液便，合併發燒或劇烈腹痛",
+              "type": "emergency",
+              "advice": "需排除感染性腸炎或發炎性腸道疾病，請盡速就醫。",
+              "departments": ["急診", "胃腸肝膽科"]
+            },
+            {
+              "label": "急性水樣腹瀉，最近有旅遊或外食史",
+              "type": "normal",
+              "advice": "旅遊者腹瀉或急性腸胃炎常見，家醫科或胃腸肝膽科可評估。",
+              "departments": ["家醫科", "胃腸肝膽科"]
+            },
+            {
+              "label": "慢性腹瀉合併體重減輕",
+              "type": "normal",
+              "advice": "需排除發炎性腸道疾病或腫瘤，胃腸肝膽科安排大腸鏡。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "constipation",
+          "name": "便秘",
+          "question": "便秘的狀況是？",
+          "options": [
+            {
+              "label": "便秘合併劇烈腹痛、腹脹或無法排氣",
+              "type": "emergency",
+              "advice": "需排除腸阻塞，請立即急診。",
+              "departments": ["急診", "一般外科"]
+            },
+            {
+              "label": "慢性便秘，排便頻率減少或需用力",
+              "type": "normal",
+              "advice": "功能性便秘常見，胃腸肝膽科可評估，飲食與運動調整有幫助。",
+              "departments": ["胃腸肝膽科", "家醫科"]
+            },
+            {
+              "label": "便秘與腹瀉交替，合併血便或體重減輕",
+              "type": "normal",
+              "advice": "需排除大腸病變，胃腸肝膽科安排大腸鏡。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "bloating",
+          "name": "腹脹",
+          "question": "腹脹的狀況是？",
+          "options": [
+            {
+              "label": "腹脹合併劇痛、嘔吐或無法排氣",
+              "type": "emergency",
+              "advice": "需排除腸阻塞，請立即急診。",
+              "departments": ["急診", "一般外科"]
+            },
+            {
+              "label": "飯後腹脹，合併打嗝或排氣增加",
+              "type": "normal",
+              "advice": "功能性消化不良常見，胃腸肝膽科可評估。",
+              "departments": ["胃腸肝膽科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "blood_stool",
+          "name": "血便",
+          "question": "血便的狀況是？",
+          "options": [
+            {
+              "label": "大量鮮血便，合併頭暈、心跳快或意識變化",
+              "type": "emergency",
+              "advice": "需立即急診，排除大量消化道出血。",
+              "departments": ["急診", "胃腸肝膽科"]
+            },
+            {
+              "label": "少量血便或糞便帶血，反覆出現",
+              "type": "normal",
+              "advice": "需排除痔瘡、大腸息肉或腫瘤，胃腸肝膽科安排大腸鏡。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "jaundice",
+          "name": "黃疸（皮膚或眼白變黃）",
+          "question": "黃疸的狀況是？",
+          "options": [
+            {
+              "label": "合併發燒、右上腹痛、意識變化",
+              "type": "emergency",
+              "advice": "需排除膽管炎或急性肝衰竭，請立即急診。",
+              "departments": ["急診", "胃腸肝膽科"]
+            },
+            {
+              "label": "逐漸出現，合併茶色尿、灰白便或皮膚癢",
+              "type": "normal",
+              "advice": "可能與膽道阻塞或肝炎有關，胃腸肝膽科可安排影像與肝功能檢查。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "gerd",
+          "name": "胃食道逆流",
+          "question": "逆流的狀況是？",
+          "options": [
+            {
+              "label": "胸口灼熱、酸水逆流，飯後或躺下時加重",
+              "type": "normal",
+              "advice": "胃食道逆流常見，胃腸肝膽科可評估，飲食與生活調整有幫助。",
+              "departments": ["胃腸肝膽科"]
+            },
+            {
+              "label": "吞嚥困難、體重減輕或黑便",
+              "type": "normal",
+              "advice": "需排除食道病變，胃腸肝膽科安排內視鏡。",
+              "departments": ["胃腸肝膽科"]
+            }
+          ]
+        },
+        {
+          "id": "appetite_loss",
+          "name": "食慾不振",
+          "question": "食慾不振的狀況是？",
+          "options": [
+            {
+              "label": "食慾明顯下降，合併體重減輕或黃疸",
+              "type": "normal",
+              "advice": "需排除肝膽腸胃或全身性疾病，胃腸肝膽科或家醫科可評估。",
+              "departments": ["胃腸肝膽科", "家醫科"]
+            },
+            {
+              "label": "短期食慾差，與壓力或情緒有關",
+              "type": "normal",
+              "advice": "可先觀察，若持續超過兩週或影響生活，家醫科或精神科可評估。",
+              "departments": ["家醫科", "精神科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urinary",
+      "name": "泌尿與腎臟",
+      "icon": "🚻",
+      "symptoms": [
+        {
+          "id": "dysuria",
+          "name": "排尿疼痛／頻尿",
+          "question": "排尿症狀的狀況是？",
+          "options": [
+            {
+              "label": "合併發燒、腰痛（敲擊痛）或畏寒",
+              "type": "normal",
+              "advice": "可能是腎盂腎炎，需盡速就醫，泌尿科或感染科可評估。",
+              "departments": ["泌尿科", "感染科", "急診"]
+            },
+            {
+              "label": "排尿灼熱、頻尿、急尿，但無發燒",
+              "type": "normal",
+              "advice": "膀胱炎常見，泌尿科或家醫科可驗尿。",
+              "departments": ["泌尿科", "家醫科"]
+            },
+            {
+              "label": "解尿困難、尿流變細，男性",
+              "type": "normal",
+              "advice": "可能與攝護腺肥大有關，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "hematuria",
+          "name": "血尿",
+          "question": "血尿的狀況是？",
+          "options": [
+            {
+              "label": "無痛性血尿，反覆出現",
+              "type": "normal",
+              "advice": "需排除泌尿道上皮腫瘤，泌尿科安排膀胱鏡或影像檢查。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "血尿合併劇烈腰痛、噁心",
+              "type": "normal",
+              "advice": "可能是腎結石，泌尿科可安排影像檢查。",
+              "departments": ["泌尿科", "急診"]
+            },
+            {
+              "label": "血尿合併發燒、排尿疼痛",
+              "type": "normal",
+              "advice": "可能是泌尿道感染，泌尿科或家醫科可驗尿。",
+              "departments": ["泌尿科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "edema_renal",
+          "name": "水腫／泡泡尿",
+          "question": "水腫或尿液狀況是？",
+          "options": [
+            {
+              "label": "眼皮或下肢水腫，合併泡泡尿久不消散",
+              "type": "normal",
+              "advice": "可能為腎病症候群或腎炎，腎臟科可安排尿液與血液檢查。",
+              "departments": ["腎臟科"]
+            },
+            {
+              "label": "全身水腫，合併呼吸困難或端坐呼吸",
+              "type": "emergency",
+              "advice": "可能為心臟或腎臟衰竭急症，請立即急診。",
+              "departments": ["急診"]
+            }
+          ]
+        },
+        {
+          "id": "urinary_retention",
+          "name": "解尿困難／尿滯留",
+          "question": "解尿困難的狀況是？",
+          "options": [
+            {
+              "label": "完全解不出尿，合併下腹脹痛",
+              "type": "emergency",
+              "advice": "需立即急診導尿，排除急性尿滯留。",
+              "departments": ["急診", "泌尿科"]
+            },
+            {
+              "label": "尿流變細、需用力解尿，逐漸出現",
+              "type": "normal",
+              "advice": "可能與攝護腺肥大或尿道狹窄有關，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            }
+          ]
+        },
+        {
+          "id": "flank_pain",
+          "name": "腰痛（腎臟區）",
+          "question": "腰痛的狀況是？",
+          "options": [
+            {
+              "label": "單側腰部劇痛，合併血尿或噁心",
+              "type": "normal",
+              "advice": "可能是腎結石，泌尿科可安排影像檢查。",
+              "departments": ["泌尿科", "急診"]
+            },
+            {
+              "label": "腰痛合併發燒、排尿疼痛",
+              "type": "normal",
+              "advice": "需排除腎盂腎炎，泌尿科或感染科可評估。",
+              "departments": ["泌尿科", "感染科"]
+            },
+            {
+              "label": "慢性腰痛，與姿勢或工作有關",
+              "type": "normal",
+              "advice": "肌肉骨骼問題常見，骨科或復健科可評估。",
+              "departments": ["骨科", "復健科"]
+            }
+          ]
+        },
+        {
+          "id": "incontinence",
+          "name": "尿失禁",
+          "question": "尿失禁的狀況是？",
+          "options": [
+            {
+              "label": "咳嗽、打噴嚏或運動時漏尿",
+              "type": "normal",
+              "advice": "應力性尿失禁常見，泌尿科或婦產科可評估。",
+              "departments": ["泌尿科", "婦產科"]
+            },
+            {
+              "label": "突然強烈尿意來不及上廁所",
+              "type": "normal",
+              "advice": "急迫性尿失禁可能，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "尿失禁合併下肢無力或背痛",
+              "type": "emergency",
+              "advice": "需排除神經壓迫，請盡速就醫。",
+              "departments": ["急診", "神經外科"]
+            }
+          ]
+        },
+        {
+          "id": "nocturia",
+          "name": "夜尿",
+          "question": "夜尿的狀況是？",
+          "options": [
+            {
+              "label": "每晚起床排尿超過兩次，影響睡眠",
+              "type": "normal",
+              "advice": "可能與攝護腺、膀胱或心臟問題有關，泌尿科可評估。",
+              "departments": ["泌尿科"]
+            },
+            {
+              "label": "夜尿合併水腫、白天喘",
+              "type": "normal",
+              "advice": "需評估心臟功能，心臟內科可安排檢查。",
+              "departments": ["心臟內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neuro",
+      "name": "神經與感覺",
+      "icon": "⚡",
+      "symptoms": [
+        {
+          "id": "weakness",
+          "name": "肢體無力",
+          "question": "無力的狀況是？",
+          "options": [
+            {
+              "label": "突然單側手腳無力、臉歪、口齒不清",
+              "type": "emergency",
+              "advice": "急性中風徵兆，請立即撥打 119。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "逐漸四肢無力，合併肌肉萎縮或抽搐",
+              "type": "normal",
+              "advice": "需評估神經肌肉疾病，神經內科可安排肌電圖與神經傳導檢查。",
+              "departments": ["神經內科"]
+            },
+            {
+              "label": "運動後無力，休息後改善",
+              "type": "normal",
+              "advice": "需評估神經肌肉接合處或代謝問題，神經內科可評估。",
+              "departments": ["神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "numbness",
+          "name": "麻木／刺痛",
+          "question": "麻木的狀況是？",
+          "options": [
+            {
+              "label": "對稱性手腳麻木，像戴手套襪套的感覺",
+              "type": "normal",
+              "advice": "可能為周邊神經病變，神經內科可安排神經傳導檢查。",
+              "departments": ["神經內科"]
+            },
+            {
+              "label": "局部麻木合併頸痛或背痛，特定姿勢加重",
+              "type": "normal",
+              "advice": "可能與神經根壓迫有關，骨科或神經內科可評估。",
+              "departments": ["骨科", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "seizure",
+          "name": "抽搐／意識喪失",
+          "question": "抽搐或意識狀況是？",
+          "options": [
+            {
+              "label": "首次發生全身抽搐或意識喪失",
+              "type": "emergency",
+              "advice": "首次癲癇發作需急診評估，排除代謝或結構性原因。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "已知癲癇，發作頻率或型態改變",
+              "type": "normal",
+              "advice": "神經內科調整治療或評估。",
+              "departments": ["神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "tremor",
+          "name": "顫抖／不自主運動",
+          "question": "顫抖的狀況是？",
+          "options": [
+            {
+              "label": "靜止時手抖，合併動作變慢、僵硬",
+              "type": "normal",
+              "advice": "需評估帕金森氏症，神經內科可安排檢查。",
+              "departments": ["神經內科"]
+            },
+            {
+              "label": "拿東西或做精細動作時手抖，家族有類似情況",
+              "type": "normal",
+              "advice": "可能是原發性顫抖，神經內科可評估。",
+              "departments": ["神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "gait",
+          "name": "步態不穩",
+          "question": "步態不穩的狀況是？",
+          "options": [
+            {
+              "label": "突然步態不穩，合併頭暈或肢體無力",
+              "type": "emergency",
+              "advice": "需排除中風或急性神經問題，請立即急診。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "逐漸步態不穩，合併僵硬或平衡變差",
+              "type": "normal",
+              "advice": "需評估帕金森氏症或小腦問題，神經內科可安排檢查。",
+              "departments": ["神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "language",
+          "name": "語言障礙",
+          "question": "語言障礙的狀況是？",
+          "options": [
+            {
+              "label": "突然說話不清、聽不懂或找不到詞",
+              "type": "emergency",
+              "advice": "急性中風徵兆，請立即撥打 119。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "逐漸語言能力退化，合併記憶力變差",
+              "type": "normal",
+              "advice": "需評估失智症或神經退化，神經內科可安排認知檢查。",
+              "departments": ["神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "facial_palsy",
+          "name": "顏面神經麻痺",
+          "question": "臉部無力的狀況是？",
+          "options": [
+            {
+              "label": "突然單側臉部無力，眼睛閉不緊、嘴角歪斜",
+              "type": "normal",
+              "advice": "可能是周邊顏面神經麻痺，神經內科可評估，需排除中風。",
+              "departments": ["神經內科", "急診"]
+            },
+            {
+              "label": "臉部無力合併單側手腳無力",
+              "type": "emergency",
+              "advice": "需立即排除中風，請急診。",
+              "departments": ["急診", "神經內科"]
+            }
+          ]
+        },
+        {
+          "id": "headache_neuro",
+          "name": "神經相關頭痛",
+          "question": "頭痛與神經症狀的關係是？",
+          "options": [
+            {
+              "label": "頭痛合併複視、肢體無力或意識變化",
+              "type": "emergency",
+              "advice": "需排除腦部急症，請立即急診。",
+              "departments": ["急診", "神經內科"]
+            },
+            {
+              "label": "慢性頭痛，合併視力變化或耳鳴",
+              "type": "normal",
+              "advice": "需評估顱內壓或神經問題，神經內科可安排影像檢查。",
+              "departments": ["神經內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "psych",
+      "name": "心理與睡眠",
+      "icon": "🧘",
+      "symptoms": [
+        {
+          "id": "depression",
+          "name": "情緒低落",
+          "question": "情緒狀況比較接近？",
+          "options": [
+            {
+              "label": "持續兩週以上情緒低落、失去興趣，合併睡眠或食慾改變",
+              "type": "normal",
+              "advice": "可能與憂鬱症有關，精神科或身心科可評估。",
+              "departments": ["精神科", "身心科", "家醫科"]
+            },
+            {
+              "label": "情緒低落合併自傷或自殺念頭",
+              "type": "emergency",
+              "advice": "請立即撥打 1925 安心專線或 119，並盡速就醫。",
+              "departments": ["急診", "精神科"]
+            }
+          ]
+        },
+        {
+          "id": "anxiety",
+          "name": "焦慮",
+          "question": "焦慮的狀況是？",
+          "options": [
+            {
+              "label": "反覆恐慌發作，合併心悸、發抖、快要失控的感覺",
+              "type": "normal",
+              "advice": "恐慌症可透過精神科評估與治療，先排除心臟問題。",
+              "departments": ["精神科", "心臟內科"]
+            },
+            {
+              "label": "持續焦慮、無法放鬆，影響工作或生活",
+              "type": "normal",
+              "advice": "精神科或身心科可評估，藥物與心理治療都有幫助。",
+              "departments": ["精神科", "身心科"]
+            }
+          ]
+        },
+        {
+          "id": "insomnia",
+          "name": "失眠",
+          "question": "睡眠狀況是？",
+          "options": [
+            {
+              "label": "難以入睡、易醒，持續超過一個月，影響白天功能",
+              "type": "normal",
+              "advice": "慢性失眠可至精神科或身心科評估，認知行為治療是首選。",
+              "departments": ["精神科", "身心科"]
+            },
+            {
+              "label": "打鼾聲大，白天嗜睡，旁人觀察到呼吸中止",
+              "type": "normal",
+              "advice": "疑似睡眠呼吸中止，胸腔內科或睡眠中心可安排檢查。",
+              "departments": ["胸腔內科", "耳鼻喉科"]
+            }
+          ]
+        },
+        {
+          "id": "hypersomnia",
+          "name": "嗜睡",
+          "question": "嗜睡的狀況是？",
+          "options": [
+            {
+              "label": "白天無法控制地睡著，影響工作或開車安全",
+              "type": "normal",
+              "advice": "需評估猝睡症或睡眠呼吸中止，神經內科或睡眠中心可檢查。",
+              "departments": ["神經內科", "胸腔內科"]
+            },
+            {
+              "label": "白天疲倦嗜睡，合併體重增加、怕冷",
+              "type": "normal",
+              "advice": "需評估甲狀腺或代謝問題，內分泌暨新陳代謝科可抽血。",
+              "departments": ["內分泌暨新陳代謝科"]
+            }
+          ]
+        },
+        {
+          "id": "attention",
+          "name": "注意力不集中",
+          "question": "注意力狀況是？",
+          "options": [
+            {
+              "label": "長期注意力差、衝動，影響學業或工作",
+              "type": "normal",
+              "advice": "成人注意力不足過動症可能，精神科可評估。",
+              "departments": ["精神科"]
+            },
+            {
+              "label": "近期注意力變差，合併情緒低落或焦慮",
+              "type": "normal",
+              "advice": "可能與情緒或壓力有關，精神科或家醫科可評估。",
+              "departments": ["精神科", "家醫科"]
+            }
+          ]
+        },
+        {
+          "id": "psychosis",
+          "name": "幻覺／妄想",
+          "question": "幻覺或妄想的狀況是？",
+          "options": [
+            {
+              "label": "出現聽幻覺、被害妄想或行為異常",
+              "type": "normal",
+              "advice": "需評估精神疾病，精神科可安排評估與治療。",
+              "departments": ["精神科"]
+            },
+            {
+              "label": "突然意識混亂、看到不存在的事物",
+              "type": "emergency",
+              "advice": "需排除急性譫妄或藥物影響，請立即急診。",
+              "departments": ["急診", "精神科"]
+            }
+          ]
+        },
+        {
+          "id": "ocd",
+          "name": "強迫行為",
+          "question": "強迫症狀的狀況是？",
+          "options": [
+            {
+              "label": "反覆洗手、檢查，無法控制，影響生活",
+              "type": "normal",
+              "advice": "強迫症可透過精神科評估，藥物與認知行為治療有幫助。",
+              "departments": ["精神科"]
+            },
+            {
+              "label": "強烈焦慮合併強迫思考",
+              "type": "normal",
+              "advice": "精神科可評估並治療。",
+              "departments": ["精神科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skin",
+      "name": "皮膚與毛髮",
+      "icon": "🧴",
+      "symptoms": [
+        {
+          "id": "rash",
+          "name": "紅疹／搔癢",
+          "question": "皮疹的狀況是？",
+          "options": [
+            {
+              "label": "合併高燒、皮膚大片脫皮或黏膜潰爛",
+              "type": "emergency",
+              "advice": "需排除嚴重藥物疹或感染，請立即急診。",
+              "departments": ["急診", "皮膚科"]
+            },
+            {
+              "label": "反覆蕁麻疹，合併呼吸困難或嘴唇腫脹",
+              "type": "emergency",
+              "advice": "可能為過敏性休克前兆，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "慢性搔癢、紅疹，與季節或接觸物有關",
+              "type": "normal",
+              "advice": "濕疹或接觸性皮膚炎常見，皮膚科可評估。",
+              "departments": ["皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "blister",
+          "name": "水泡",
+          "question": "水泡的狀況是？",
+          "options": [
+            {
+              "label": "帶狀分布的疼痛水泡",
+              "type": "normal",
+              "advice": "可能是帶狀疱疹，皮膚科可開立抗病毒藥，越早治療越好。",
+              "departments": ["皮膚科"]
+            },
+            {
+              "label": "大面積鬆弛水泡，合併黏膜潰爛",
+              "type": "emergency",
+              "advice": "需排除嚴重藥物疹或自體免疫疾病，請立即急診。",
+              "departments": ["急診", "皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "hair_loss",
+          "name": "掉髮",
+          "question": "掉髮的狀況是？",
+          "options": [
+            {
+              "label": "合併皮疹、關節痛或全身症狀",
+              "type": "normal",
+              "advice": "需排除自體免疫或全身性疾病，風濕免疫科或皮膚科可評估。",
+              "departments": ["風濕免疫科", "皮膚科"]
+            },
+            {
+              "label": "局部圓形掉髮，頭皮外觀正常",
+              "type": "normal",
+              "advice": "可能是圓禿，皮膚科可評估。",
+              "departments": ["皮膚科"]
+            },
+            {
+              "label": "廣泛性掉髮，最近有壓力、生產或快速減重",
+              "type": "normal",
+              "advice": "休止期落髮常見，皮膚科可評估並追蹤。",
+              "departments": ["皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "dry_skin",
+          "name": "皮膚乾燥",
+          "question": "皮膚乾燥的狀況是？",
+          "options": [
+            {
+              "label": "全身乾燥、脫屑，合併搔癢",
+              "type": "normal",
+              "advice": "冬季癢或乾燥症可能，皮膚科可評估。",
+              "departments": ["皮膚科"]
+            },
+            {
+              "label": "局部乾燥、脫屑，合併紅斑",
+              "type": "normal",
+              "advice": "濕疹或乾癬可能，皮膚科可評估。",
+              "departments": ["皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "mole_change",
+          "name": "痣變化",
+          "question": "痣的變化是？",
+          "options": [
+            {
+              "label": "痣快速變大、顏色不均、邊緣不規則或出血",
+              "type": "normal",
+              "advice": "需排除黑色素瘤，皮膚科可安排皮膚鏡或切片。",
+              "departments": ["皮膚科"]
+            },
+            {
+              "label": "痣緩慢變化，無出血或搔癢",
+              "type": "normal",
+              "advice": "皮膚科可定期追蹤。",
+              "departments": ["皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "athlete_foot",
+          "name": "香港腳／足部皮膚問題",
+          "question": "足部皮膚的狀況是？",
+          "options": [
+            {
+              "label": "趾間脫皮、癢、異味",
+              "type": "normal",
+              "advice": "足癬常見，皮膚科可評估並開立抗黴菌藥。",
+              "departments": ["皮膚科"]
+            },
+            {
+              "label": "足部紅腫熱痛，合併發燒",
+              "type": "emergency",
+              "advice": "需排除蜂窩性組織炎，請立即就醫。",
+              "departments": ["急診", "皮膚科"]
+            }
+          ]
+        },
+        {
+          "id": "cellulitis",
+          "name": "蜂窩性組織炎",
+          "question": "皮膚感染的狀況是？",
+          "options": [
+            {
+              "label": "皮膚紅腫熱痛，範圍擴大，合併發燒",
+              "type": "emergency",
+              "advice": "需立即就醫，可能需要靜脈抗生素。",
+              "departments": ["急診", "感染科", "皮膚科"]
+            },
+            {
+              "label": "局部紅腫，無發燒，範圍未擴大",
+              "type": "normal",
+              "advice": "皮膚科或家醫科可評估，可能需要口服抗生素。",
+              "departments": ["皮膚科", "家醫科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msk",
+      "name": "骨骼與肌肉",
+      "icon": "🦴",
+      "symptoms": [
+        {
+          "id": "joint_pain",
+          "name": "關節痛／腫脹",
+          "question": "關節痛的狀況是？",
+          "options": [
+            {
+              "label": "單一大關節紅、腫、熱、痛，突然發作",
+              "type": "normal",
+              "advice": "需排除痛風或感染性關節炎，可至風濕免疫科或急診。",
+              "departments": ["風濕免疫科", "急診", "骨科"]
+            },
+            {
+              "label": "對稱性多關節腫痛，晨間僵硬超過一小時",
+              "type": "normal",
+              "advice": "需評估類風濕性關節炎，風濕免疫科可安排抽血與影像。",
+              "departments": ["風濕免疫科"]
+            },
+            {
+              "label": "膝關節痛，上下樓梯或蹲下時加重",
+              "type": "normal",
+              "advice": "退化性關節炎常見，骨科或復健科可評估。",
+              "departments": ["骨科", "復健科"]
+            }
+          ]
+        },
+        {
+          "id": "back_pain",
+          "name": "背痛／腰痛",
+          "question": "背痛或腰痛的狀況是？",
+          "options": [
+            {
+              "label": "合併大小便失禁、下肢無力或發燒",
+              "type": "emergency",
+              "advice": "需排除馬尾症候群或感染，請立即急診。",
+              "departments": ["急診"]
+            },
+            {
+              "label": "慢性下背痛，久站或彎腰加重，休息改善",
+              "type": "normal",
+              "advice": "機械性背痛常見，骨科或復健科可評估。",
+              "departments": ["骨科", "復健科"]
+            },
+            {
+              "label": "夜間背痛加劇，合併體重減輕或發燒",
+              "type": "normal",
+              "advice": "需排除感染或腫瘤，骨科或感染科可評估。",
+              "departments": ["骨科", "感染科"]
+            }
+          ]
+        },
+        {
+          "id": "muscle_pain",
+          "name": "肌肉痠痛",
+          "question": "肌肉痠痛的狀況是？",
+          "options": [
+            {
+              "label": "全身肌肉痠痛，合併發燒或疲倦",
+              "type": "normal",
+              "advice": "可能與感染或發炎有關，家醫科可評估。",
+              "departments": ["家醫科"]
+            },
+            {
+              "label": "運動後局部肌肉痠痛，數天內改善",
+              "type": "normal",
+              "advice": "延遲性肌肉痠痛常見，休息與伸展有幫助。",
+              "departments": ["復健科", "骨科"]
+            }
+          ]
+        },
+        {
+          "id": "sprain",
+          "name": "扭傷／拉傷",
+          "question": "扭傷的狀況是？",
+          "options": [
+            {
+              "label": "關節腫脹變形、無法負重或劇烈疼痛",
+              "type": "emergency",
+              "advice": "需排除骨折或韌帶斷裂，請至急診或骨科。",
+              "departments": ["急診", "骨科"]
+            },
+            {
+              "label": "輕微扭傷，可負重，局部腫脹",
+              "type": "normal",
+              "advice": "可先冰敷、加壓、抬高，骨科或復健科可評估。",
+              "departments": ["骨科", "復健科"]
+            }
+          ]
+        },
+        {
+          "id": "fracture",
+          "name": "骨折",
+          "question": "疑似骨折的狀況是？",
+          "options": [
+            {
+              "label": "明顯變形、開放性傷口或無法移動",
+              "type": "emergency",
+              "advice": "請立即撥打 119，勿自行移動傷肢。",
+              "departments": ["急診", "骨科"]
+            },
+            {
+              "label": "懷疑骨折，輕微腫脹但可移動",
+              "type": "normal",
+              "advice": "需 X 光確認，骨科可評估。",
+              "departments": ["骨科", "急診"]
+            }
+          ]
+        },
+        {
+          "id": "osteoporosis",
+          "name": "骨質疏鬆",
+          "question": "骨質疏鬆的狀況是？",
+          "options": [
+            {
+              "label": "輕微外力即骨折，或身高明顯變矮",
+              "type": "normal",
+              "advice": "需評估骨質密度，骨科或內分泌科可安排檢查。",
+              "departments": ["骨科", "內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "停經後女性，想評估骨質疏鬆風險",
+              "type": "normal",
+              "advice": "可至家醫科或骨科安排骨密度檢查。",
+              "departments": ["家醫科", "骨科"]
+            }
+          ]
+        },
+        {
+          "id": "plantar_fasciitis",
+          "name": "足底筋膜炎",
+          "question": "足底疼痛的狀況是？",
+          "options": [
+            {
+              "label": "早晨下床第一步足底劇痛，活動後改善",
+              "type": "normal",
+              "advice": "足底筋膜炎常見，復健科或骨科可評估，伸展與鞋墊有幫助。",
+              "departments": ["復健科", "骨科"]
+            },
+            {
+              "label": "足底疼痛合併紅腫熱痛或發燒",
+              "type": "normal",
+              "advice": "需排除感染，骨科或急診可評估。",
+              "departments": ["骨科", "急診"]
+            }
+          ]
+        },
+        {
+          "id": "shoulder_pain",
+          "name": "肩頸僵硬／肩痛",
+          "question": "肩頸的狀況是？",
+          "options": [
+            {
+              "label": "肩膀無法抬起，合併夜間疼痛",
+              "type": "normal",
+              "advice": "五十肩或旋轉肌問題常見，骨科或復健科可評估。",
+              "departments": ["骨科", "復健科"]
+            },
+            {
+              "label": "肩頸僵硬合併手臂麻木",
+              "type": "normal",
+              "advice": "頸椎問題可能，骨科或神經內科可評估。",
+              "departments": ["骨科", "神經內科"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "endocrine",
+      "name": "內分泌與代謝",
+      "icon": "⚖️",
+      "symptoms": [
+        {
+          "id": "thyroid",
+          "name": "頸部腫大／甲狀腺問題",
+          "question": "甲狀腺相關狀況是？",
+          "options": [
+            {
+              "label": "心悸、手抖、怕熱、體重減輕",
+              "type": "normal",
+              "advice": "可能為甲狀腺機能亢進，內分泌暨新陳代謝科可安排抽血。",
+              "departments": ["內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "怕冷、體重增加、便秘、皮膚乾燥",
+              "type": "normal",
+              "advice": "可能為甲狀腺機能低下，內分泌暨新陳代謝科評估。",
+              "departments": ["內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "頸部前方腫大，合併吞嚥或呼吸不順",
+              "type": "normal",
+              "advice": "需評估甲狀腺結節或腫大，內分泌科或一般外科。",
+              "departments": ["內分泌暨新陳代謝科", "一般外科"]
+            }
+          ]
+        },
+        {
+          "id": "diabetes_symptoms",
+          "name": "多吃／多喝／多尿／體重減輕",
+          "question": "血糖相關症狀是？",
+          "options": [
+            {
+              "label": "明顯吃多、喝多、尿多，體重下降",
+              "type": "normal",
+              "advice": "典型高血糖症狀，內分泌暨新陳代謝科應盡速評估。",
+              "departments": ["內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "已知糖尿病，出現意識混亂、冒冷汗、手抖",
+              "type": "emergency",
+              "advice": "可能為低血糖，意識清楚時立即補充糖分，意識不清請撥 119。",
+              "departments": ["急診", "內分泌暨新陳代謝科"]
+            }
+          ]
+        },
+        {
+          "id": "weight_change",
+          "name": "體重變化",
+          "question": "體重變化的狀況是？",
+          "options": [
+            {
+              "label": "半年內體重減輕超過 10%，非刻意減重",
+              "type": "normal",
+              "advice": "需排除內分泌、腫瘤或慢性感染，家醫科或內分泌科可評估。",
+              "departments": ["家醫科", "內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "體重快速增加，合併水腫或月亮臉",
+              "type": "normal",
+              "advice": "需評估內分泌或腎臟問題，內分泌科或腎臟科可評估。",
+              "departments": ["內分泌暨新陳代謝科", "腎臟科"]
+            }
+          ]
+        },
+        {
+          "id": "cold_intolerance",
+          "name": "怕冷／怕熱",
+          "question": "怕冷或怕熱的狀況是？",
+          "options": [
+            {
+              "label": "持續怕冷，合併疲倦、便祕",
+              "type": "normal",
+              "advice": "需評估甲狀腺機能低下，內分泌科可抽血。",
+              "departments": ["內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "持續怕熱、多汗，合併心悸",
+              "type": "normal",
+              "advice": "需評估甲狀腺機能亢進，內分泌科可抽血。",
+              "departments": ["內分泌暨新陳代謝科"]
+            }
+          ]
+        },
+        {
+          "id": "menstrual_hormone",
+          "name": "月經異常（荷爾蒙相關）",
+          "question": "月經異常的狀況是？",
+          "options": [
+            {
+              "label": "月經不規則、多毛、青春痘，懷疑多囊性卵巢",
+              "type": "normal",
+              "advice": "婦產科或內分泌科可評估，安排超音波與抽血。",
+              "departments": ["婦產科", "內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "月經異常合併體重增加、怕冷",
+              "type": "normal",
+              "advice": "需評估甲狀腺或泌乳素，內分泌科可抽血。",
+              "departments": ["內分泌暨新陳代謝科", "婦產科"]
+            }
+          ]
+        },
+        {
+          "id": "male_hormone",
+          "name": "男性荷爾蒙相關",
+          "question": "男性荷爾蒙的狀況是？",
+          "options": [
+            {
+              "label": "性慾下降、疲倦、肌肉量減少",
+              "type": "normal",
+              "advice": "需評估睪固酮，泌尿科或內分泌科可抽血。",
+              "departments": ["泌尿科", "內分泌暨新陳代謝科"]
+            },
+            {
+              "label": "男性乳房增大",
+              "type": "normal",
+              "advice": "需評估荷爾蒙或藥物影響，內分泌科可評估。",
+              "departments": ["內分泌暨新陳代謝科"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

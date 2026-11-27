@@ -29,7 +29,7 @@ export default function NewsLink({
     };
   }, [open]);
 
-  const shareHref = `/news?url=${encodeURIComponent(url)}`;
+  const shareHref = url;
 
   return (
     <>
