@@ -53,7 +53,39 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-TW">
+      <head>
+        {/* Google Translate 初始化回調（必須先於 element.js 執行） */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              function googleTranslateElementInit() {
+                if (!window.google || !window.google.translate) return;
+                new google.translate.TranslateElement(
+                  {
+                    pageLanguage: 'zh-TW',
+                    includedLanguages: 'zh-TW,zh-CN,en,vi,id,th,ja,ko,fil,km,lo,hi,ru,my,ms',
+                    autoDisplay: false
+                  },
+                  'google_translate_element'
+                );
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+        {/* Google Translate 唯一容器（隱藏） */}
+        <div
+          id="google_translate_element"
+          style={{
+            position: "absolute",
+            top: "-9999px",
+            left: "-9999px",
+            opacity: 0,
+            pointerEvents: "none",
+          }}
+        />
+
         {children}
 
         {/* AdSense */}
@@ -63,27 +95,10 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        {/* Google Translate */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              function googleTranslateElementInit() {
-                new google.translate.TranslateElement(
-                  {
-                    pageLanguage: 'zh-TW',
-                    includedLanguages: 'en,ja,ko,vi,th,id,zh-CN',
-                    autoDisplay: false
-                  },
-                  'google_translate_element'
-                );
-              }
-            `,
-          }}
-        />
+        {/* Google Translate（唯一載入點） */}
         <script
           src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
           async
-          defer
         />
 
         {/* Cloudflare Turnstile */}
