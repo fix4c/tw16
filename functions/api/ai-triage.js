@@ -71,7 +71,7 @@ export async function onRequestPost(context) {
           max_tokens: 300,
           response_format: { type: "json_object" },
           stream: true,
-          // 👇 修正 400：移除 thinking_budget，改用 thinking_level: "low"
+          // 👇 修正 400：移除 thinking_budget，僅保留 thinking_level，並使用模型支援的 "low"
           thinking_level: "low",
         }),
       }
