@@ -56,7 +56,6 @@ export async function onRequestPost(context) {
 輸出格式：{"is_emergency":bool,"departments":["科別"],"advice":"2-3句建議","warning":"緊急紅線或空"}
 症狀：${symptoms}`;
 
-    // 👇 修改点 1：将模型切换为 gemini-3.7-flash，该版本无 thinking 熔断机制
     const res = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
@@ -72,8 +71,8 @@ export async function onRequestPost(context) {
           max_tokens: 300,
           response_format: { type: "json_object" },
           stream: true,
-          // 👇 修改点 2：把 thinkingLevel 改回原生支持的安全值，避免因参数格式出错直接 503
-          thinking_budget: 0,
+          // 👇 修正 400：移除 thinking_budget，改用 thinking_level: "low"
+          thinking_level: "low",
         }),
       }
     );
@@ -110,7 +109,6 @@ export async function onRequestPost(context) {
               if (data === "[DONE]") continue;
               try {
                 const json = JSON.parse(data);
-                // 👇 修改点 3：主动拦截上游通过 SSE 流内传回的 error 帧
                 if (json.error) {
                   await writer.write(
                     encoder.encode(`data: ${JSON.stringify({ error: "AI 服務暫時無法使用" })}\n\n`)
