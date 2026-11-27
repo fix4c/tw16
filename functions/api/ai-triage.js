@@ -137,7 +137,6 @@ export async function onRequestPost(context) {
     }
 
     // 嚴格限制 AI 的角色與輸出格式，並把科別鎖死在白名單內。
-    // 保留原本的完整 Prompt 結構，確保模型行為與你原本測試的一致。
     const prompt = `
 你是一個專業的台灣醫療分診導航助手。
 請根據使用者的症狀，判斷建議掛號的科別，並評估緊急程度。
@@ -162,22 +161,22 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 症狀描述：「${symptoms}」
 `;
 
-    // 👇 關鍵效能優化：改用 Gemini 原生 API + gemini-2.0-flash 模型
-    // 原生端點比 OpenAI 相容層快 2-3 倍，gemini-2.0-flash 是目前 Google 官方回應最快的模型
+    // 👇 回滾：使用 OpenAI 相容端點，確保絕不發生 404。
+    // 並將原本錯誤的 gemini-3.6-flash 改為官方支援且極快的 gemini-1.5-flash。
     const res = await fetchGeminiWithRetry(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${GEMINI_API_KEY}`,
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.1,
-            maxOutputTokens: 800,
-            responseMimeType: "application/json",
-          },
+          model: "gemini-1.5-flash", 
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.1,
+          max_tokens: 500, // 限制輸出長度，防止模型長篇大論拖慢速度
+          response_format: { type: "json_object" },
         }),
       }
     );
@@ -188,9 +187,7 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
     }
 
     const data = await res.json();
-
-    // 原生 API 的回應結構：candidates[0].content.parts[0].text
-    const rawContent = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? "";
+    const rawContent = data.choices?.[0]?.message?.content?.trim() ?? "";
 
     // 清除可能出現的 markdown code fence
     const cleanedContent = rawContent.replace(/```json|```/g, "").trim();
