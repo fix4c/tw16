@@ -71,9 +71,13 @@ export default function SymptomsFlowPage() {
     setSelectedCounty("");
   };
 
+
+  const [loadingStartTime, setLoadingStartTime] = useState(0);
+
   const handleAiSubmit = async () => {
     if (!aiInput.trim()) return;
     setAiLoading(true);
+    setLoadingStartTime(Date.now()); // 新增這行
     setAiResult(null);
 
     try {
@@ -176,7 +180,7 @@ export default function SymptomsFlowPage() {
               >
                 {aiLoading ? (
                   // 👇 優化：更換等待時的提示文字，減少使用者的焦慮感
-                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> 醫師助理分析中，請稍候...</>
+                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> 分析中... 已等待 {Math.max(1, Math.round((Date.now() - loadingStartTime) / 1000))} 秒</>
                 ) : "✨ 開始分析"}
               </button>
 
