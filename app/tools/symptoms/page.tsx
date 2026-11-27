@@ -21,7 +21,7 @@ type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
 
 const categories = (rawData as { categories: Category[] }).categories;
 
-// 👇 全台縣市地理排序（由北而南、由西而東）
+// 全台縣市地理排序（由北而南、由西而東）
 const COUNTY_ORDER = [
   "基隆市", "臺北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣",
   "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "臺南市",
@@ -57,13 +57,13 @@ export default function SymptomsFlowPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
-  // 👇 新增：等待秒數狀態
+  // 等待秒數狀態
   const [loadingSeconds, setLoadingSeconds] = useState(0);
 
   // 縣市選擇
   const [selectedCounty, setSelectedCounty] = useState("");
 
-  // 👇 新增：讓等待秒數每秒跳動
+  // 讓等待秒數每秒跳動
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (aiLoading) {
@@ -88,62 +88,72 @@ export default function SymptomsFlowPage() {
     setLoadingSeconds(0);
   };
 
-const handleAiSubmit = async () => {
-  if (!aiInput.trim()) return;
-  setAiLoading(true);
-  setAiResult(null);
-  setStreamedText(""); // 需要新增一个状态来显示流式文本
+  const handleAiSubmit = async () => {
+    if (!aiInput.trim()) return;
+    setAiLoading(true);
+    setAiResult(null);
 
-  try {
-    const res = await fetch("/api/ai-triage", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ symptoms: aiInput }),
-    });
+    try {
+      const res = await fetch("/api/ai-triage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symptoms: aiInput }),
+      });
 
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.error || "AI 分析失敗");
-      return;
-    }
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || "AI 分析失敗");
+        return;
+      }
 
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullJsonString = "";
+      // 修復 TypeScript 報錯：檢查 res.body 是否存在
+      if (!res.body) {
+        throw new Error("無法讀取回應內容");
+      }
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullJsonString = "";
 
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split("\n");
-      for (const line of lines) {
-        if (line.startsWith("data: ")) {
-          const data = line.slice(6).trim();
-          if (data === "[DONE]") continue;
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.content) {
-              fullJsonString += parsed.content;
-              // 可以在这里更新 UI，显示流式文本
-              setStreamedText(fullJsonString); 
+      // 讀取流式資料
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+        
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6).trim();
+            if (data === "[DONE]") continue;
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.error) {
+                alert(parsed.error);
+                return;
+              }
+              if (parsed.content) {
+                fullJsonString += parsed.content;
+              }
+            } catch (e) {
+              // 忽略無法解析的行（如心跳包）
             }
-          } catch (e) { /* 忽略 */ }
+          }
         }
       }
+
+      // 流結束後，嘗試解析完整的 JSON
+      const cleaned = fullJsonString.replace(/```json|```/g, "").trim();
+      const finalResult = JSON.parse(cleaned);
+      setAiResult(finalResult);
+
+    } catch (e) {
+      alert("網路錯誤或分析超時，請稍後再試。");
+    } finally {
+      setAiLoading(false);
     }
-
-    // 流结束后，尝试解析完整的 JSON
-    const cleaned = fullJsonString.replace(/```json|```/g, "").trim();
-    const finalResult = JSON.parse(cleaned);
-    setAiResult(finalResult); // 设置最终结果
-
-  } catch (e) {
-    alert("網路錯誤，請稍後再試。");
-  } finally {
-    setAiLoading(false);
-  }
-};
+  };
 
   // AI 結果科別：映射、去重、兜底
   const safeAiDepts: string[] = aiResult
