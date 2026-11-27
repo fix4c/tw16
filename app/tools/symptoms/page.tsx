@@ -88,29 +88,62 @@ export default function SymptomsFlowPage() {
     setLoadingSeconds(0);
   };
 
-  const handleAiSubmit = async () => {
-    if (!aiInput.trim()) return;
-    setAiLoading(true);
-    setAiResult(null);
+const handleAiSubmit = async () => {
+  if (!aiInput.trim()) return;
+  setAiLoading(true);
+  setAiResult(null);
+  setStreamedText(""); // 需要新增一个状态来显示流式文本
 
-    try {
-      const res = await fetch("/api/ai-triage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms: aiInput }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setAiResult(data);
-      } else {
-        alert(data.error || "AI 分析失敗，請稍後再試。");
-      }
-    } catch (e) {
-      alert("網路錯誤，請稍後再試。");
-    } finally {
-      setAiLoading(false);
+  try {
+    const res = await fetch("/api/ai-triage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ symptoms: aiInput }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.error || "AI 分析失敗");
+      return;
     }
-  };
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullJsonString = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split("\n");
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const data = line.slice(6).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              fullJsonString += parsed.content;
+              // 可以在这里更新 UI，显示流式文本
+              setStreamedText(fullJsonString); 
+            }
+          } catch (e) { /* 忽略 */ }
+        }
+      }
+    }
+
+    // 流结束后，尝试解析完整的 JSON
+    const cleaned = fullJsonString.replace(/```json|```/g, "").trim();
+    const finalResult = JSON.parse(cleaned);
+    setAiResult(finalResult); // 设置最终结果
+
+  } catch (e) {
+    alert("網路錯誤，請稍後再試。");
+  } finally {
+    setAiLoading(false);
+  }
+};
 
   // AI 結果科別：映射、去重、兜底
   const safeAiDepts: string[] = aiResult
