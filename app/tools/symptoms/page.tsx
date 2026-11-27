@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import rawData from "@/data/symptoms.json";
 import rawClinics from "@/data/clinics.json";
@@ -18,6 +18,13 @@ type Option = {
 
 type Symptom = { id: string; name: string; question: string; options: Option[] };
 type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
+
+type AiResult = {
+  is_emergency?: boolean;
+  departments?: string[];
+  advice?: string;
+  warning?: string;
+};
 
 const categories = (rawData as { categories: Category[] }).categories;
 
@@ -41,6 +48,43 @@ const allCounties = Array.from(
   return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
 });
 
+/** 還原 JSON 字串中的跳脫字元；若結尾是不完整的跳脫序列則原樣回傳 */
+function unescapeJsonString(s: string): string {
+  try {
+    return JSON.parse(`"${s}"`);
+  } catch {
+    return s.replace(/\\$/, "");
+  }
+}
+
+/**
+ * 從「尚未接收完整」的 JSON 字串中盡可能取出欄位，
+ * 讓結果卡片能邊串流邊顯示（急診判斷 → 科別 → 建議）。
+ */
+function parsePartialAiJson(s: string): AiResult {
+  const out: AiResult = {};
+
+  const em = s.match(/"is_emergency"\s*:\s*(true|false)/);
+  if (em) out.is_emergency = em[1] === "true";
+
+  const dm = s.match(/"departments"\s*:\s*\[([^\]]*)\]/);
+  if (dm) {
+    out.departments = Array.from(dm[1].matchAll(/"((?:[^"\\]|\\.)*)"/g)).map((m) =>
+      unescapeJsonString(m[1])
+    );
+  }
+
+  const am = s.match(/"advice"\s*:\s*"((?:[^"\\]|\\.)*)("|$)/);
+  if (am) out.advice = unescapeJsonString(am[1]);
+
+  const wm = s.match(/"warning"\s*:\s*"((?:[^"\\]|\\.)*)("|$)/);
+  if (wm) out.warning = unescapeJsonString(wm[1]);
+
+  return out;
+}
+
+const AI_TIMEOUT_MS = 25000;
+
 export default function SymptomsFlowPage() {
   const [mode, setMode] = useState<"select" | "ai">("select");
   const [step, setStep] = useState(0);
@@ -50,15 +94,15 @@ export default function SymptomsFlowPage() {
 
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiResult, setAiResult] = useState<any>(null);
-  
-  // 👇 新增：用於顯示打字機效果的狀態
-  const [streamedText, setStreamedText] = useState("");
+  const [aiResult, setAiResult] = useState<AiResult | null>(null);
+
   const [loadingSeconds, setLoadingSeconds] = useState(0);
   const [selectedCounty, setSelectedCounty] = useState("");
 
+  const abortRef = useRef<AbortController | null>(null);
+
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (aiLoading) {
       setLoadingSeconds(0);
       interval = setInterval(() => {
@@ -70,83 +114,131 @@ export default function SymptomsFlowPage() {
     };
   }, [aiLoading]);
 
+  // 離開頁面時中止進行中的請求
+  useEffect(() => {
+    return () => abortRef.current?.abort();
+  }, []);
+
   const reset = () => {
+    abortRef.current?.abort();
     setStep(0);
     setSelectedCategory(null);
     setSelectedSymptom(null);
     setResult(null);
     setAiInput("");
     setAiResult(null);
+    setAiLoading(false);
     setSelectedCounty("");
     setLoadingSeconds(0);
-    setStreamedText(""); // 重置打字機文字
   };
 
   const handleAiSubmit = async () => {
-    if (!aiInput.trim()) return;
+    if (!aiInput.trim() || aiLoading) return;
+
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+
     setAiLoading(true);
     setAiResult(null);
-    setStreamedText(""); // 清空上一次的文字
 
     try {
       const res = await fetch("/api/ai-triage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptoms: aiInput }),
+        signal: controller.signal,
       });
 
       if (!res.ok) {
-        const err = await res.json();
+        const err = await res.json().catch(() => ({}));
         alert(err.error || "AI 分析失敗");
         return;
       }
-
       if (!res.body) throw new Error("無法讀取回應內容");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
+      let buffer = "";
       let fullJsonString = "";
 
-      while (true) {
+      const handleLine = (line: string): boolean => {
+        if (!line.startsWith("data:")) return true;
+        const data = line.slice(5).trim();
+        if (!data || data === "[DONE]") return true;
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.error) {
+            alert(parsed.error);
+            return false;
+          }
+          if (parsed.content) {
+            fullJsonString += parsed.content;
+            // 邊接收邊更新：is_emergency 一出現就先顯示結果卡片
+            const partial = parsePartialAiJson(fullJsonString);
+            if (partial.is_emergency !== undefined) {
+              setAiResult(partial);
+            }
+          }
+        } catch {
+          // 忽略不完整的片段
+        }
+        return true;
+      };
+
+      let aborted = false;
+      while (!aborted) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-        
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
         for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6).trim();
-            if (data === "[DONE]") continue;
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.error) {
-                alert(parsed.error);
-                return;
-              }
-              if (parsed.content) {
-                fullJsonString += parsed.content;
-                // 👇 優化：邊接收邊更新畫面，實現打字機效果
-                setStreamedText(fullJsonString);
-              }
-            } catch (e) {}
+          if (!handleLine(line.trim())) {
+            aborted = true;
+            setAiResult(null);
+            break;
           }
         }
       }
+      if (aborted) return;
+      if (buffer.trim()) handleLine(buffer.trim());
 
+      // 以完整 JSON 為準；失敗時退回使用已解析的部分內容
       const cleaned = fullJsonString.replace(/```json|```/g, "").trim();
-      const finalResult = JSON.parse(cleaned);
-      setAiResult(finalResult);
-
-    } catch (e) {
-      alert("網路錯誤或分析超時，請稍後再試。");
+      try {
+        setAiResult(JSON.parse(cleaned));
+      } catch {
+        const fallback = parsePartialAiJson(fullJsonString);
+        if (fallback.departments && fallback.departments.length > 0) {
+          setAiResult(fallback);
+        } else {
+          setAiResult(null);
+          alert("AI 回應格式異常，請再試一次。");
+        }
+      }
+    } catch (e: any) {
+      if (e?.name === "AbortError") {
+        // 使用者重設或切換模式時的中止不提示；逾時才提示
+        if (abortRef.current === controller) {
+          alert("分析超時，請稍後再試。");
+        }
+      } else {
+        alert("網路錯誤或分析超時，請稍後再試。");
+      }
     } finally {
-      setAiLoading(false);
+      clearTimeout(timeout);
+      if (abortRef.current === controller) {
+        setAiLoading(false);
+      }
     }
   };
 
-  const safeAiDepts: string[] = aiResult
-    ? getSafeDepartments(aiResult.departments ?? [])
+  const safeAiDepts: string[] = aiResult?.departments
+    ? getSafeDepartments(aiResult.departments)
     : [];
   const safeResultDepts: string[] = result
     ? getSafeDepartments(result.departments ?? [])
@@ -190,6 +282,7 @@ export default function SymptomsFlowPage() {
                 value={aiInput}
                 onChange={(e) => setAiInput(e.target.value)}
                 placeholder="請詳細描述您的不適..."
+                maxLength={500}
                 className="w-full h-32 p-4 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none mb-4 bg-slate-50"
               />
               <button
@@ -202,13 +295,6 @@ export default function SymptomsFlowPage() {
                 ) : "✨ 開始分析"}
               </button>
 
-              {/* 👇 新增：顯示打字機效果的文字 */}
-              {aiLoading && streamedText && (
-                <div className="mt-6 p-4 bg-slate-100 rounded-xl text-sm font-mono text-slate-600 break-all animate-pulse">
-                  {streamedText}
-                </div>
-              )}
-
               {aiResult && (
                 <div className="mt-8 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-bottom-4">
                   <div className={`p-6 rounded-2xl border ${aiResult.is_emergency ? "bg-rose-50 border-rose-200" : "bg-teal-50 border-teal-200"}`}>
@@ -216,16 +302,18 @@ export default function SymptomsFlowPage() {
                       <span className="text-3xl">{aiResult.is_emergency ? "🚨" : "✅"}</span>
                       <h3 className={`text-xl font-bold ${aiResult.is_emergency ? "text-rose-700" : "text-teal-700"}`}>{aiResult.is_emergency ? "建議立即就醫" : "建議門診評估"}</h3>
                     </div>
-                    <p className="text-slate-700 leading-relaxed mb-4">{aiResult.advice}</p>
+                    {aiResult.advice && <p className="text-slate-700 leading-relaxed mb-4">{aiResult.advice}</p>}
                     {aiResult.warning && <p className="text-sm font-bold text-rose-600 bg-white/60 p-3 rounded-lg mb-4">⚠️ {aiResult.warning}</p>}
-                    <div className="bg-white/60 p-4 rounded-xl border border-white">
-                      <p className="text-xs text-slate-500 mb-2">建議掛號科別：</p>
-                      <div className="flex flex-wrap gap-2">
-                        {safeAiDepts.map((d: string) => (
-                          <span key={d} className="px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">{d}</span>
-                        ))}
+                    {safeAiDepts.length > 0 && (
+                      <div className="bg-white/60 p-4 rounded-xl border border-white">
+                        <p className="text-xs text-slate-500 mb-2">建議掛號科別：</p>
+                        <div className="flex flex-wrap gap-2">
+                          {safeAiDepts.map((d: string) => (
+                            <span key={d} className="px-3 py-1 bg-white border border-slate-200 rounded-md text-sm font-bold text-slate-700">{d}</span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     {aiReason && (
                       <div className="mt-4 p-3 bg-white/80 border border-teal-100 rounded-lg">
                         <p className="text-xs font-bold text-teal-700 mb-1">💡 為什麼建議這個科別？</p>
@@ -234,16 +322,18 @@ export default function SymptomsFlowPage() {
                     )}
                   </div>
 
-                  <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
-                    <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeAiDepts[0]} 診所</h4>
-                    <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
-                      <select value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
-                        <option value="">請選擇縣市</option>
-                        {allCounties.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
-                      <Link href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${safeAiDepts[0]}`)}` : "#"} className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${selectedCounty ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`} onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}>查看在地診所 →</Link>
+                  {safeAiDepts[0] && (
+                    <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
+                      <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeAiDepts[0]} 診所</h4>
+                      <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
+                        <select value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
+                          <option value="">請選擇縣市</option>
+                          {allCounties.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                        <Link href={selectedCounty ? `/clinics/${encodeURIComponent(`${selectedCounty}-${safeAiDepts[0]}`)}` : "#"} className={`flex-1 flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-colors ${selectedCounty ? "bg-teal-600 text-white hover:bg-teal-700 shadow-md shadow-teal-500/20" : "bg-slate-200 text-slate-400 cursor-not-allowed"}`} onClick={(e) => { if (!selectedCounty) e.preventDefault(); }}>查看在地診所 →</Link>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
             </div>
