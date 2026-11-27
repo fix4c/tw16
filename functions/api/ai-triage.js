@@ -77,6 +77,51 @@ function getSafeDepartments(rawDepts) {
   return unique.length > 0 ? unique : ["家醫科"];
 }
 
+/**
+ * 👇 新增：帶指數退避重試的 Gemini API 呼叫。
+ * 針對 503（服務暫時不可用）與 429（請求過多）自動重試，
+ * 避免使用者第一次點擊就遇到錯誤。
+ */
+async function fetchGeminiWithRetry(url, options, maxRetries = 3) {
+  let lastResponse = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.ok) {
+        return response;
+      }
+
+      lastResponse = response;
+
+      // 只對暫時性錯誤（503 / 429）重試
+      if ((response.status === 503 || response.status === 429) && attempt < maxRetries - 1) {
+        // 指數退避：1s → 2s → 4s（加上隨機抖動避免併發撞車）
+        const waitTime = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+        console.warn(
+          `Gemini API 返回 ${response.status}，${waitTime.toFixed(0)}ms 後重試 (${attempt + 1}/${maxRetries})`
+        );
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+        continue;
+      }
+
+      // 其他錯誤或已達最大重試次數：直接回傳，交由上層處理
+      return response;
+    } catch (error) {
+      // 網路層錯誤：若還有重試次數則等待後重試
+      if (attempt === maxRetries - 1) throw error;
+      console.warn(
+        `網路請求失敗，重試中 (${attempt + 1}/${maxRetries}):`,
+        error.message
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  return lastResponse;
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -117,20 +162,24 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 使用者的症狀描述：「${symptoms}」
 `;
 
-    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${GEMINI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gemini-3.6-flash",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.1,
-        // 強制模型輸出合法 JSON，避免 markdown 或額外文字
-        response_format: { type: "json_object" },
-      }),
-    });
+    // 👇 改為呼叫帶重試機制的函數
+    const res = await fetchGeminiWithRetry(
+      "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GEMINI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gemini-3.6-flash",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.1,
+          // 強制模型輸出合法 JSON，避免 markdown 或額外文字
+          response_format: { type: "json_object" },
+        }),
+      }
+    );
 
     if (!res.ok) {
       const errText = await res.text();
