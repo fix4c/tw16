@@ -162,10 +162,9 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 症狀描述：「${symptoms}」
 `;
 
-    // 👇 關鍵效能優化：改用 Gemini 原生 API + gemini-2.0-flash 模型
-    // 原生端點比 OpenAI 相容層快 2-3 倍，gemini-2.0-flash 是目前 Google 官方回應最快的模型
+    // 👇 修正 404：改用相容性最高、速度極快的 gemini-1.5-flash
     const res = await fetchGeminiWithRetry(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
