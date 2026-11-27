@@ -295,7 +295,9 @@ export async function onRequestPost(context) {
       return jsonResponse({ error: "請提供症狀描述" }, 400);
     }
 
-    const apiKey = env.GEMINI_API_KEY;
+    // 優先使用 AI 分診專用的新 Key，沒有才退回舊 Key
+    const apiKey = env.Gemini_API_Key_2 || env.GEMINI_API_KEY;
+    const keySource = env.Gemini_API_Key_2 ? "triage-key" : "default-key";
     if (!apiKey) {
       return jsonResponse({ error: "未設定 AI API Key" }, 500);
     }
@@ -409,7 +411,7 @@ export async function onRequestPost(context) {
     });
 
     return new Response(upstreamBody.pipeThrough(transformer), {
-      headers: { ...SSE_HEADERS, "X-Model": winner.model },
+      headers: { ...SSE_HEADERS, "X-Model": winner.model, "X-Key-Source": keySource },
     });
   } catch (e) {
     console.error("ai-triage error:", e);
