@@ -85,7 +85,7 @@ function parsePartialAiJson(s: string): AiResult {
 
 /* ---------------- AI 請求：逾時偵測 + 自動重試 ---------------- */
 
-// 後端最多等 9 秒（含對沖請求），前端首包等待需略大於此值
+// 後端最多等 9 秒（含備援模型），前端首包等待需略大於此值
 const FIRST_DATA_TIMEOUT_MS = 11000;
 // 開始串流後，若超過這段時間沒有新資料就視為卡住
 const IDLE_TIMEOUT_MS = 8000;
@@ -144,7 +144,7 @@ async function requestTriage(
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      // 5xx（含 504 逾時）可重試；4xx（格式錯誤、429 額度）不重試
+      // 5xx（含 504 逾時）可重試；4xx（格式錯誤、429 額度）不重試，避免加重限流
       throw new TriageError(err.error || "AI 分析失敗", res.status >= 500);
     }
     if (!res.body) throw new TriageError("無法讀取回應內容", true);
@@ -350,6 +350,9 @@ export default function SymptomsFlowPage() {
                 <p className="text-sm text-slate-500">例如：「我昨天開始右下腹一直痛，還有點發燒」</p>
               </div>
               <textarea
+                id="ai-symptoms"
+                name="symptoms"
+                aria-label="症狀描述"
                 value={aiInput}
                 onChange={(e) => setAiInput(e.target.value)}
                 placeholder="請詳細描述您的不適..."
@@ -397,7 +400,7 @@ export default function SymptomsFlowPage() {
                     <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
                       <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeAiDepts[0]} 診所</h4>
                       <div className="flex flex-col md:flex-row gap-3 max-w-lg mx-auto">
-                        <select value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
+                        <select id="county-ai" name="county" aria-label="選擇縣市" value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
                           <option value="">請選擇縣市</option>
                           {allCounties.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
@@ -473,7 +476,7 @@ export default function SymptomsFlowPage() {
                   <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto">
                     <h4 className="font-bold text-slate-900 mb-3 text-center">尋找您附近的 {safeResultDepts[0]} 診所</h4>
                     <div className="flex flex-col gap-3">
-                      <select value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
+                      <select id="county-select" name="county" aria-label="選擇縣市" value={selectedCounty} onChange={(e) => setSelectedCounty(e.target.value)} className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-teal-500 text-slate-700 font-medium">
                         <option value="">請選擇縣市</option>
                         {allCounties.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
