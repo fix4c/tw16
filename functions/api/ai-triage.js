@@ -136,7 +136,6 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ error: "未設定 AI API Key" }), { status: 500 });
     }
 
-    // 嚴格限制 AI 的角色與輸出格式，並把科別鎖死在白名單內。
     const prompt = `
 你是一個專業的台灣醫療分診導航助手。
 請根據使用者的症狀，判斷建議掛號的科別，並評估緊急程度。
@@ -144,7 +143,7 @@ export async function onRequestPost(context) {
 【嚴格規則】
 1. 絕對不要進行疾病診斷，也不要建議藥物。
 2. 只能提供「建議科別」、「是否緊急」與「就醫前注意事項」。
-3. 必須嚴格輸出 JSON 格式，絕對不要包含任何 markdown 標記、前言或後語（例如「好的，這是您的分析結果」）。
+3. 必須嚴格輸出 JSON 格式，絕對不要包含任何 markdown 標記、前言或後語。
 4. departments 陣列中的每一個科別名稱，必須完全等於下列白名單中的字串：
 ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 5. 如果症狀可能涉及多個科別，請挑選最相關的 1 至 3 個。
@@ -161,8 +160,8 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
 症狀描述：「${symptoms}」
 `;
 
-    // 👇 回滾：使用 OpenAI 相容端點，確保絕不發生 404。
-    // 並將原本錯誤的 gemini-3.6-flash 改為官方支援且極快的 gemini-1.5-flash。
+    // 👇 關鍵修正：將已淘汰的 gemini-1.5-flash 改為目前可用的 gemini-2.5-flash
+    // 若你的 API Key 仍無法使用 2.5-flash，可改用別名 "gemini-flash-latest"
     const res = await fetchGeminiWithRetry(
       "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
@@ -172,10 +171,10 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
           "Authorization": `Bearer ${GEMINI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gemini-1.5-flash", 
+          model: "gemini-2.5-flash",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.1,
-          max_tokens: 500, // 限制輸出長度，防止模型長篇大論拖慢速度
+          max_tokens: 500,
           response_format: { type: "json_object" },
         }),
       }
@@ -189,14 +188,12 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
     const data = await res.json();
     const rawContent = data.choices?.[0]?.message?.content?.trim() ?? "";
 
-    // 清除可能出現的 markdown code fence
     const cleanedContent = rawContent.replace(/```json|```/g, "").trim();
 
     let parsed;
     try {
       parsed = JSON.parse(cleanedContent);
     } catch {
-      // 模型偶爾仍可能輸出非法 JSON，直接回傳安全預設值，避免 500
       parsed = {
         is_emergency: false,
         departments: ["家醫科"],
@@ -205,7 +202,6 @@ ${STANDARD_DEPARTMENTS.map((d) => `   - "${d}"`).join("\n")}
       };
     }
 
-    // 後端安全網：把模型輸出的科別收斂到白名單
     const safeDepartments = getSafeDepartments(parsed.departments);
 
     const result = {
