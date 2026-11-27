@@ -21,15 +21,88 @@ const DEPT_ALIAS_MAP = {
   中醫: "中醫一般科", 中醫科: "中醫一般科",
 };
 
-// 若 Cloudflare 環境變數設定了 GEMINI_MODEL 則優先使用，方便日後換模型
+/* ---------------- 可調參數（也可用 Cloudflare 環境變數覆寫） ---------------- */
+// GEMINI_MODEL           主要模型，預設 gemini-3.7-flash
+// GEMINI_FALLBACK_MODEL  對沖請求使用的模型，預設與主要模型相同
+// GEMINI_REASONING       reasoning_effort：minimal / low / medium；設為 none 則不送此參數
 const DEFAULT_MODEL = "gemini-3.7-flash";
+const DEFAULT_REASONING = "low";
 const MAX_SYMPTOM_LENGTH = 500;
+
+// 第一個請求超過這個時間還沒收到第一個 token，就同時發第二個請求（對沖）
+const HEDGE_AFTER_MS = 4000;
+// 整體等待上限：超過就放棄並回 504，讓前端自動重試
+const TOTAL_TIMEOUT_MS = 9000;
+
+const GEMINI_URL =
+  "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
 
 function jsonResponse(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
     headers: { "Content-Type": "application/json; charset=utf-8" },
   });
+}
+
+class UpstreamError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+}
+
+/** 對 Gemini 發出請求；若因 reasoning_effort 被拒（400）則去掉該參數重試一次 */
+async function openUpstream({ apiKey, model, effort, messages, signal }) {
+  const efforts = effort ? [effort, null] : [null];
+  let lastErr = new UpstreamError("unknown", 502);
+
+  for (const eff of efforts) {
+    const payload = {
+      model,
+      messages,
+      temperature: 0.1,
+      // 思考 token 可能佔用額度，額度太小容易讓 JSON 被截斷
+      max_tokens: 1024,
+      response_format: { type: "json_object" },
+      stream: true,
+    };
+    // ✅ OpenAI 相容端點用 reasoning_effort（不可與 thinking_level 並用）
+    if (eff) payload.reasoning_effort = eff;
+
+    const res = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+      signal,
+    });
+
+    if (res.ok && res.body) return res;
+
+    const text = await res.text().catch(() => "");
+    console.error(
+      `Gemini API error [${model}${eff ? "/" + eff : ""}]: ${res.status} ${text.slice(0, 300)}`
+    );
+    lastErr = new UpstreamError(`HTTP ${res.status}`, res.status);
+    if (res.status !== 400) break; // 只有 400 才值得去掉參數重試
+  }
+  throw lastErr;
+}
+
+/** 發起一次嘗試，並等到「第一個資料塊」到達才算成功（避免只拿到標頭就卡住） */
+function startAttempt(ctx, model, controllers) {
+  const ac = new AbortController();
+  controllers.push(ac);
+
+  return (async () => {
+    const res = await openUpstream({ ...ctx, model, signal: ac.signal });
+    const reader = res.body.getReader();
+    const first = await reader.read();
+    if (first.done || !first.value) throw new UpstreamError("empty response", 502);
+    return { reader, first: first.value, ac };
+  })();
 }
 
 /**
@@ -93,51 +166,94 @@ export async function onRequestPost(context) {
       return jsonResponse({ error: "請提供症狀描述" }, 400);
     }
 
-    const GEMINI_API_KEY = env.GEMINI_API_KEY;
-    if (!GEMINI_API_KEY) {
+    const apiKey = env.GEMINI_API_KEY;
+    if (!apiKey) {
       return jsonResponse({ error: "未設定 AI API Key" }, 500);
     }
 
     const model = env.GEMINI_MODEL || DEFAULT_MODEL;
+    const fallbackModel = env.GEMINI_FALLBACK_MODEL || model;
+    const rawEffort = env.GEMINI_REASONING || DEFAULT_REASONING;
+    const effort = rawEffort === "none" ? null : rawEffort;
 
     const systemPrompt =
       `你是台灣醫療分診助手。根據使用者症狀只輸出 JSON，嚴禁診斷或建議藥物。\n` +
       `科別只能從白名單選擇：${STANDARD_DEPARTMENTS.join("、")}\n` +
       `JSON 欄位順序固定：{"is_emergency":布林,"departments":["科別"],"advice":"2句內、60字內的就醫建議","warning":"需立即就醫的紅線，沒有則空字串"}`;
 
-    const upstream = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${GEMINI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `症狀：${symptoms.slice(0, MAX_SYMPTOM_LENGTH)}` },
-          ],
-          temperature: 0.1,
-          // 思考 token 可能佔用額度，300 容易讓 JSON 被截斷
-          max_tokens: 1024,
-          response_format: { type: "json_object" },
-          stream: true,
-          // ✅ 正確參數：OpenAI 相容端點使用 reasoning_effort
-          // （頂層 thinking_level 會造成 400，且不可與 reasoning_effort 並用）
-          reasoning_effort: "low",
-        }),
-      }
+    const ctx = {
+      apiKey,
+      effort,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `症狀：${symptoms.slice(0, MAX_SYMPTOM_LENGTH)}` },
+      ],
+    };
+
+    /* ---------- Hedged request：慢就補發第二個，誰先回就用誰 ---------- */
+    const controllers = [];
+    let hedgeTimer;
+
+    const p1 = startAttempt(ctx, model, controllers);
+    const p2 = new Promise((resolve, reject) => {
+      let started = false;
+      const startHedge = () => {
+        if (started) return;
+        started = true;
+        clearTimeout(hedgeTimer);
+        startAttempt(ctx, fallbackModel, controllers).then(resolve, reject);
+      };
+      hedgeTimer = setTimeout(startHedge, HEDGE_AFTER_MS);
+      // 第一個請求若很快失敗，立刻補發，不必等到 4 秒
+      p1.then(() => clearTimeout(hedgeTimer), startHedge);
+    });
+
+    const totalTimer = setTimeout(
+      () => controllers.forEach((c) => c.abort()),
+      TOTAL_TIMEOUT_MS
     );
 
-    if (!upstream.ok || !upstream.body) {
-      const errText = await upstream.text().catch(() => "");
-      console.error(`Gemini API error: ${upstream.status} ${errText.slice(0, 500)}`);
+    let winner;
+    try {
+      winner = await Promise.any([p1, p2]);
+    } catch (agg) {
+      const errors = agg?.errors || [agg];
+      const statuses = errors.map((e) => e?.status).filter(Boolean);
+      console.error("All Gemini attempts failed:", statuses.join(",") || "timeout/abort");
+      if (statuses.includes(429)) {
+        return jsonResponse({ error: "AI 使用量較高，請稍候幾秒再試" }, 429);
+      }
+      if (statuses.length === 0) {
+        return jsonResponse({ error: "AI 回應逾時" }, 504);
+      }
       return jsonResponse({ error: "AI 服務暫時無法使用，請稍後再試" }, 502);
+    } finally {
+      clearTimeout(totalTimer);
+      clearTimeout(hedgeTimer);
     }
 
-    return new Response(upstream.body.pipeThrough(createSseTransformer()), {
+    // 中止落後的那個請求，避免浪費額度
+    for (const c of controllers) {
+      if (c !== winner.ac) c.abort();
+    }
+
+    // 把「已讀出的第一塊」加回串流前面，再接續讀取
+    const { reader, first, ac } = winner;
+    const upstreamBody = new ReadableStream({
+      start(controller) {
+        controller.enqueue(first);
+      },
+      async pull(controller) {
+        const { done, value } = await reader.read();
+        if (done) controller.close();
+        else controller.enqueue(value);
+      },
+      cancel() {
+        ac.abort();
+      },
+    });
+
+    return new Response(upstreamBody.pipeThrough(createSseTransformer()), {
       headers: {
         "Content-Type": "text/event-stream; charset=utf-8",
         "Cache-Control": "no-cache, no-transform",
@@ -147,6 +263,6 @@ export async function onRequestPost(context) {
     });
   } catch (e) {
     console.error("ai-triage error:", e);
-    return jsonResponse({ error: "AI 分析失敗 - 重整頁面 - 6字以上、60字內" }, 500);
+    return jsonResponse({ error: "AI 分析暫時失敗，請重新整理頁面後再試" }, 500);
   }
 }

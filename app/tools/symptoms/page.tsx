@@ -83,7 +83,118 @@ function parsePartialAiJson(s: string): AiResult {
   return out;
 }
 
-const AI_TIMEOUT_MS = 25000;
+/* ---------------- AI 請求：逾時偵測 + 自動重試 ---------------- */
+
+// 後端最多等 9 秒（含對沖請求），前端首包等待需略大於此值
+const FIRST_DATA_TIMEOUT_MS = 11000;
+// 開始串流後，若超過這段時間沒有新資料就視為卡住
+const IDLE_TIMEOUT_MS = 8000;
+const MAX_ATTEMPTS = 2;
+
+class TriageError extends Error {
+  retryable: boolean;
+  constructor(message: string, retryable: boolean) {
+    super(message);
+    this.retryable = retryable;
+  }
+}
+
+async function requestTriage(
+  symptoms: string,
+  outer: AbortSignal,
+  onText: (text: string) => void
+): Promise<string> {
+  const ctrl = new AbortController();
+  const onOuterAbort = () => ctrl.abort();
+  outer.addEventListener("abort", onOuterAbort);
+
+  let stalled = false;
+  let timer: ReturnType<typeof setTimeout> = setTimeout(() => {
+    stalled = true;
+    ctrl.abort();
+  }, FIRST_DATA_TIMEOUT_MS);
+
+  const bump = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      stalled = true;
+      ctrl.abort();
+    }, IDLE_TIMEOUT_MS);
+  };
+
+  // 把 fetch / read 的中止錯誤轉成可判斷的錯誤
+  const wrap = (e: unknown): Error => {
+    if (outer.aborted) return e as Error; // 使用者主動中止，原樣丟出
+    if (e instanceof TriageError) return e;
+    return new TriageError(stalled ? "AI 回應逾時" : "網路連線失敗", true);
+  };
+
+  try {
+    let res: Response;
+    try {
+      res = await fetch("/api/ai-triage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symptoms }),
+        signal: ctrl.signal,
+      });
+    } catch (e) {
+      throw wrap(e);
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      // 5xx（含 504 逾時）可重試；4xx（格式錯誤、429 額度）不重試
+      throw new TriageError(err.error || "AI 分析失敗", res.status >= 500);
+    }
+    if (!res.body) throw new TriageError("無法讀取回應內容", true);
+
+    bump();
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let full = "";
+
+    const handleLine = (line: string) => {
+      if (!line.startsWith("data:")) return;
+      const data = line.slice(5).trim();
+      if (!data || data === "[DONE]") return;
+      let parsed: any;
+      try {
+        parsed = JSON.parse(data);
+      } catch {
+        return; // 忽略不完整片段
+      }
+      if (parsed.error) throw new TriageError(parsed.error, true);
+      if (parsed.content) {
+        full += parsed.content;
+        onText(full);
+      }
+    };
+
+    while (true) {
+      let chunk: ReadableStreamReadResult<Uint8Array>;
+      try {
+        chunk = await reader.read();
+      } catch (e) {
+        throw wrap(e);
+      }
+      if (chunk.done) break;
+      bump();
+
+      buffer += decoder.decode(chunk.value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+      for (const line of lines) handleLine(line.trim());
+    }
+    if (buffer.trim()) handleLine(buffer.trim());
+
+    return full;
+  } finally {
+    clearTimeout(timer);
+    outer.removeEventListener("abort", onOuterAbort);
+  }
+}
 
 export default function SymptomsFlowPage() {
   const [mode, setMode] = useState<"select" | "ai">("select");
@@ -94,6 +205,7 @@ export default function SymptomsFlowPage() {
 
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiRetrying, setAiRetrying] = useState(false);
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
 
   const [loadingSeconds, setLoadingSeconds] = useState(0);
@@ -128,6 +240,7 @@ export default function SymptomsFlowPage() {
     setAiInput("");
     setAiResult(null);
     setAiLoading(false);
+    setAiRetrying(false);
     setSelectedCounty("");
     setLoadingSeconds(0);
   };
@@ -138,81 +251,48 @@ export default function SymptomsFlowPage() {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
-    const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
 
     setAiLoading(true);
+    setAiRetrying(false);
     setAiResult(null);
 
     try {
-      const res = await fetch("/api/ai-triage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms: aiInput }),
-        signal: controller.signal,
-      });
+      let fullText = "";
+      let lastError: TriageError | null = null;
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        alert(err.error || "AI 分析失敗");
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+          fullText = await requestTriage(aiInput, controller.signal, (text) => {
+            // 邊接收邊更新：is_emergency 一出現就先顯示結果卡片
+            const partial = parsePartialAiJson(text);
+            if (partial.is_emergency !== undefined) setAiResult(partial);
+          });
+          lastError = null;
+          break;
+        } catch (e: any) {
+          if (controller.signal.aborted) return; // 使用者重設或切換模式
+          lastError =
+            e instanceof TriageError ? e : new TriageError("AI 分析失敗", true);
+          setAiResult(null);
+          if (lastError.retryable && attempt < MAX_ATTEMPTS) {
+            setAiRetrying(true); // 自動重試一次
+            continue;
+          }
+          break;
+        }
+      }
+
+      if (lastError) {
+        alert(lastError.message || "AI 分析失敗，請稍後再試。");
         return;
       }
-      if (!res.body) throw new Error("無法讀取回應內容");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let fullJsonString = "";
-
-      const handleLine = (line: string): boolean => {
-        if (!line.startsWith("data:")) return true;
-        const data = line.slice(5).trim();
-        if (!data || data === "[DONE]") return true;
-        try {
-          const parsed = JSON.parse(data);
-          if (parsed.error) {
-            alert(parsed.error);
-            return false;
-          }
-          if (parsed.content) {
-            fullJsonString += parsed.content;
-            // 邊接收邊更新：is_emergency 一出現就先顯示結果卡片
-            const partial = parsePartialAiJson(fullJsonString);
-            if (partial.is_emergency !== undefined) {
-              setAiResult(partial);
-            }
-          }
-        } catch {
-          // 忽略不完整的片段
-        }
-        return true;
-      };
-
-      let aborted = false;
-      while (!aborted) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!handleLine(line.trim())) {
-            aborted = true;
-            setAiResult(null);
-            break;
-          }
-        }
-      }
-      if (aborted) return;
-      if (buffer.trim()) handleLine(buffer.trim());
 
       // 以完整 JSON 為準；失敗時退回使用已解析的部分內容
-      const cleaned = fullJsonString.replace(/```json|```/g, "").trim();
+      const cleaned = fullText.replace(/```json|```/g, "").trim();
       try {
         setAiResult(JSON.parse(cleaned));
       } catch {
-        const fallback = parsePartialAiJson(fullJsonString);
+        const fallback = parsePartialAiJson(fullText);
         if (fallback.departments && fallback.departments.length > 0) {
           setAiResult(fallback);
         } else {
@@ -220,19 +300,10 @@ export default function SymptomsFlowPage() {
           alert("AI 回應格式異常，請再試一次。");
         }
       }
-    } catch (e: any) {
-      if (e?.name === "AbortError") {
-        // 使用者重設或切換模式時的中止不提示；逾時才提示
-        if (abortRef.current === controller) {
-          alert("分析超時，請稍後再試。");
-        }
-      } else {
-        alert("網路錯誤或分析超時，請稍後再試。");
-      }
     } finally {
-      clearTimeout(timeout);
       if (abortRef.current === controller) {
         setAiLoading(false);
+        setAiRetrying(false);
       }
     }
   };
@@ -291,7 +362,7 @@ export default function SymptomsFlowPage() {
                 className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
               >
                 {aiLoading ? (
-                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> 分析中... 已等待 {loadingSeconds} 秒</>
+                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> {aiRetrying ? "連線較慢，自動重試中..." : "分析中..."} 已等待 {loadingSeconds} 秒</>
                 ) : "✨ 開始分析"}
               </button>
 
