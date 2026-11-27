@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import rawData from "@/data/symptoms.json";
 import rawClinics from "@/data/clinics.json";
@@ -21,7 +21,7 @@ type Category = { id: string; name: string; icon: string; symptoms: Symptom[] };
 
 const categories = (rawData as { categories: Category[] }).categories;
 
-// 👇 全台縣市地理排序（由北而南、由西而東）
+// 👇 新增：全台縣市地理排序（由北而南、由西而東）
 const COUNTY_ORDER = [
   "基隆市", "臺北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣",
   "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "臺南市",
@@ -38,6 +38,7 @@ const allCounties = Array.from(
   )
 ).filter((c) => c !== "其他")
 .sort((a, b) => {
+  // 👇 修改：套用地理位置排序
   const ia = COUNTY_ORDER.indexOf(a);
   const ib = COUNTY_ORDER.indexOf(b);
   return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
@@ -57,25 +58,8 @@ export default function SymptomsFlowPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<any>(null);
 
-  // 👇 新增：等待秒數狀態
-  const [loadingSeconds, setLoadingSeconds] = useState(0);
-
   // 縣市選擇
   const [selectedCounty, setSelectedCounty] = useState("");
-
-  // 👇 新增：讓等待秒數每秒跳動
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (aiLoading) {
-      setLoadingSeconds(0);
-      interval = setInterval(() => {
-        setLoadingSeconds((prev) => prev + 1);
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [aiLoading]);
 
   const reset = () => {
     setStep(0);
@@ -85,12 +69,15 @@ export default function SymptomsFlowPage() {
     setAiInput("");
     setAiResult(null);
     setSelectedCounty("");
-    setLoadingSeconds(0);
   };
+
+
+  const [loadingStartTime, setLoadingStartTime] = useState(0);
 
   const handleAiSubmit = async () => {
     if (!aiInput.trim()) return;
     setAiLoading(true);
+    setLoadingStartTime(Date.now()); // 新增這行
     setAiResult(null);
 
     try {
@@ -192,7 +179,8 @@ export default function SymptomsFlowPage() {
                 className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
               >
                 {aiLoading ? (
-                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> 分析中... 已等待 {loadingSeconds} 秒</>
+                  // 👇 優化：更換等待時的提示文字，減少使用者的焦慮感
+                  <><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span> 分析中... 已等待 {Math.max(1, Math.round((Date.now() - loadingStartTime) / 1000))} 秒</>
                 ) : "✨ 開始分析"}
               </button>
 
