@@ -51,13 +51,12 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ error: "未設定 AI API Key" }), { status: 500 });
     }
 
-    // 👇 優化：極簡化 Prompt。因為我們已經設定 response_format: json_object，
-    // 所以不需要再用長文解釋 JSON 格式，大幅減少 AI 預填充時間。
     const prompt = `你是台灣醫療分診助手。根據症狀輸出 JSON。嚴禁診斷或建議藥物。
 科別必須從以下白名單選擇：${STANDARD_DEPARTMENTS.join("、")}
 輸出格式：{"is_emergency":bool,"departments":["科別"],"advice":"2-3句建議","warning":"緊急紅線或空"}
 症狀：${symptoms}`;
 
+    // 👇 修改点 1：将模型切换为 gemini-3.7-flash，该版本无 thinking 熔断机制
     const res = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       {
@@ -66,17 +65,15 @@ export async function onRequestPost(context) {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${GEMINI_API_KEY}`,
         },
-        // 👇 清理了原本重複的 body 定義
         body: JSON.stringify({
-          model: "gemini-3.8-flash",
+          model: "gemini-3.7-flash",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.1,
           max_tokens: 300,
           response_format: { type: "json_object" },
           stream: true,
-          thinkingConfig: {
-            thinkingLevel: "LOW",
-          },
+          // 👇 修改点 2：把 thinkingLevel 改回原生支持的安全值，避免因参数格式出错直接 503
+          thinking_budget: 0,
         }),
       }
     );
@@ -93,7 +90,7 @@ export async function onRequestPost(context) {
 
     const keepAliveInterval = setInterval(() => {
       writer.write(encoder.encode(`: keep-alive\n\n`));
-    }, 15000); 
+    }, 15000);
 
     (async () => {
       const reader = res.body.getReader();
@@ -113,6 +110,13 @@ export async function onRequestPost(context) {
               if (data === "[DONE]") continue;
               try {
                 const json = JSON.parse(data);
+                // 👇 修改点 3：主动拦截上游通过 SSE 流内传回的 error 帧
+                if (json.error) {
+                  await writer.write(
+                    encoder.encode(`data: ${JSON.stringify({ error: "AI 服務暫時無法使用" })}\n\n`)
+                  );
+                  continue;
+                }
                 const content = json.choices?.[0]?.delta?.content || "";
                 if (content) {
                   await writer.write(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
