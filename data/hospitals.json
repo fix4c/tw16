@@ -1,6 +1,6 @@
 {
   "lastUpdated": "2026-11-15T00:00:00+08:00",
-  "total": 86,
+  "total": 84,
   "hospitals": [
     {
       "id": "ntuh",
@@ -162,7 +162,7 @@
       "region": "高雄市",
       "address": "高雄市三民區自由一路100號",
       "phone": "07-312-1101",
-      "registrationUrl": "http://www.kmuh.org.tw/"
+      "registrationUrl": "https://www.kmuh.org.tw/"
     },
     {
       "id": "cgmh_kaohsiung",
@@ -219,6 +219,15 @@
       "registrationUrl": "https://reg.ntuh.gov.tw"
     },
     {
+      "id": "mohw-keelung",
+      "name": "衛生福利部基隆醫院",
+      "level": "區域醫院",
+      "region": "基隆市",
+      "address": "基隆市信義區信二路268號",
+      "phone": "02-24292525",
+      "registrationUrl": "https://www.kln.mohw.gov.tw/"
+    },
+    {
       "id": "kln",
       "name": "基隆長庚紀念醫院",
       "level": "區域醫院",
@@ -235,6 +244,15 @@
       "address": "新北市新莊區思源路127號",
       "phone": "02-2276-5566",
       "registrationUrl": "https://www.tph.mohw.gov.tw/"
+    },
+    {
+      "id": "tpe-city-hospital",
+      "name": "臺北市立聯合醫院",
+      "level": "區域醫院",
+      "region": "台北市",
+      "address": "台北市大同區鄭州路145號",
+      "phone": "02-25553000",
+      "registrationUrl": "https://tpech.gov.taipei/"
     },
     {
       "id": "tzuchi_taichung",
@@ -307,6 +325,15 @@
       "address": "高雄市小港區山明路482號",
       "phone": "07-803-6783",
       "registrationUrl": "https://www.kmhk.org.tw/"
+    },
+    {
+      "id": "km-city-hospital",
+      "name": "高雄市立聯合醫院",
+      "level": "區域醫院",
+      "region": "高雄市",
+      "address": "高雄市鼓山區中華一路976號",
+      "phone": "07-5552565",
+      "registrationUrl": "https://kmsh.kcg.gov.tw/"
     },
     {
       "id": "pingtung_christian",
